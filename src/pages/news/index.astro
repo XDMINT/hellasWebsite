@@ -1,0 +1,363 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { WP_BASE, fetchWp, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
+
+type WpTag = { id: number; name: string; slug: string; count: number };
+
+const PER_PAGE = 12;
+
+// Query params
+const sp = Astro.url.searchParams;
+const tagSlug = sp.get("tag") ?? "";
+const requestedPage = Number(sp.get("page") ?? "1");
+const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+
+// URL builder (query based)
+const makeUrl = (opts: { page?: number; tag?: string }) => {
+    const u = new URL(Astro.url);
+    const nextPage = opts.page ?? page;
+    const nextTag = opts.tag ?? tagSlug;
+
+    if (nextPage <= 1) u.searchParams.delete("page");
+    else u.searchParams.set("page", String(nextPage));
+
+    if (!nextTag) u.searchParams.delete("tag");
+    else u.searchParams.set("tag", nextTag);
+
+    return u.pathname + (u.search ? u.search : "");
+};
+
+// UI classes (amber)
+const tagBtnBase =
+    "font-barlow inline-flex items-center rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300";
+const tagBtnInactive =
+    "bg-amber-50 text-amber-900 ring-1 ring-amber-200 hover:bg-amber-100";
+const tagBtnActive =
+    "bg-amber-500 text-white ring-1 ring-amber-500 hover:bg-amber-600";
+
+const pageBtn =
+    "font-barlow inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-semibold transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300";
+const pageBtnInactive =
+    "bg-amber-50 text-amber-900 ring-1 ring-amber-200 hover:bg-amber-100";
+const pageBtnActive =
+    "bg-amber-500 text-white ring-1 ring-amber-500 hover:bg-amber-600";
+
+// Helper: totals aus WP-Headers holen (ohne wp.ts zu ändern)
+async function fetchWpTotals(path: string): Promise<{ total: number; totalPages: number }> {
+    const url = `${WP_BASE}${path}`;
+    // HEAD reicht meist; falls ein Server HEAD nicht mag, fallback auf GET ohne json parse.
+    let res = await fetch(url, { method: "HEAD" });
+    if (!res.ok) {
+        res = await fetch(url, { method: "GET" });
+    }
+    const total = Number(res.headers.get("X-WP-Total") ?? "0");
+    const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? "0");
+    return { total, totalPages };
+}
+
+// Data
+let error: string | null = null;
+
+let tags: WpTag[] = [];
+let selectedTag: WpTag | null = null;
+
+let featured: WpPost | null = null;
+let gridPosts: WpPost[] = [];
+
+let totalPosts = 0;
+let totalPages = 1;
+
+try {
+    // Tags für UI
+    tags = await fetchWp<WpTag[]>(
+        `/wp-json/wp/v2/tags?per_page=20&orderby=count&order=desc`
+    );
+
+    // Selected tag slug -> id
+    if (tagSlug) {
+        selectedTag = tags.find((t) => t.slug === tagSlug) ?? null;
+        if (!selectedTag) {
+            const bySlug = await fetchWp<WpTag[]>(
+                `/wp-json/wp/v2/tags?slug=${encodeURIComponent(tagSlug)}`
+            );
+            selectedTag = bySlug?.[0] ?? null;
+        }
+    }
+    const tagFilter = selectedTag ? `&tags=${selectedTag.id}` : "";
+
+    // Featured (neuester)
+    const featuredArr = await fetchWp<WpPost[]>(
+        `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed=1${tagFilter}`
+    );
+    featured = featuredArr?.[0] ?? null;
+
+    // Total count für aktuellen Filter (aus Headers)
+    const totals = await fetchWpTotals(
+        `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc${tagFilter}`
+    );
+    totalPosts = totals.total;
+
+    // Pagination fürs Grid ohne Featured
+    const gridTotal = Math.max(totalPosts - (featured ? 1 : 0), 0);
+    totalPages = Math.max(1, Math.ceil(gridTotal / PER_PAGE));
+
+    const safePage = Math.min(Math.max(page, 1), totalPages);
+    const offset = (featured ? 1 : 0) + (safePage - 1) * PER_PAGE;
+
+    gridPosts = await fetchWp<WpPost[]>(
+        `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
+    );
+} catch (e: any) {
+    error = e?.message ?? "Beiträge konnten nicht geladen werden.";
+}
+
+// kompakte Seitenzahlen
+const pageNums = (() => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const set = new Set<number>([1, 2, 3, totalPages]);
+    if (page > 3 && page < totalPages) set.add(page);
+    return Array.from(set).sort((a, b) => a - b);
+})();
+
+const featuredImg = featured ? getFeaturedImage(featured) : null;
+---
+
+<SiteLayout pageTitle="News | WSV Hellas" showHero={false}>
+    <section class="space-y-8">
+        <!-- Kopfbox -->
+        <div class="bg-neutral-100 rounded-2xl px-6 py-8 sm:px-10 sm:py-10">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <h1
+                            class="font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900
+                   relative inline-block
+                   after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2
+                   after:h-1 after:rounded-full after:bg-blue-500"
+                    >
+                        News
+                    </h1>
+                    <p class="mt-3 font-barlow text-neutral-700">
+                        Aktuelles aus dem Vereinsleben
+                    </p>
+                </div>
+
+                {!error && selectedTag && (
+                        <div class="font-barlow text-sm text-neutral-600">
+                            Filter: <span class="font-semibold">{selectedTag.name}</span>
+                        </div>
+                )}
+            </div>
+        </div>
+
+        {error && (
+                <div class="rounded-2xl bg-neutral-100 p-6 sm:p-8 ring-1 ring-neutral-200">
+                    <p class="font-barlow text-neutral-700">
+                        <span class="font-albert font-bold">Hinweis:</span> {error}
+                    </p>
+                </div>
+        )}
+
+        <!-- Featured -->
+        {!error && featured && (
+                <a
+                        href={`/news/${featured.slug}/`}
+                        class="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200
+               transition duration-200 ease-out hover:shadow-md hover:-translate-y-0.5 hover:bg-blue-600"
+                >
+                    <div class="grid lg:grid-cols-12">
+                        <div class="relative lg:col-span-7 aspect-[16/9] lg:aspect-auto lg:min-h-[340px] bg-neutral-200">
+                            {featuredImg ? (
+                                    <img
+                                            src={featuredImg}
+                                            alt=""
+                                            loading="eager"
+                                            decoding="async"
+                                            class="absolute inset-0 h-full w-full object-cover"
+                                    />
+                            ) : (
+                                    <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
+                            )}
+
+                            <div class="absolute left-6 bottom-6 h-1 w-20 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
+                        </div>
+
+                        <div class="lg:col-span-5 p-6 sm:p-8">
+                            <div class="font-barlow text-xs text-neutral-500 group-hover:text-white/80 transition-colors">
+                                {formatDateDE(featured.date)}
+                            </div>
+
+                            <h2 class="mt-2 font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 group-hover:text-white transition-colors">
+                                {featured.title?.rendered ?? "Ohne Titel"}
+                            </h2>
+
+                            <p class="mt-4 font-barlow text-neutral-700 group-hover:text-white/90 transition-colors leading-relaxed line-clamp-4">
+                                {stripHtml(featured.excerpt?.rendered ?? "")}
+                            </p>
+
+                            <div class="mt-6 font-barlow text-sm font-semibold text-blue-600 group-hover:text-white/90 transition-colors">
+              <span class="inline-flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-1">
+                Weiterlesen <span aria-hidden="true">→</span>
+              </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+        )}
+
+        <!-- Count + Tag Filter unter Featured -->
+        {!error && (
+                <div class="bg-neutral-100 rounded-2xl px-6 py-8 sm:px-10 sm:py-10 space-y-5">
+                    <div>
+                        <div class="font-albert text-lg font-extrabold text-neutral-900">
+                            Alle Beiträge
+                        </div>
+
+                        <div class="font-barlow text-sm text-neutral-700">
+                            {selectedTag ? (
+                                    <>
+                                        Beiträge mit Tag{" "}
+                                        <span class="font-semibold">„{selectedTag.name}“</span>:{" "}
+                                        <span class="font-semibold">{totalPosts}</span>
+                                    </>
+                            ) : (
+                                    <>
+                                        Gesamt: <span class="font-semibold">{totalPosts}</span>
+                                    </>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="font-albert text-sm font-bold text-neutral-900 mb-3">
+                            Filtern nach Tags
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            <a
+                                    href={makeUrl({ page: 1, tag: "" })}
+                                    class:list={[tagBtnBase, !tagSlug ? tagBtnActive : tagBtnInactive]}
+                            >
+                                Alle
+                            </a>
+
+                            {tags.map((t) => (
+                                    <a
+                                            href={makeUrl({ page: 1, tag: t.slug })}
+                                            class:list={[tagBtnBase, tagSlug === t.slug ? tagBtnActive : tagBtnInactive]}
+                                            title={`${t.count} Beiträge`}
+                                    >
+                                        {t.name}
+                                    </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+        )}
+
+        <!-- Grid -->
+        {!error && gridPosts.length > 0 && (
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    {gridPosts.map((post) => {
+                        const img = getFeaturedImage(post);
+                        const excerpt = stripHtml(post.excerpt?.rendered ?? "");
+
+                        return (
+                                <a
+                                        href={`/news/${post.slug}/`}
+                                        class="group rounded-2xl overflow-hidden bg-white ring-1 ring-neutral-200 shadow-sm
+                     transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
+                                >
+                                    <div class="relative aspect-[16/9] bg-neutral-200">
+                                        {img ? (
+                                                <img
+                                                        src={img}
+                                                        alt=""
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        class="absolute inset-0 h-full w-full object-cover"
+                                                />
+                                        ) : (
+                                                <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
+                                        )}
+
+                                        <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
+                                    </div>
+
+                                    <div class="p-5">
+                                        <div class="font-barlow text-xs text-neutral-500 group-hover:text-white/80 transition-colors">
+                                            {formatDateDE(post.date)}
+                                        </div>
+
+                                        <h3 class="mt-2 font-albert text-lg font-extrabold tracking-tight text-neutral-900 group-hover:text-white transition-colors">
+                                            {post.title?.rendered ?? "Ohne Titel"}
+                                        </h3>
+
+                                        <p class="mt-2 font-barlow text-sm text-neutral-700 group-hover:text-white/90 transition-colors line-clamp-3">
+                                            {excerpt}
+                                        </p>
+
+                                        <div class="mt-4 font-barlow text-sm font-semibold text-blue-600 group-hover:text-white/90 transition-colors">
+                  <span class="inline-flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-1">
+                    Weiterlesen <span aria-hidden="true">→</span>
+                  </span>
+                                        </div>
+                                    </div>
+                                </a>
+                        );
+                    })}
+                </div>
+        )}
+
+        <!-- Pagination (ohne "Mehr laden") -->
+        {!error && totalPages > 1 && (
+                <div class="pt-2">
+                    <div class="flex flex-wrap items-center justify-center gap-2">
+                        <a
+                                href={makeUrl({ page: Math.max(1, page - 1) })}
+                                aria-disabled={page === 1 ? "true" : undefined}
+                                class:list={[
+                                    pageBtn,
+                                    page === 1 ? "pointer-events-none opacity-60 " + pageBtnInactive : pageBtnInactive,
+                                ]}
+                        >
+                            ← Zurück
+                        </a>
+
+                        {pageNums.map((n, idx) => {
+                            const prev = pageNums[idx - 1];
+                            const showDots = idx > 0 && prev && n - prev > 1;
+
+                            return (
+                                    <>
+                                        {showDots && <span class="font-barlow text-neutral-500 px-2">…</span>}
+                                        <a
+                                                href={makeUrl({ page: n })}
+                                                class:list={[pageBtn, n === page ? pageBtnActive : pageBtnInactive]}
+                                        >
+                                            {n}
+                                        </a>
+                                    </>
+                            );
+                        })}
+
+                        <a
+                                href={makeUrl({ page: Math.min(totalPages, page + 1) })}
+                                aria-disabled={page === totalPages ? "true" : undefined}
+                                class:list={[
+                                    pageBtn,
+                                    page === totalPages ? "pointer-events-none opacity-60 " + pageBtnInactive : pageBtnInactive,
+                                ]}
+                        >
+                            Weiter →
+                        </a>
+                    </div>
+                </div>
+        )}
+    </section>
+</SiteLayout>
+
+
+
+

@@ -1,0 +1,51 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { fetchWp, type WpPost, getFeaturedImage, formatDateDE } from "../../lib/wp";
+
+export async function getStaticPaths() {
+    // hol z.B. die letzten 100 Beiträge als Slugs
+    const posts = await fetchWp<WpPost[]>(
+        `/wp-json/wp/v2/posts?per_page=100&orderby=date&order=desc`
+    );
+
+    return posts.map((p) => ({
+        params: { slug: p.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+
+const found = await fetchWp<WpPost[]>(
+    `/wp-json/wp/v2/posts?slug=${slug}&_embed=1`
+);
+
+const post = found?.[0];
+if (!post) throw new Error(`Post not found: ${slug}`);
+
+const img = getFeaturedImage(post);
+---
+
+<SiteLayout
+        pageTitle={`${post.title.rendered} | WSV Hellas`}
+        heroTitle="News"
+        heroSubtitle={formatDateDE(post.date)}
+        heroImage={img ?? "/images/news-header.jpg"}
+>
+    <article class="max-w-3xl mx-auto">
+        <h1 class="font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900">
+            {post.title.rendered}
+        </h1>
+
+        <div class="mt-2 font-barlow text-sm text-neutral-500">
+            {formatDateDE(post.date)}
+        </div>
+
+        <div
+                class="mt-8 prose prose-neutral max-w-none font-barlow
+             prose-headings:font-albert prose-headings:tracking-tight
+             prose-a:text-blue-700 prose-a:font-semibold"
+                set:html={post.content?.rendered ?? ""}
+        />
+    </article>
+</SiteLayout>
+

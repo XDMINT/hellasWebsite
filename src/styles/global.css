@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "Albert Sans";
+    src: url("fonts/Albert_Sans/AlbertSans-VariableFont_wght.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+/* Überschriften */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Buttons (native + “button-like”) */
+button,
+[type="button"],
+[type="submit"],
+[type="reset"],
+.btn {
+    font-family: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+    .font-albert {
+        font-family: "Albert Sans", system-ui, sans-serif;
+    }
+}
+
+@font-face {
+    font-family: "Barlow";
+    src: url("fonts/Barlow/Barlow-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+p {
+    font-family: "Barlow", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+    .font-barlow {
+        font-family: "Barlow", system-ui, sans-serif;
+    }
+}
+
+
+@tailwind utilities;
+
+@layer utilities {
+    /* sehr nah am Mockup: weicher, großer Schatten */
+    .hero-shadow {
+        text-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.35),
+                0 10px 22px rgba(0, 0, 0, 0.30),
+                0 24px 48px rgba(0, 0, 0, 0.22);
+    }
+
+    /* etwas stärker für Subtitle (damit auch auf weiß sicher lesbar) */
+    .hero-shadow-strong {
+        text-shadow:
+                0 0 2px rgba(0, 0, 0, 0.45),
+                0 3px 8px rgba(0, 0, 0, 0.40),
+                0 14px 28px rgba(0, 0, 0, 0.32),
+                0 30px 60px rgba(0,  0, 0, 0.24);
+    }
+}

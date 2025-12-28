@@ -1,0 +1,77 @@
+---
+// src/components/Header.astro
+import '../styles/global.css'
+type NavLink = { href: string; label: string };
+
+const {
+    logoSrc = "src/assets/220926_HellasGiessen-Logo-Web.png",
+    logoAlt = "WSV Hellas 1920 Gießen e. V.",
+    links = [
+        { href: "/", label: "Home" },
+        { href: "/news", label: "News" },
+        { href: "/rudern", label: "Rudern" },
+        { href: "/drachenboot", label: "Drachenboot" },
+        { href: "/weiteres-sportangebot", label: "Weiteres Sportangebot" },
+        { href: "/vorstand", label: "Vorstand" },
+    ] satisfies NavLink[],
+} = Astro.props as {
+    logoSrc?: string;
+    logoAlt?: string;
+    links?: NavLink[];
+};
+
+const normalize = (p: string) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
+const pathname = normalize(Astro.url?.pathname ?? "/");
+
+const isActive = (href: string) => {
+    const h = normalize(href);
+    if (h === "/") return pathname === "/";
+    return pathname === h || pathname.startsWith(h + "/");
+};
+---
+
+<header class="bg-white border-b border-black/10">
+    <div class="mx-auto max-w-6xl h-36 flex flex-col items-center">
+        <a href="/" aria-label="Zur Startseite" class="mt-2 inline-flex items-center">
+            <img
+                    src={logoSrc}
+                    alt={logoAlt}
+                    class="h-20 w-auto block"
+                    loading="eager"
+                    decoding="async"
+            />
+        </a>
+
+        <nav aria-label="Hauptnavigation" class="mt-auto mb-4">
+            <ul class="m-0 p-0 list-none flex flex-wrap justify-center gap-12">
+                {links.map((l) => {
+                    const active = isActive(l.href);
+
+                    return (
+                            <li>
+                                <a
+                                        href={l.href}
+                                        aria-current={active ? "page" : undefined}
+                                        class:list={[
+                                            "relative inline-block pb-2 text-lg font-albert leading-none text-neutral-900 no-underline",
+                                            // underline pseudo-element
+                  "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
+                                            "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
+                                            // hover/focus underline
+                  "hover:after:scale-x-100 focus-visible:after:scale-x-100",
+                                            // active underline always
+                  active && "after:scale-x-100",
+                                            // focus ring
+                  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 rounded-lg",
+                                        ]}
+                                >
+                                    {l.label}
+                                </a>
+                            </li>
+                    );
+                })}
+            </ul>
+        </nav>
+    </div>
+</header>
+
