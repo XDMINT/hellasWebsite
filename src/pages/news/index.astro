@@ -10,7 +10,10 @@ const PER_PAGE = 12;
 const sp = Astro.url.searchParams;
 const tagSlug = sp.get("tag") ?? "";
 const requestedPage = Number(sp.get("page") ?? "1");
-const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+let page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+
+// Featured nur auf (unfiltered + page1)
+const showFeatured = !tagSlug && page === 1;
 
 // URL builder (query based)
 const makeUrl = (opts: { page?: number; tag?: string }) => {
@@ -47,11 +50,9 @@ const pageBtnActive =
 // Helper: totals aus WP-Headers holen (ohne wp.ts zu ändern)
 async function fetchWpTotals(path: string): Promise<{ total: number; totalPages: number }> {
     const url = `${WP_BASE}${path}`;
-    // HEAD reicht meist; falls ein Server HEAD nicht mag, fallback auf GET ohne json parse.
     let res = await fetch(url, { method: "HEAD" });
-    if (!res.ok) {
-        res = await fetch(url, { method: "GET" });
-    }
+    if (!res.ok) res = await fetch(url, { method: "GET" });
+
     const total = Number(res.headers.get("X-WP-Total") ?? "0");
     const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? "0");
     return { total, totalPages };
@@ -70,7 +71,7 @@ let totalPosts = 0;
 let totalPages = 1;
 
 try {
-    // Tags für UI
+    // Tags UI
     tags = await fetchWp<WpTag[]>(
         `/wp-json/wp/v2/tags?per_page=20&orderby=count&order=desc`
     );
@@ -87,28 +88,40 @@ try {
     }
     const tagFilter = selectedTag ? `&tags=${selectedTag.id}` : "";
 
-    // Featured (neuester)
-    const featuredArr = await fetchWp<WpPost[]>(
-        `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed=1${tagFilter}`
-    );
-    featured = featuredArr?.[0] ?? null;
-
-    // Total count für aktuellen Filter (aus Headers)
+    // Total count (für aktuellen Filter)
     const totals = await fetchWpTotals(
         `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc${tagFilter}`
     );
     totalPosts = totals.total;
 
-    // Pagination fürs Grid ohne Featured
-    const gridTotal = Math.max(totalPosts - (featured ? 1 : 0), 0);
-    totalPages = Math.max(1, Math.ceil(gridTotal / PER_PAGE));
+    // Pagination abhängig davon, ob featured angezeigt wird
+    const effectiveTotal = showFeatured ? Math.max(totalPosts - 1, 0) : totalPosts;
+    totalPages = Math.max(1, Math.ceil(effectiveTotal / PER_PAGE));
 
-    const safePage = Math.min(Math.max(page, 1), totalPages);
-    const offset = (featured ? 1 : 0) + (safePage - 1) * PER_PAGE;
+    // clamp page
+    page = Math.min(Math.max(page, 1), totalPages);
 
-    gridPosts = await fetchWp<WpPost[]>(
-        `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
-    );
+    if (showFeatured) {
+        // Featured holen
+        const featuredArr = await fetchWp<WpPost[]>(
+            `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed=1${tagFilter}`
+        );
+        featured = featuredArr?.[0] ?? null;
+
+        // Grid ohne Featured: Offset = 1 + (page-1)*PER_PAGE (page ist hier 1)
+        const offset = 1 + (page - 1) * PER_PAGE;
+
+        gridPosts = await fetchWp<WpPost[]>(
+            `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
+        );
+    } else {
+        // KEIN Featured: normales Paging mit 12 pro Seite
+        const offset = (page - 1) * PER_PAGE;
+
+        gridPosts = await fetchWp<WpPost[]>(
+            `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
+        );
+    }
 } catch (e: any) {
     error = e?.message ?? "Beiträge konnten nicht geladen werden.";
 }
@@ -138,9 +151,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                     >
                         News
                     </h1>
-                    <p class="mt-3 font-barlow text-neutral-700">
-                        Aktuelles aus dem Vereinsleben
-                    </p>
+                    <p class="mt-3 font-barlow text-neutral-700">Aktuelles aus dem Vereinsleben</p>
                 </div>
 
                 {!error && selectedTag && (
@@ -159,8 +170,8 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                 </div>
         )}
 
-        <!-- Featured -->
-        {!error && featured && (
+        <!-- Featured NUR wenn showFeatured -->
+        {!error && showFeatured && featured && (
                 <a
                         href={`/news/${featured.slug}/`}
                         class="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200
@@ -179,7 +190,6 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                             ) : (
                                     <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
                             )}
-
                             <div class="absolute left-6 bottom-6 h-1 w-20 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
                         </div>
 
@@ -206,19 +216,15 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                 </a>
         )}
 
-        <!-- Count + Tag Filter unter Featured -->
+        <!-- Count + Tag Filter (immer unter Featured/oberhalb Grid) -->
         {!error && (
                 <div class="bg-neutral-100 rounded-2xl px-6 py-8 sm:px-10 sm:py-10 space-y-5">
                     <div>
-                        <div class="font-albert text-lg font-extrabold text-neutral-900">
-                            Alle Beiträge
-                        </div>
-
+                        <div class="font-albert text-lg font-extrabold text-neutral-900">Alle Beiträge</div>
                         <div class="font-barlow text-sm text-neutral-700">
                             {selectedTag ? (
                                     <>
-                                        Beiträge mit Tag{" "}
-                                        <span class="font-semibold">„{selectedTag.name}“</span>:{" "}
+                                        Beiträge mit Tag <span class="font-semibold">„{selectedTag.name}“</span>:{" "}
                                         <span class="font-semibold">{totalPosts}</span>
                                     </>
                             ) : (
@@ -230,15 +236,9 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                     </div>
 
                     <div>
-                        <div class="font-albert text-sm font-bold text-neutral-900 mb-3">
-                            Filtern nach Tags
-                        </div>
-
+                        <div class="font-albert text-sm font-bold text-neutral-900 mb-3">Filtern nach Tags</div>
                         <div class="flex flex-wrap gap-2">
-                            <a
-                                    href={makeUrl({ page: 1, tag: "" })}
-                                    class:list={[tagBtnBase, !tagSlug ? tagBtnActive : tagBtnInactive]}
-                            >
+                            <a href={makeUrl({ page: 1, tag: "" })} class:list={[tagBtnBase, !tagSlug ? tagBtnActive : tagBtnInactive]}>
                                 Alle
                             </a>
 
@@ -256,7 +256,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                 </div>
         )}
 
-        <!-- Grid -->
+        <!-- Grid: immer 12 pro Seite -->
         {!error && gridPosts.length > 0 && (
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {gridPosts.map((post) => {
@@ -281,7 +281,6 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                                         ) : (
                                                 <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
                                         )}
-
                                         <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
                                     </div>
 
@@ -310,7 +309,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                 </div>
         )}
 
-        <!-- Pagination (ohne "Mehr laden") -->
+        <!-- Pagination (ohne Mehr laden) -->
         {!error && totalPages > 1 && (
                 <div class="pt-2">
                     <div class="flex flex-wrap items-center justify-center gap-2">
@@ -332,10 +331,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                             return (
                                     <>
                                         {showDots && <span class="font-barlow text-neutral-500 px-2">…</span>}
-                                        <a
-                                                href={makeUrl({ page: n })}
-                                                class:list={[pageBtn, n === page ? pageBtnActive : pageBtnInactive]}
-                                        >
+                                        <a href={makeUrl({ page: n })} class:list={[pageBtn, n === page ? pageBtnActive : pageBtnInactive]}>
                                             {n}
                                         </a>
                                     </>
@@ -357,6 +353,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
         )}
     </section>
 </SiteLayout>
+
 
 
 

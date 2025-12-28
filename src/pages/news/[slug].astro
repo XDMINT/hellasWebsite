@@ -3,14 +3,11 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { fetchWp, type WpPost, getFeaturedImage, formatDateDE } from "../../lib/wp";
 
 export async function getStaticPaths() {
-    // hol z.B. die letzten 100 Beiträge als Slugs
     const posts = await fetchWp<WpPost[]>(
         `/wp-json/wp/v2/posts?per_page=100&orderby=date&order=desc`
     );
 
-    return posts.map((p) => ({
-        params: { slug: p.slug },
-    }));
+    return posts.map((p) => ({ params: { slug: p.slug } }));
 }
 
 const { slug } = Astro.params;
@@ -48,4 +45,5 @@ const img = getFeaturedImage(post);
         />
     </article>
 </SiteLayout>
+
 
