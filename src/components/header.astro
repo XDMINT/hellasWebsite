@@ -1,6 +1,5 @@
 ---
 // src/components/Header.astro
-import '../styles/global.css'
 type NavLink = { href: string; label: string };
 
 const {
@@ -31,47 +30,171 @@ const isActive = (href: string) => {
 ---
 
 <header class="bg-white border-b border-black/10">
-    <div class="mx-auto max-w-6xl h-36 flex flex-col items-center">
-        <a href="/" aria-label="Zur Startseite" class="mt-2 inline-flex items-center">
-            <img
-                    src={logoSrc}
-                    alt={logoAlt}
-                    class="h-20 w-auto block"
-                    loading="eager"
-                    decoding="async"
-            />
-        </a>
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <!-- Top row: Logo centered + burger on mobile -->
+        <div class="relative flex flex-col items-center pt-3 lg:pt-4">
+            <!-- mobile: logo + burger in one row -->
+            <div class="w-full flex items-center justify-between lg:justify-center pb-3 lg:pb-0">
+            <a href="/" aria-label="Zur Startseite" class="inline-flex items-center">
+                    <img
+                            src={logoSrc}
+                            alt={logoAlt}
+                            class="h-14 sm:h-16 lg:h-20 w-auto block"
+                            loading="eager"
+                            decoding="async"
+                    />
+                </a>
 
-        <nav aria-label="Hauptnavigation" class="mt-auto mb-4">
-            <ul class="m-0 p-0 list-none flex flex-wrap justify-center gap-12">
-                {links.map((l) => {
-                    const active = isActive(l.href);
+                <!-- Mobile hamburger / close -->
+                <button
+                        type="button"
+                        class="lg:hidden inline-flex items-center justify-center rounded-xl p-3
+                 ring-1 ring-black/10 hover:bg-neutral-50 transition
+                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                        aria-label="Menü öffnen"
+                        aria-controls="mobile-menu"
+                        aria-expanded="false"
+                        data-menu-button
+                >
+                    <span class="sr-only">Menü</span>
 
-                    return (
-                            <li>
-                                <a
-                                        href={l.href}
-                                        aria-current={active ? "page" : undefined}
-                                        class:list={[
-                                            "relative inline-block pb-2 text-lg font-albert leading-none text-neutral-900 no-underline",
-                                            // underline pseudo-element
-                  "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
-                                            "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
-                                            // hover/focus underline
-                  "hover:after:scale-x-100 focus-visible:after:scale-x-100",
-                                            // active underline always
-                  active && "after:scale-x-100",
-                                            // focus ring
-                  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 rounded-lg",
-                                        ]}
-                                >
-                                    {l.label}
-                                </a>
-                            </li>
-                    );
-                })}
-            </ul>
-        </nav>
+                    <!-- Hamburger -->
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-icon-hamburger>
+                        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+
+                    <!-- X -->
+                    <svg class="h-6 w-6 hidden" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-icon-close>
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Desktop nav UNDER logo -->
+            <nav aria-label="Hauptnavigation" class="hidden lg:block mt-6 mb-6">
+                <ul class="m-0 p-0 list-none flex flex-wrap justify-center gap-12">
+                    {links.map((l) => {
+                        const active = isActive(l.href);
+                        return (
+                                <li>
+                                    <a
+                                            href={l.href}
+                                            aria-current={active ? "page" : undefined}
+                                            class:list={[
+                                                "relative inline-block pb-2 text-lg font-albert leading-none text-neutral-900 no-underline",
+                                                "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
+                                                "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
+                                                "hover:after:scale-x-100 focus-visible:after:scale-x-100",
+                                                active && "after:scale-x-100",
+                                                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 rounded-lg",
+                                            ]}
+                                    >
+                                        {l.label}
+                                    </a>
+                                </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Mobile slide-down panel -->
+        <div
+                id="mobile-menu"
+                data-menu-panel
+                class="lg:hidden overflow-hidden max-h-0 opacity-0 transition-all duration-300 ease-out"
+                aria-hidden="true"
+        >
+            <nav aria-label="Mobile Hauptnavigation" class="pb-6">
+                <div class="bg-neutral-100 rounded-2xl px-4 py-4 mt-3">
+                    <ul class="m-0 p-0 list-none flex flex-col gap-2">
+                        {links.map((l) => {
+                            const active = isActive(l.href);
+                            return (
+                                    <li>
+                                        <a
+                                                href={l.href}
+                                                aria-current={active ? "page" : undefined}
+                                                class:list={[
+                                                    "font-albert text-base rounded-xl px-4 py-3 block no-underline transition",
+                                                    active
+                                                        ? "bg-blue-600 text-white"
+                                                        : "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-blue-50",
+                                                    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300",
+                                                ]}
+                                        >
+                                            {l.label}
+                                        </a>
+                                    </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            </nav>
+        </div>
     </div>
+
+    <script is:inline>
+        (() => {
+            const btn = document.querySelector("[data-menu-button]");
+            const panel = document.querySelector("[data-menu-panel]");
+            const iconHamburger = document.querySelector("[data-icon-hamburger]");
+            const iconClose = document.querySelector("[data-icon-close]");
+            if (!btn || !panel || !iconHamburger || !iconClose) return;
+
+            const openClasses = ["max-h-[520px]", "opacity-100"];
+            const closedClasses = ["max-h-0", "opacity-0"];
+
+            const setOpen = (open) => {
+                // toggle panel
+                panel.classList.remove(...(open ? closedClasses : openClasses));
+                panel.classList.add(...(open ? openClasses : closedClasses));
+
+                // aria
+                btn.setAttribute("aria-expanded", String(open));
+                panel.setAttribute("aria-hidden", String(!open));
+                btn.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+
+                // icons
+                iconHamburger.classList.toggle("hidden", open);
+                iconClose.classList.toggle("hidden", !open);
+            };
+
+            let open = false;
+            setOpen(false);
+
+            btn.addEventListener("click", () => {
+                open = !open;
+                setOpen(open);
+            });
+
+            // Close on link click
+            panel.querySelectorAll("a").forEach((a) =>
+                a.addEventListener("click", () => {
+                    open = false;
+                    setOpen(false);
+                })
+            );
+
+            // Close on ESC
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    open = false;
+                    setOpen(false);
+                }
+            });
+
+            // If resized to desktop, ensure menu is closed
+            const mq = window.matchMedia("(min-width: 1024px)"); // lg
+            mq.addEventListener?.("change", (e) => {
+                if (e.matches) {
+                    open = false;
+                    setOpen(false);
+                }
+            });
+        })();
+    </script>
 </header>
+
+
 
