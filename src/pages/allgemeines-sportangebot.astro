@@ -1,0 +1,329 @@
+---
+// src/pages/weiteres-sportangebot/index.astro
+import SiteLayout from "../layouts/siteLayout.astro";
+
+const underlinedTitleClass =
+    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
+    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
+    "after:h-1 after:rounded-full after:bg-blue-500";
+
+const sectionTitleClass =
+    "font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900";
+
+const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
+const smallClass = "font-barlow text-sm text-neutral-600";
+
+const ctaBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-amber-500 text-white hover:bg-amber-600 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
+
+const secondaryBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+
+// Platzhalter-Bilder (1–2 Stück)
+const heroImage = "/images/220926_HellasGiessen-Logo-Web.png";
+const imgHall = "/images/hallensport.png";
+const imgSportabzeichen = "/images/sportabzeichen.jpg";
+---
+
+<SiteLayout
+        pageTitle="Allgemeines Sportangebot | WSV Hellas"
+        heroTitle="Allgemeines Sportangebot"
+        heroSubtitle="Hallensport, Sportabzeichen & mehr – für Kinder, Jugendliche und Erwachsene"
+        heroImage={heroImage}
+        showHero={true}
+>
+    <div id="top" class="sr-only">Top</div>
+
+    <!-- Intro + Quicklinks -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
+                    <div class="lg:col-span-4 flex justify-center lg:justify-center">
+                        <h2 class={underlinedTitleClass}>Übersicht</h2>
+                    </div>
+
+                    <div class="lg:col-span-8">
+                        <p class={bodyClass}>
+                            Neben Rudern und Drachenboot bietet der WSV Hellas ein starkes Angebot abseits des Wassers –
+                            besonders im <strong>Hallensport</strong> (vor allem für Kinder) und im <strong>Sportabzeichen-Treff</strong>.
+                            Hier findest du alle Infos kompakt auf einer Seite – ohne Unterseiten.
+                        </p>
+
+                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                            <a class={ctaBtn} href="/kontakt">Kontakt / Einstieg</a>
+                            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
+                        </div>
+
+                        <div class="mt-8 flex flex-wrap gap-2">
+                            <a
+                                    href="#hallensport"
+                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
+                            >
+                                Hallensport
+                            </a>
+                            <a
+                                    href="#sportabzeichen"
+                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
+                            >
+                                Sportabzeichen-Treff
+                            </a>
+                            <a
+                                    href="#weitere-angebote"
+                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
+                            >
+                                Weitere Angebote
+                            </a>
+                        </div>
+
+                        <p class={"mt-4 " + smallClass}>
+                            Hinweis: In den Schulferien ist die Sporthalle geschlossen.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hallensport -->
+    <section id="hallensport" class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
+                <!-- Text -->
+                <div class="lg:col-span-7">
+                    <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                        <h3 class={sectionTitleClass}>Hallensport</h3>
+                        <p class={"mt-3 " + bodyClass}>
+                            Unser Hallensportangebot ist eine perfekte Ergänzung zum Wassersport – mit viel Bewegung, Koordination,
+                            Spielen und Spaß. Besonders für Kinder bieten wir altersgerechte Gruppen. Für Erwachsene gibt es eigene
+                            Sportstunden in lockerer Atmosphäre.
+                        </p>
+
+                        <div class="mt-6">
+                            <div class="font-albert text-xl font-extrabold text-neutral-900">Ort</div>
+                            <p class={"mt-2 " + smallClass}>
+                                Sporthalle der Sandfeldschule Gießen (in den Schulferien geschlossen)
+                            </p>
+                        </div>
+
+                        <!-- Kinder & Jugendliche Zeiten -->
+                        <div class="mt-8">
+                            <div class="flex items-end justify-between gap-3">
+                                <div class="font-albert text-xl font-extrabold text-neutral-900">Kinder & Jugendliche</div>
+                                <div class="font-barlow text-sm text-neutral-600">Montags</div>
+                            </div>
+
+                            <div class="mt-4 overflow-hidden rounded-2xl bg-white ring-1 ring-black/10">
+                                <div class="divide-y divide-black/10">
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">3–6 Jahre</div>
+                                            <div class="font-barlow text-sm text-neutral-600">spielerisch & motorisch</div>
+                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">16:00–16:50</div>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">6–10 Jahre</div>
+                                            <div class="font-barlow text-sm text-neutral-600">Bewegung, Spiele, Koordination</div>
+                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">16:55–17:45</div>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">10–14 Jahre</div>
+                                            <div class="font-barlow text-sm text-neutral-600">Fitness, Teamspiele, Technik</div>
+                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">17:50–18:50</div>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">ab 14 Jahre</div>
+                                            <div class="font-barlow text-sm text-neutral-600">Jugend-Training & sportlicher Fokus</div>
+                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">18:55–19:55</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class={"mt-3 " + smallClass}>
+                                Du bist unsicher, welche Gruppe passt? Schreib uns kurz – wir helfen dir beim Einstieg.
+                            </p>
+                        </div>
+
+                        <!-- Erwachsene Zeiten -->
+                        <div class="mt-10">
+                            <div class="font-albert text-xl font-extrabold text-neutral-900">Erwachsene</div>
+
+                            <div class="mt-4 overflow-hidden rounded-2xl bg-white ring-1 ring-black/10">
+                                <div class="divide-y divide-black/10">
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">Frauen-Sportstunde (ab 18)</div>
+                                            <div class="font-barlow text-sm text-neutral-600">Ganzkörper, Mobilität, Ausdauer</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Mi 20:00–21:30</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
+                                        <div>
+                                            <div class="font-barlow font-semibold text-neutral-900">Gemischt (Frauen & Männer)</div>
+                                            <div class="font-barlow text-sm text-neutral-600">Sportlich aktiv – gemeinsam</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Fr 20:00–21:45</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                                <a class={ctaBtn} href="/kontakt">Mitmachen</a>
+                                <a class={secondaryBtn} href="/trainingszeiten">Alle Zeiten</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bild -->
+                <div class="lg:col-span-5">
+                    <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
+                        <div class="relative aspect-[4/3]">
+                            <img
+                                    src={imgHall}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                            />
+                        </div>
+                    </div>
+                    <p class={"mt-3 " + smallClass}>
+                        Bild: Hallensport / Kindergruppe
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sportabzeichen -->
+    <section id="sportabzeichen" class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
+                <!-- Bild -->
+                <div class="lg:col-span-5 lg:order-1 order-2">
+                    <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
+                        <div class="relative aspect-[4/3]">
+                            <img
+                                    src={imgSportabzeichen}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                            />
+                        </div>
+                    </div>
+                    <p class={"mt-3 " + smallClass}>
+                        Bild: DOSB
+                    </p>
+                </div>
+
+                <!-- Text -->
+                <div class="lg:col-span-7 lg:order-2 order-1">
+                    <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                        <h3 class={sectionTitleClass}>Sportabzeichen-Treff</h3>
+
+                        <p class={"mt-3 " + bodyClass}>
+                            Training und Abnahme des <strong>Deutschen Sportabzeichens</strong> – gemeinsam, motivierend und für alle,
+                            die ihre Fitness testen oder gezielt verbessern möchten. Der Treff ist ideal für Jugendliche wie Erwachsene.
+                        </p>
+
+                        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                            <div class="rounded-2xl bg-white ring-1 ring-black/10 p-5">
+                                <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+                                <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Ort</div>
+                                <p class={"mt-2 " + smallClass}>
+                                    Sportanlagen der Sandfeldschule Gießen
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl bg-white ring-1 ring-black/10 p-5">
+                                <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+                                <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Zeit</div>
+                                <p class={"mt-2 " + smallClass}>
+                                    Freitags ca. 18:00–20:00 Uhr (Sommermonate, zwischen Oster- und Herbstferien)
+                                </p>
+                            </div>
+                        </div>
+
+                        <ul class="mt-6 space-y-2 font-barlow text-base text-neutral-700">
+                            <li>• Teilnahme ist auch <strong>ohne Vereinsmitgliedschaft</strong> möglich</li>
+                            <li>• Training + Abnahme in Leichtathletik-Disziplinen (nach deinen Zielen)</li>
+                            <li>• Ideal als persönlicher Fitness-Check oder gemeinsames Saison-Ziel</li>
+                        </ul>
+
+                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                            <a class={ctaBtn} href="/kontakt">Fragen / Anmeldung</a>
+                            <a class={secondaryBtn} href="/trainingszeiten">Zeiten im Überblick</a>
+                        </div>
+
+                        <p class={"mt-4 " + smallClass}>
+                            Wetter- und ferienabhängig – bei Unsicherheiten einfach kurz nachfragen.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weitere Angebote (kurz, untergeordnet) -->
+    <section id="weitere-angebote" class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <h3 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 text-center">
+                    Weitere Angebote
+                </h3>
+
+                <div class="mt-8 grid gap-6 md:grid-cols-3">
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Kraftraum (Winter)</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Ergänzendes Training – besonders im Winterhalbjahr.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">SUP-Treff</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Stand Up Paddling auf der Lahn – Technik & Sicherheit in der Gruppe (saisonal).
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Yoga (unregelmäßig)</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Winterangebot – aktuell nur unregelmäßig. Bei Interesse bitte kurz melden.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+                    <a class={ctaBtn} href="/kontakt">Kontakt aufnehmen</a>
+                    <a class={secondaryBtn} href="#top">Nach oben</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</SiteLayout>

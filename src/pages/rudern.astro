@@ -1,0 +1,219 @@
+---
+// src/pages/rudern/index.astro
+import SiteLayout from "../layouts/siteLayout.astro";
+
+const underlinedTitleClass =
+    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
+    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
+    "after:h-1 after:rounded-full after:bg-blue-500";
+
+const sectionKickerClass = "font-barlow text-sm font-semibold text-blue-700";
+const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
+
+const cardTitleClass =
+    "font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 group-hover:text-white transition-colors";
+
+const cardBodyClass =
+    "font-barlow text-sm sm:text-base leading-relaxed text-neutral-700 group-hover:text-white/90 transition-colors";
+
+const bulletClass =
+    "font-barlow text-sm sm:text-base text-neutral-700 group-hover:text-white/90 transition-colors";
+
+const ctaBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-amber-500 text-white hover:bg-amber-600 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
+
+// Platzhalter-Bilder (du tauschst die später aus)
+const heroImage = "/images/rudernDoppelzweier.jpg";
+const imgBreitensport = "/images/rudernBreitSport.jpeg";
+const imgKinder = "/images/rudernKind.jpeg";
+const imgRennrudern = "/images/rudernPodium.jpeg";
+---
+
+<SiteLayout
+        pageTitle="Rudern | WSV Hellas"
+        heroTitle="Rudern"
+        heroSubtitle="Gemeinsam auf der Lahn – vom ersten Schlag bis zur Regatta"
+        heroImage={heroImage}
+        showHero={true}
+>
+    <div id="top" class="sr-only">Top</div>
+
+    <!-- Intro -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
+                    <div class="lg:col-span-4 flex justify-center lg:justify-center">
+                        <h2 class={underlinedTitleClass}>Rudern bei Hellas</h2>
+                    </div>
+
+                    <div class="lg:col-span-8">
+                        <p class={bodyClass}>
+                            Rudern verbindet Ausdauer, Technik und Teamgeist – und ist dabei erstaunlich vielseitig:
+                            entspanntes Rudern nach Feierabend, strukturiertes Training im Boot oder ambitionierte Rennen.
+                            Bei uns findest du den Einstieg, passende Trainingsgruppen und eine starke Gemeinschaft – direkt
+                            auf der Lahn in Gießen.
+                        </p>
+
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <a class={ctaBtn} href="/trainingszeiten">Trainingszeiten ansehen</a>
+                            <a
+                                    class="inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold
+                       bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
+                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                                    href="/kontakt"
+                            >
+                                Kontakt & Probetraining
+                            </a>
+                        </div>
+
+                        <p class="mt-4 font-barlow text-sm text-neutral-600">
+                            Hinweis: Für Kinder ist ein sicherer Schwimmnachweis erforderlich.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Bereiche als Cards -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
+            <div class="grid gap-6 lg:grid-cols-3">
+                <!-- Breitensport -->
+                <article
+                        class="group overflow-hidden rounded-2xl bg-white ring-1 ring-black/10 shadow-sm
+                 transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
+                >
+                    <div class="relative aspect-[16/9] bg-neutral-200">
+                        <img
+                                src={imgBreitensport}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                class="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class={sectionKickerClass + " group-hover:text-white/80 transition-colors"}>Für Einsteiger & Fortgeschrittene</div>
+                        <h3 class={"mt-2 " + cardTitleClass}>Breitensport</h3>
+
+                        <p class={"mt-3 " + cardBodyClass}>
+                            Du willst dich bewegen, den Kopf frei bekommen und dabei in netter Runde aufs Wasser?
+                            Im Breitensport steht das gemeinsame Rudern im Vordergrund – mit sauberer Technik und ohne Leistungsdruck.
+                        </p>
+
+                        <ul class="mt-4 space-y-2">
+                            <li class={bulletClass}>• lockere Einheiten auf der Lahn</li>
+                            <li class={bulletClass}>• Technik-Tipps & sicheres Bootshandling</li>
+                            <li class={bulletClass}>• Gemeinschaft, Ausgleich, Natur</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Kinder & Jugendliche -->
+                <article
+                        class="group overflow-hidden rounded-2xl bg-white ring-1 ring-black/10 shadow-sm
+                 transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
+                >
+                    <div class="relative aspect-[16/9] bg-neutral-200">
+                        <img
+                                src={imgKinder}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                class="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class={sectionKickerClass + " group-hover:text-white/80 transition-colors"}>Ab ca. 8 Jahren</div>
+                        <h3 class={"mt-2 " + cardTitleClass}>Kinder & Jugendliche</h3>
+
+                        <p class={"mt-3 " + cardBodyClass}>
+                            Spielerisch lernen, draußen aktiv sein und Schritt für Schritt Sicherheit im Boot bekommen:
+                            Im Nachwuchsbereich bauen wir Grundlagen auf – von Balance bis Technik – und fördern Teamgeist und Selbstvertrauen.
+                        </p>
+
+                        <ul class="mt-4 space-y-2">
+                            <li class={bulletClass}>• altersgerechtes Training & Betreuung</li>
+                            <li class={bulletClass}>• Technik, Koordination, Spaß am Wasser</li>
+                            <li class={bulletClass}>• Optional: erste Regatta-Erfahrungen</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Rennrudern -->
+                <article
+                        class="group overflow-hidden rounded-2xl bg-white ring-1 ring-black/10 shadow-sm
+                 transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
+                >
+                    <div class="relative aspect-[16/9] bg-neutral-200">
+                        <img
+                                src={imgRennrudern}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                class="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class={sectionKickerClass + " group-hover:text-white/80 transition-colors"}>Ambitioniert & strukturiert</div>
+                        <h3 class={"mt-2 " + cardTitleClass}>Rennrudern</h3>
+
+                        <p class={"mt-3 " + cardBodyClass}>
+                            Du hast Lust, dich sportlich weiterzuentwickeln, an Regatten teilzunehmen und im Team an Geschwindigkeit zu arbeiten?
+                            Im Rennrudern kombinieren wir Technik, Ausdauer und Kraft – mit klaren Zielen und viel Zusammenhalt.
+                        </p>
+
+                        <ul class="mt-4 space-y-2">
+                            <li class={bulletClass}>• Technik- und Temposchulung</li>
+                            <li class={bulletClass}>• Teamboote & Regatten</li>
+                            <li class={bulletClass}>• Athletiktraining als Ergänzung</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Einstieg / CTA -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <div class="mx-auto max-w-3xl text-center">
+                    <h2 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900">
+                        Lust auf ein Probetraining?
+                    </h2>
+
+                    <p class="mt-3 font-barlow text-base sm:text-lg text-neutral-700 leading-relaxed">
+                        Egal ob du neu startest oder schon Erfahrung mitbringst: Schreib uns kurz – wir finden die passende Gruppe.
+                        Die aktuellen Zeiten und Treffpunkte findest du auf der Trainingszeiten-Seite.
+                    </p>
+
+                    <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <a class={ctaBtn} href="/kontakt">Jetzt anfragen</a>
+
+                        <a
+                                class="inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold
+                   bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
+                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                                href="/trainingszeiten"
+                        >
+                            Trainingszeiten
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</SiteLayout>

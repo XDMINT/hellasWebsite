@@ -1,0 +1,213 @@
+---
+// src/pages/drachenboot/index.astro
+import SiteLayout from "../layouts/siteLayout.astro";
+
+const underlinedTitleClass =
+    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
+    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
+    "after:h-1 after:rounded-full after:bg-blue-500";
+
+const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
+const smallClass = "font-barlow text-sm text-neutral-600";
+
+const ctaBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-amber-500 text-white hover:bg-amber-600 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
+
+const secondaryBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+
+// Platzhalter-Bilder (tauschst du später)
+const heroImage = "/images/drachenbootAction.png";
+const img1 = "/images/drachenbootHinten.jpeg";
+const img2 = "/images/drachenbootNah.jpeg";
+---
+
+<SiteLayout
+        pageTitle="Drachenboot | WSV Hellas"
+        heroTitle="Drachenboot"
+        heroSubtitle="Team, Takt und Tempo – gemeinsam im Boot"
+        heroImage={heroImage}
+        showHero={true}
+>
+    <div id="top" class="sr-only">Top</div>
+
+    <!-- Intro -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
+                    <div class="lg:col-span-4 flex justify-center lg:justify-center">
+                        <h2 class={underlinedTitleClass}>Was ist Drachenboot?</h2>
+                    </div>
+
+                    <div class="lg:col-span-8">
+                        <p class={bodyClass}>
+                            Drachenboot ist Mannschaftssport auf dem Wasser: Ein großes Boot, viele Paddel – und ein gemeinsamer Rhythmus.
+                            Entscheidend sind Timing, Technik und Teamgeist. Genau das macht Drachenboot so besonders: Man wächst schnell als
+                            Crew zusammen und merkt sofort, wie viel Geschwindigkeit durch gutes Zusammenspiel entsteht.
+                        </p>
+
+                        <p class={"mt-4 " + bodyClass}>
+                            Bei uns steht das Miteinander im Vordergrund – mit Spaß am Training, klaren Abläufen und dem Ziel,
+                            als Team besser zu werden. Ob du neu reinschnuppern möchtest oder schon Erfahrung hast: Du bist willkommen.
+                        </p>
+
+                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
+                            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
+                        </div>
+
+                        <p class={"mt-4 " + smallClass}>
+                            Tipp: Sportsachen, Trinkflasche und ggf. Wechselshirt reichen für den Einstieg völlig aus.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bild + Trainingsinfos -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
+                <!-- Bild 1 -->
+                <div class="lg:col-span-6">
+                    <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
+                        <div class="relative aspect-[16/10]">
+                            <img
+                                    src={img1}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                            />
+                        </div>
+                    </div>
+                    <p class={"mt-3 " + smallClass}>
+                        Bild: ©No4Any
+                    </p>
+                </div>
+
+                <!-- Textblock -->
+                <div class="lg:col-span-6">
+                    <div class="bg-neutral-100 rounded-2xl px-6 py-8 sm:px-8 sm:py-10">
+                        <h3 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900">
+                            Training & Ablauf
+                        </h3>
+
+                        <p class={"mt-3 " + bodyClass}>
+                            Im Training arbeiten wir an Grundtechnik, Schlagrhythmus und Abstimmung im Boot.
+                            Zusätzlich gehören kurze Belastungen und längere Ausfahrten dazu – je nach Saison und Zielsetzung.
+                        </p>
+
+                        <ul class="mt-5 space-y-2 font-barlow text-base text-neutral-700">
+                            <li>• Technik: saubere Paddelführung & gemeinsamer Takt</li>
+                            <li>• Team: Kommandos, Sitzpositionen, Bootsgefühl</li>
+                            <li>• Fitness: Ausdauer und Kraft – passend dosiert</li>
+                        </ul>
+
+                        <p class={"mt-5 " + smallClass}>
+                            Du musst kein Profi sein – wichtig ist die Bereitschaft, im Team zu arbeiten und regelmäßig zu kommen.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wettkämpfe / Events + optional Bild 2 -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
+                    <div class="lg:col-span-7">
+                        <h3 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900">
+                            Regatten, Events & Gemeinschaft
+                        </h3>
+
+                        <p class={"mt-3 " + bodyClass}>
+                            Drachenboot lebt auch von Events: gemeinsame Trainings, Wettkämpfe und Vereinsaktionen.
+                            Ob Regatta-Atmosphäre oder einfach ein gutes Training mit der Crew – das Gemeinschaftsgefühl steht im Mittelpunkt.
+                        </p>
+
+                        <p class={"mt-4 " + bodyClass}>
+                            Wenn du Lust hast, dich sportlich zu steigern, können auch Regatten und Teamziele ein Thema sein.
+                            Gleichzeitig ist Drachenboot perfekt, um einfach regelmäßig aufs Wasser zu kommen und gemeinsam aktiv zu sein.
+                        </p>
+
+                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                            <a class={ctaBtn} href="/kontakt">Mitmachen</a>
+                            <a class={secondaryBtn} href="/news">Aktuelle Berichte</a>
+                        </div>
+                    </div>
+
+                    <!-- Bild 2 (optional) -->
+                    <div class="lg:col-span-5">
+                        <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
+                            <div class="relative aspect-[4/3]">
+                                <img
+                                        src={img2}
+                                        alt=""
+                                        loading="lazy"
+                                        decoding="async"
+                                        class="absolute inset-0 h-full w-full object-cover"
+                                />
+                            </div>
+                        </div>
+                        <p class={"mt-3 " + smallClass}>
+                            Bild: ©No4Any
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kurzinfo / FAQ -->
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <h3 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 text-center">
+                    Kurz & knapp
+                </h3>
+
+                <div class="mt-8 grid gap-6 md:grid-cols-3">
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+                        <!-- dezenter blauer Strich wie auf Home -->
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Für wen?</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Für alle, die Teamsport mögen – egal ob Einsteiger oder mit Erfahrung.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Was braucht man?</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Sportkleidung, Trinkflasche – ggf. Wechselshirt. Paddel/Boot stellen wir.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+                        <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
+
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Wie starten?</div>
+                        <p class={"mt-2 " + smallClass}>
+                            Einfach Kontakt aufnehmen und zum Probetraining kommen.
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+</SiteLayout>
+
