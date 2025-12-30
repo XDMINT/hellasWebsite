@@ -44,6 +44,9 @@ const useSlideshow = isHome && heroImages.length > 1;
 	<section class="relative w-full">
 		{/* Hero-Höhe (responsive) */}
 		<div class="relative w-full h-80 sm:h-140 overflow-hidden">
+			<div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
+				<slot name="heroTopLeft" />
+			</div>
 			{useSlideshow ? (
 				<div class="absolute inset-0" id="hero-slideshow">
 					{heroImages.map((src, idx) => (
