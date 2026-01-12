@@ -1,0 +1,261 @@
+---
+import SiteLayout from "../layouts/siteLayout.astro";
+
+const underlinedTitleClass =
+    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
+    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
+    "after:h-1 after:rounded-full after:bg-blue-500";
+
+const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
+const smallClass = "font-barlow text-sm text-neutral-600";
+const accentBar = "h-1 w-12 rounded-full bg-blue-500/90";
+
+const box = "bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12";
+const card = "bg-white rounded-2xl ring-1 ring-black/10 p-6";
+
+const inputClass =
+    "w-full rounded-xl bg-white px-4 py-3 font-barlow text-sm sm:text-base text-neutral-900 " +
+    "ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-blue-300";
+
+const labelClass = "font-barlow text-sm font-semibold text-neutral-700";
+const btnPrimary =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-amber-500 text-white hover:bg-amber-600 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
+
+const btnSecondary =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+
+
+const clubName = "Wassersportverein Hellas 1920 Gießen e. V.";
+const addressLines = [
+    "Wißmarer Weg 125",
+    "35396 Gießen",
+    "Deutschland",
+];
+const email = "kontakt@wsv-hellas.de"; // ggf. anpassen
+const phone = "+49 …";             // ggf. anpassen
+
+// Google Maps Query (Marker über Such-Query)
+const mapQuery = `${clubName}, Wißmarer Weg 125, 35396 Gießen`;
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
+
+---
+
+<SiteLayout pageTitle="Kontakt | WSV Hellas" showHero={false}>
+    <section class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+            <div class={box}>
+                <div class="text-center">
+                    <h1 class={underlinedTitleClass}>Kontakt</h1>
+                    <p class={"mt-5 mx-auto max-w-3xl " + bodyClass}>
+                        Du hast Fragen zu Training, Mitgliedschaft oder Veranstaltungen? Schreib uns – wir melden uns schnellstmöglich zurück.
+                    </p>
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <a class={btnSecondary} href="/trainingszeiten">Trainingszeiten</a>
+                        <a class={btnSecondary} href="/vorstand">Ansprechpartner</a>
+                    </div>
+                </div>
+
+                <div class="mt-10 grid gap-6 lg:grid-cols-2 lg:items-start">
+                    {/* FORMULAR (Netlify Forms kompatibel) */}
+                    <div class={card}>
+                        <div class={accentBar}></div>
+                        <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
+                            Nachricht senden
+                        </h2>
+
+                        <form
+                                class="mt-6 grid gap-4"
+                                name="kontakt"
+                                method="POST"
+                                data-netlify="true"
+                                netlify-honeypot="bot-field"
+                        >
+                            <input type="hidden" name="form-name" value="kontakt" />
+                            <p class="hidden">
+                                <label>Don’t fill this out: <input name="bot-field" /></label>
+                            </p>
+
+                            <div>
+                                <label class={labelClass} for="name">Name</label>
+                                <input id="name" name="name" type="text" class={inputClass} autocomplete="name" required />
+                            </div>
+
+                            <div>
+                                <label class={labelClass} for="email">E-Mail</label>
+                                <input id="email" name="email" type="email" class={inputClass} autocomplete="email" required />
+                            </div>
+
+                            <div>
+                                <label class={labelClass} for="topic">Thema</label>
+                                <select id="topic" name="topic" class={inputClass}>
+                                    <option>Allgemein</option>
+                                    <option>Probetraining</option>
+                                    <option>Mitgliedschaft</option>
+                                    <option>Rudern</option>
+                                    <option>Drachenboot</option>
+                                    <option>Hallensport / Sportabzeichen</option>
+                                    <option>Sonstiges</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class={labelClass} for="message">Nachricht</label>
+                                <textarea
+                                        id="message"
+                                        name="message"
+                                        rows="6"
+                                        class={inputClass}
+                                        placeholder="Worum geht’s?"
+                                        required
+                                />
+                            </div>
+
+                            <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                                <button type="submit" class={btnPrimary}>Absenden</button>
+                                <a class={btnSecondary} href={`mailto:${email}`}>Oder per E-Mail</a>
+                            </div>
+
+                            <p class={"pt-1 " + smallClass}>
+                                Mit dem Absenden erklärst du dich mit der Verarbeitung deiner Angaben zur Bearbeitung der Anfrage einverstanden.
+                                Details siehe <a class="text-blue-700 font-semibold hover:underline" href="/datenschutz">Datenschutz</a>.
+                            </p>
+                        </form>
+                    </div>
+
+                    {/* KONTAKTINFOS */}
+                    <div class={card}>
+                        <div class={accentBar}></div>
+                        <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
+                            Kontakt & Anschrift
+                        </h2>
+
+                        <div class="mt-5 space-y-4">
+                            <div>
+                                <div class="font-barlow text-sm font-semibold text-neutral-700">Verein</div>
+                                <div class={"mt-1 " + bodyClass}>
+                                    <strong class="font-albert font-extrabold text-neutral-900">{clubName}</strong>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="font-barlow text-sm font-semibold text-neutral-700">Adresse</div>
+                                <div class={"mt-1 " + bodyClass}>
+                                    {addressLines.map((l) => (<div>{l}</div>))}
+                                </div>
+                            </div>
+
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <div class="font-barlow text-sm font-semibold text-neutral-700">E-Mail</div>
+                                    <a class={"mt-1 inline-block font-barlow font-semibold text-blue-700 hover:underline"} href={`mailto:${email}`}>
+                                        {email}
+                                    </a>
+                                </div>
+                                <div>
+                                    <div class="font-barlow text-sm font-semibold text-neutral-700">Telefon</div>
+                                    <a class={"mt-1 inline-block font-barlow font-semibold text-blue-700 hover:underline"} href={`tel:${phone}`}>
+                                        {phone}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <div class="font-barlow text-sm font-semibold text-neutral-700">Schnelllinks</div>
+                                <div class="mt-2 flex flex-wrap gap-3">
+                                    <a class={btnSecondary} href="/trainingszeiten">Trainingszeiten</a>
+                                    <a class={btnSecondary} href="/news">News</a>
+                                    <a class={btnSecondary} href="/impressum">Impressum</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* MAP (2-Klick) */}
+                {/* MAP (2-Klick) */}
+                <div class="mt-6">
+                    <div class={card}>
+                        <div class={accentBar}></div>
+                        <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
+                            Anfahrt
+                        </h2>
+
+                        <div class="mt-5">
+                            <div
+                                    class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 bg-white"
+                                    data-map-shell
+                            >
+                                <div class="p-6 sm:p-8 text-center">
+                                    <div class="font-albert text-lg sm:text-xl font-extrabold text-neutral-900">
+                                        Karte laden
+                                    </div>
+                                    <p class={"mt-2 mx-auto max-w-2xl " + smallClass}>
+                                        Beim Laden der Karte können Daten an Google übertragen werden. Alternativ kannst du direkt
+                                        eine Route in Google Maps öffnen.
+                                    </p>
+
+                                    <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                        <button
+                                                type="button"
+                                                class={btnPrimary + " relative z-10"}
+                                                data-map-load
+                                                data-map-src={mapSrc}
+                                                data-map-title={`Karte: ${clubName}`}
+                                        >
+                                            Google Maps anzeigen
+                                        </button>
+
+                                        <a
+                                                class={btnSecondary}
+                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                        >
+                                            In Google Maps öffnen
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script is:inline>
+                                // Guard: nicht mehrfach registrieren (falls Astro irgendwann mehrfach rendert)
+                                if (!window.__hellasMapDelegationInstalled) {
+                                    window.__hellasMapDelegationInstalled = true;
+
+                                    document.addEventListener("click", (ev) => {
+                                        const btn = ev.target.closest("[data-map-load]");
+                                        if (!btn) return;
+
+                                        const shell = btn.closest("[data-map-shell]");
+                                        if (!shell) return;
+
+                                        const src = btn.getAttribute("data-map-src");
+                                        const title = btn.getAttribute("data-map-title") || "Google Maps";
+                                        if (!src) return;
+
+                                        shell.innerHTML = `
+              <iframe
+                title="${title}"
+                src="${src}"
+                class="block w-full h-[360px] sm:h-[420px]"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            `;
+                                    });
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+</SiteLayout>
+
