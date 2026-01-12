@@ -151,15 +151,28 @@ const pdfHref = "/downloads/aufnahmeAntrag.pdf";
                                 { t: "Familie (3 Personen)", p: "22,00 €" },
                                 { t: "Familie (4+ Personen)", p: "25,00 €" },
                             ].map((row) => (
-                                    <div class="bg-neutral-100 rounded-2xl ring-1 ring-black/10 p-4">
+                                    <div class="bg-neutral-100 rounded-2xl ring-1 ring-black/10 p-4 w-full max-w-full overflow-hidden">
                                         <div class={accentBar}></div>
-                                        <div class="mt-4 flex items-center justify-between gap-4">
-                                            <div class="font-barlow text-sm font-semibold text-neutral-800">{row.t}</div>
-                                            <div class="font-barlow text-sm font-extrabold text-neutral-900 whitespace-nowrap">{row.p}</div>
+
+                                        <div class="mt-4 flex items-start justify-between gap-3">
+                                            {/* wichtig: min-w-0 damit der Text wirklich umbrechen darf */}
+                                            <div class="min-w-0">
+                                                <div class="font-barlow text-sm font-semibold text-neutral-800 break-words">
+                                                    {row.t}
+                                                </div>
+                                            </div>
+
+                                            {/* Preis: immer sichtbar, kein Umbruch */}
+                                            <div class="shrink-0 text-right">
+                                                <div class="font-barlow text-base font-extrabold text-neutral-900 whitespace-nowrap">
+                                                    {row.p}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                             ))}
                         </div>
+
 
                         {/* Aufnahmegebühr */}
                         <div class="mt-6 bg-neutral-100 rounded-2xl ring-1 ring-black/10 p-5">
