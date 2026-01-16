@@ -23,6 +23,8 @@ const {
 const normalize = (p: string) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
 const pathname = normalize(Astro.url?.pathname ?? "/");
 
+const shouldPrefetch = (href: string) => normalize(href) === "/news" && pathname !== "/news";
+
 const isActive = (href: string) => {
     const h = normalize(href);
     if (h === "/") return pathname === "/";
@@ -80,6 +82,7 @@ const isActive = (href: string) => {
                                 <li>
                                     <a
                                             href={l.href}
+                                            data-astro-prefetch={shouldPrefetch(l.href) ? "viewport" : undefined}
                                             aria-current={active ? "page" : undefined}
                                             class:list={[
                                                 "relative inline-block pb-2 text-lg font-albert leading-none text-neutral-900 no-underline",
@@ -115,6 +118,7 @@ const isActive = (href: string) => {
                                     <li>
                                         <a
                                                 href={l.href}
+                                                data-astro-prefetch={shouldPrefetch(l.href) ? "load" : undefined}
                                                 aria-current={active ? "page" : undefined}
                                                 class:list={[
                                                     "font-albert text-base rounded-xl px-4 py-3 block no-underline transition",

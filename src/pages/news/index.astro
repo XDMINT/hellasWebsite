@@ -1,5 +1,16 @@
 ---
 export const prerender = false;
+
+Astro.response.headers.set(
+    "Cache-Control",
+    "public, max-age=0, must-revalidate"
+);
+
+Astro.response.headers.set(
+    "Netlify-CDN-Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=86400"
+);
+
 import SiteLayout from "../../layouts/siteLayout.astro";
 import { WP_BASE, fetchWp, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
 
@@ -239,13 +250,18 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                     <div>
                         <div class="font-albert text-sm font-bold text-neutral-900 mb-3">Filtern nach Tags</div>
                         <div class="flex flex-wrap gap-2">
-                            <a href={makeUrl({ page: 1, tag: "" })} class:list={[tagBtnBase, !tagSlug ? tagBtnActive : tagBtnInactive]}>
+                            <a
+                                    href={makeUrl({ page: 1, tag: "" })}
+                                    data-astro-prefetch
+                                    class:list={[tagBtnBase, !tagSlug ? tagBtnActive : tagBtnInactive]}
+                            >
                                 Alle
                             </a>
 
                             {tags.map((t) => (
                                     <a
                                             href={makeUrl({ page: 1, tag: t.slug })}
+                                            data-astro-prefetch
                                             class:list={[tagBtnBase, tagSlug === t.slug ? tagBtnActive : tagBtnInactive]}
                                             title={`${t.count} Beiträge`}
                                     >
@@ -267,6 +283,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                         return (
                                 <a
                                         href={`/news/${post.slug}/`}
+                                        data-astro-prefetch
                                         class="group rounded-2xl overflow-hidden bg-white ring-1 ring-neutral-200 shadow-sm
                      transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
                                 >
@@ -316,6 +333,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                     <div class="flex flex-wrap items-center justify-center gap-2">
                         <a
                                 href={makeUrl({ page: Math.max(1, page - 1) })}
+                                data-astro-prefetch
                                 aria-disabled={page === 1 ? "true" : undefined}
                                 class:list={[
                                     pageBtn,
@@ -332,7 +350,11 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                             return (
                                     <>
                                         {showDots && <span class="font-barlow text-neutral-500 px-2">…</span>}
-                                        <a href={makeUrl({ page: n })} class:list={[pageBtn, n === page ? pageBtnActive : pageBtnInactive]}>
+                                        <a
+                                                href={makeUrl({ page: n })}
+                                                data-astro-prefetch
+                                                class:list={[pageBtn, n === page ? pageBtnActive : pageBtnInactive]}
+                                        >
                                             {n}
                                         </a>
                                     </>
@@ -341,6 +363,7 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
 
                         <a
                                 href={makeUrl({ page: Math.min(totalPages, page + 1) })}
+                                data-astro-prefetch
                                 aria-disabled={page === totalPages ? "true" : undefined}
                                 class:list={[
                                     pageBtn,
