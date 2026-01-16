@@ -1,25 +1,47 @@
 ---
+export const prerender = false;
+
+Astro.response.headers.set(
+    "Cache-Control",
+    "public, max-age=0, must-revalidate"
+);
+
+Astro.response.headers.set(
+    "Netlify-CDN-Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=86400"
+);
+
 import SiteLayout from "../../layouts/siteLayout.astro";
-import { fetchWp, type WpPost, getFeaturedImage, formatDateDE } from "../../lib/wp";
-
-export async function getStaticPaths() {
-    const posts = await fetchWp<WpPost[]>(
-        `/wp-json/wp/v2/posts?per_page=100&orderby=date&order=desc`
-    );
-
-    return posts.map((p) => ({ params: { slug: p.slug } }));
-}
+import { fetchWp, type WpPost, getFeaturedImage, formatDateDE, stripHtml } from "../../lib/wp";
+import "../../styles/global.css";
 
 const { slug } = Astro.params;
 
 const found = await fetchWp<WpPost[]>(
-    `/wp-json/wp/v2/posts?slug=${slug}&_embed=1`
+    `/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug ?? "")}&_embed=1`
 );
 
-const post = found?.[0];
-if (!post) throw new Error(`Post not found: ${slug}`);
+const post = found?.[0] ?? null;
 
+if (!post) {
+    Astro.response.status = 404;
+}
 const img = getFeaturedImage(post);
+
+const normalizeText = (s: string) =>
+    s
+        .replace(/\s+/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace(/…/g, "...")
+        .trim();
+
+const excerptText = normalizeText(stripHtml(post.excerpt?.rendered ?? ""));
+const contentText = normalizeText(stripHtml(post.content?.rendered ?? ""));
+
+// Excerpt nur zeigen, wenn er NICHT im Content-Anfang steckt
+const showLead =
+    excerptText.length > 20 &&
+    !contentText.toLowerCase().startsWith(excerptText.slice(0, 80).toLowerCase());
 ---
 
 <SiteLayout
@@ -28,22 +50,86 @@ const img = getFeaturedImage(post);
         heroSubtitle={formatDateDE(post.date)}
         heroImage={img ?? "/images/news-header.jpg"}
 >
-    <article class="max-w-3xl mx-auto">
-        <h1 class="font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900">
-            {post.title.rendered}
-        </h1>
 
-        <div class="mt-2 font-barlow text-sm text-neutral-500">
-            {formatDateDE(post.date)}
-        </div>
+    <section class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-14">
+        <article class="space-y-6">
+            {/* Kopfkarte */}
+            <div class="rounded-2xl bg-neutral-100 ring-1 ring-black/10 px-6 py-6 sm:px-8 sm:py-8">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <a
+                            href="/news"
+                            class="font-barlow inline-flex items-center gap-2 text-sm font-semibold text-blue-700
+                   hover:text-blue-800 transition
+                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4
+                   focus-visible:outline-blue-300 rounded-lg"
+                    >
+                        <span aria-hidden="true">←</span> Zurück zu den News
+                    </a>
 
-        <div
-                class="mt-8 prose prose-neutral max-w-none font-barlow
-             prose-headings:font-albert prose-headings:tracking-tight
-             prose-a:text-blue-700 prose-a:font-semibold"
-                set:html={post.content?.rendered ?? ""}
-        />
-    </article>
+                    <div class="font-barlow text-sm text-neutral-600">
+                        {formatDateDE(post.date)}
+                    </div>
+                </div>
+
+                <h1
+                        class="mt-4 font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900
+                 relative inline-block
+                 after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2
+                 after:h-1 after:rounded-full after:bg-blue-500"
+                >
+                    {post.title.rendered}
+                </h1>
+
+                {showLead && (
+                        <p class="mt-5 font-barlow text-base sm:text-lg text-neutral-700 leading-relaxed">
+                            {excerptText}
+                        </p>
+                )}
+            </div>
+
+            {/* Content-Karte */}
+            <div class="rounded-2xl bg-white ring-1 ring-neutral-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-8 sm:px-10 sm:py-10">
+                    <div
+                            class="news-content prose prose-neutral prose-lg max-w-none font-barlow
+         prose-headings:font-albert prose-headings:tracking-tight
+         prose-p:leading-8 prose-p:my-5
+         prose-li:my-1
+         prose-strong:text-neutral-900
+         prose-a:text-blue-700 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+         prose-hr:my-10
+         prose-blockquote:border-l-blue-500 prose-blockquote:bg-neutral-50
+         prose-blockquote:rounded-2xl prose-blockquote:px-6 prose-blockquote:py-4"
+                            set:html={post.content?.rendered ?? ""}
+                    />
+
+
+
+                    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <a
+                                href="/news"
+                                class="font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2
+                     bg-neutral-100 text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
+                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                        >
+                            ← Zurück zur Übersicht
+                        </a>
+
+                        <a
+                                href="#top"
+                                class="font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2
+                     bg-blue-600 text-white hover:bg-blue-700 transition
+                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                        >
+                            Nach oben ↑
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+
 </SiteLayout>
+
 
 

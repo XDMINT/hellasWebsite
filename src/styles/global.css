@@ -65,3 +65,106 @@ p {
                 0 30px 60px rgba(0,  0, 0, 0.24);
     }
 }
+@layer components {
+    .news-content {
+        @apply flow-root;
+    }
+
+    /* WP Spacer Block killt oft riesige Lücken */
+    .news-content :where(.wp-block-spacer) {
+        height: 2rem !important;
+    }
+
+    /* ====== BILD-BLOECKE ALS CARDS ====== */
+    .news-content :where(figure.wp-block-image) {
+        @apply bg-neutral-50 ring-1 ring-neutral-200 shadow-sm rounded-2xl overflow-hidden;
+        padding: 0.75rem;
+        margin: 2rem auto !important;
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    /* Link-Wrapper clippt die Rundungen sicher */
+    .news-content :where(figure.wp-block-image > a) {
+        @apply block rounded-xl overflow-hidden;
+    }
+
+    /* WICHTIG: Bild NICHT mehr zwangsweise full width -> wieder unterschiedliche Groessen */
+    .news-content :where(figure.wp-block-image img) {
+        border-radius: 0.75rem !important;
+        width: auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    /* Default Groesse, wenn WP keine size-* Klasse setzt */
+    .news-content :where(
+      figure.wp-block-image:not(.size-thumbnail):not(.size-medium):not(.size-large):not(.size-full)
+      :not(.alignleft):not(.alignright):not(.alignwide):not(.alignfull)
+  ) {
+        max-width: 760px;
+    }
+
+    /* WP Bildgroessen respektieren (damit’s variieren kann) */
+    .news-content :where(figure.wp-block-image.size-thumbnail) { max-width: 260px; }
+    .news-content :where(figure.wp-block-image.size-medium)    { max-width: 420px; }
+    .news-content :where(figure.wp-block-image.size-large)     { max-width: 720px; }
+    .news-content :where(figure.wp-block-image.size-full)      { max-width: 980px; }
+
+    /* Optional: "wide/full" */
+    .news-content :where(figure.wp-block-image.alignwide) { max-width: 980px; }
+    .news-content :where(figure.wp-block-image.alignfull) { max-width: 100%; }
+
+    /* ====== TEXTUMBRUCH (nur wenn WP links/rechts ausrichtet) ====== */
+    .news-content :where(figure.wp-block-image.alignleft) {
+        float: left;
+        max-width: min(46%, 380px);
+        margin: 0.35rem 1.75rem 1.25rem 0 !important;
+    }
+
+    .news-content :where(figure.wp-block-image.alignright) {
+        float: right;
+        max-width: min(46%, 380px);
+        margin: 0.35rem 0 1.25rem 1.75rem !important;
+    }
+
+    .news-content :where(figcaption) {
+        @apply mt-2 text-center text-sm text-neutral-500;
+    }
+
+    /* Mobile: Floats aus -> sauber untereinander */
+    @media (max-width: 640px) {
+        .news-content :where(figure.wp-block-image.alignleft, figure.wp-block-image.alignright) {
+            float: none;
+            max-width: 100%;
+            margin: 1.25rem 0 !important;
+        }
+    }
+
+    /* ====== GALERIE ALS GRID (bleibt gleichmaessig) ====== */
+    .news-content :where(.wp-block-gallery, ul.wp-block-gallery, figure.wp-block-gallery) {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 1rem !important;
+        margin: 2rem 0 !important;
+        padding: 0 !important;
+    }
+
+    .news-content :where(.wp-block-gallery figure) {
+        @apply bg-neutral-50 ring-1 ring-neutral-200 shadow-sm rounded-2xl overflow-hidden;
+        padding: 0.5rem;
+        margin: 0 !important;
+    }
+
+    .news-content :where(.wp-block-gallery img) {
+        width: 100% !important;      /* in der Galerie SOLL es gleich breit sein */
+        max-width: 100% !important;
+        height: auto !important;
+        border-radius: 0.75rem !important;
+        display: block !important;
+    }
+}
+
+
+
