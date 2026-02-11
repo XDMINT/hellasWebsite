@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  title?: string;
+  className?: string;
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  loading?: "lazy" | "eager";
+  decoding?: "async" | "sync";
+}
+
+const {
+  src,
+  alt,
+  title,
+  className = "",
+  width,
+  height,
+  aspectRatio,
+  loading = "lazy",
+  decoding = "async",
+} = Astro.props;
+
+// Prüfe ob es ein lokales Asset ist (ImageMetadata) oder externe URL
+const isLocalAsset = typeof src !== "string";
+
+// Wenn lokales Asset: nutze <Image> für Optimierung
+// Wenn externe URL: nutze normales <img>
+---
+
+{isLocalAsset ? (
+  <Image
+    src={src}
+    alt={alt}
+    title={title}
+    class={`${className} object-cover w-full`}
+    {...(width && { width })}
+    {...(height && { height })}
+    loading={loading}
+    decoding={decoding}
+  />
+) : (
+  <img
+    src={src}
+    alt={alt}
+    title={title}
+    class={`${className} object-cover w-full`}
+    style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : ""}
+    {...(width && { width })}
+    {...(height && { height })}
+    loading={loading}
+    decoding={decoding}
+  />
+)}
+

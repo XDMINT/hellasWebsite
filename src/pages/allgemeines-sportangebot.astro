@@ -1,6 +1,8 @@
 ---
 // src/pages/weiteres-sportangebot/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
+import OptimizedImg from "../components/OptimizedImg.astro";
+import { logo, hallensport, sportabzeichen } from "../assets/images";
 
 const underlinedTitleClass =
     "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
@@ -23,10 +25,10 @@ const secondaryBtn =
     "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
 
-// Platzhalter-Bilder (1–2 Stück)
-const heroImage = "/images/220926_HellasGiessen-Logo-Web.png";
-const imgHall = "/images/hallensport.png";
-const imgSportabzeichen = "/images/sportabzeichen.jpg";
+// Bilder aus assets
+const heroImage = logo;
+const imgHall = hallensport;
+const imgSportabzeichen = sportabzeichen;
 ---
 
 <SiteLayout
@@ -198,12 +200,11 @@ const imgSportabzeichen = "/images/sportabzeichen.jpg";
                 <div class="lg:col-span-5">
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[4/3]">
-                            <img
+                            <OptimizedImg
                                     src={imgHall}
-                                    alt=""
+                                    alt="Hallensport"
+                                    className="absolute inset-0 h-full w-full"
                                     loading="lazy"
-                                    decoding="async"
-                                    class="absolute inset-0 h-full w-full object-cover"
                             />
                         </div>
                     </div>
@@ -223,12 +224,11 @@ const imgSportabzeichen = "/images/sportabzeichen.jpg";
                 <div class="lg:col-span-5 lg:order-1 order-2">
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[4/3]">
-                            <img
+                            <OptimizedImg
                                     src={imgSportabzeichen}
-                                    alt=""
+                                    alt="Sportabzeichen"
+                                    className="absolute inset-0 h-full w-full"
                                     loading="lazy"
-                                    decoding="async"
-                                    class="absolute inset-0 h-full w-full object-cover"
                             />
                         </div>
                     </div>

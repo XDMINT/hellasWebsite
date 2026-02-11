@@ -1,6 +1,8 @@
 ---
 // src/pages/drachenboot/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
+import OptimizedImg from "../components/OptimizedImg.astro";
+import { drachenbootAction, drachenbootHinten, drachenbootNah } from "../assets/images";
 
 const underlinedTitleClass =
     "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
@@ -20,10 +22,10 @@ const secondaryBtn =
     "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
 
-// Platzhalter-Bilder (tauschst du später)
-const heroImage = "/images/drachenbootAction.png";
-const img1 = "/images/drachenbootHinten.jpeg";
-const img2 = "/images/drachenbootNah.jpeg";
+// Bilder aus assets
+const heroImage = drachenbootAction;
+const img1 = drachenbootHinten;
+const img2 = drachenbootNah;
 ---
 
 <SiteLayout
@@ -78,12 +80,11 @@ const img2 = "/images/drachenbootNah.jpeg";
                 <div class="lg:col-span-6">
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[16/10]">
-                            <img
+                            <OptimizedImg
                                     src={img1}
-                                    alt=""
+                                    alt="Drachenboot Training"
+                                    className="absolute inset-0 h-full w-full"
                                     loading="lazy"
-                                    decoding="async"
-                                    class="absolute inset-0 h-full w-full object-cover"
                             />
                         </div>
                     </div>
@@ -149,12 +150,11 @@ const img2 = "/images/drachenbootNah.jpeg";
                     <div class="lg:col-span-5">
                         <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                             <div class="relative aspect-[4/3]">
-                                <img
+                                <OptimizedImg
                                         src={img2}
-                                        alt=""
+                                        alt="Drachenboot Event"
+                                        className="absolute inset-0 h-full w-full"
                                         loading="lazy"
-                                        decoding="async"
-                                        class="absolute inset-0 h-full w-full object-cover"
                                 />
                             </div>
                         </div>

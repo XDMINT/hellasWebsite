@@ -2,14 +2,17 @@
 // src/layouts/SiteLayout.astro
 import Header from "../components/header.astro";
 import Footer from "../components/footer.astro";
+import OptimizedImg from "../components/OptimizedImg.astro";
+import { Image } from "astro:assets";
 import "../styles/global.css"
+import type { ImageMetadata } from "astro";
 
 type Props = {
 	pageTitle?: string;
 	heroTitle?: string;
 	heroSubtitle?: string;
-	heroImage?: string;
-	heroImages?: string[];
+	heroImage?: string | ImageMetadata;
+	heroImages?: (string | ImageMetadata)[];
 	showHero?: boolean;
 };
 
@@ -47,23 +50,37 @@ const useSlideshow = isHome && heroImages.length > 1;
 			<div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
 				<slot name="heroTopLeft" />
 			</div>
-			{useSlideshow ? (
-				<div class="absolute inset-0" id="hero-slideshow">
-					{heroImages.map((src, idx) => (
-						<img
-							src={src}
-							alt=""
-							loading={idx === 0 ? "eager" : "lazy"}
-							decoding="async"
-							class:list={[
-								"absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-								idx === 0 ? "opacity-100" : "opacity-0",
-							]}
-							data-slide
-						/>
-					))}
-				</div>
-			) : (
+		{useSlideshow ? (
+			<div class="absolute inset-0" id="hero-slideshow">
+				{(heroImages as any[]).map((img, idx) => (
+					<div
+						class:list={[
+							"absolute inset-0 transition-opacity duration-700",
+							idx === 0 ? "opacity-100" : "opacity-0",
+						]}
+						data-slide
+					>
+						{typeof img === 'string' ? (
+							<img
+								src={img}
+								alt=""
+								loading="eager"
+								decoding="async"
+								class="absolute inset-0 h-full w-full object-cover"
+							/>
+						) : (
+							<Image
+								src={img}
+								alt=""
+								class="absolute inset-0 h-full w-full object-cover"
+								loading="eager"
+							/>
+						)}
+					</div>
+				))}
+			</div>
+		) : (
+			typeof heroImage === 'string' ? (
 				<img
 					src={heroImage}
 					alt=""
@@ -71,7 +88,15 @@ const useSlideshow = isHome && heroImages.length > 1;
 					decoding="async"
 					class="absolute inset-0 h-full w-full object-cover"
 				/>
-			)}
+			) : (
+				<Image
+					src={heroImage}
+					alt=""
+					class="absolute inset-0 h-full w-full object-cover"
+					loading="eager"
+				/>
+			)
+		)}
 
 			{/* Text sitzt unten im Bild (statt mittig) */}
 			<div class="absolute inset-0 flex items-end justify-center px-4 sm:px-6 lg:px-8 pb-10 sm:pb-12 lg:pb-14">

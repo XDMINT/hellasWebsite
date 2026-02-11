@@ -12,6 +12,7 @@ Astro.response.headers.set(
 );
 
 import SiteLayout from "../../layouts/siteLayout.astro";
+import OptimizedImg from "../../components/OptimizedImg.astro";
 import { WP_BASE, fetchWp, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
 
 type WpTag = { id: number; name: string; slug: string; count: number };
@@ -192,12 +193,11 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                     <div class="grid lg:grid-cols-12">
                         <div class="relative lg:col-span-7 aspect-[16/9] lg:aspect-auto lg:min-h-[340px] bg-neutral-200">
                             {featuredImg ? (
-                                    <img
+                                    <OptimizedImg
                                             src={featuredImg}
-                                            alt=""
+                                            alt="Featured Post"
+                                            className="absolute inset-0 h-full w-full"
                                             loading="eager"
-                                            decoding="async"
-                                            class="absolute inset-0 h-full w-full object-cover"
                                     />
                             ) : (
                                     <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
@@ -289,12 +289,11 @@ const featuredImg = featured ? getFeaturedImage(featured) : null;
                                 >
                                     <div class="relative aspect-[16/9] bg-neutral-200">
                                         {img ? (
-                                                <img
+                                                <OptimizedImg
                                                         src={img}
-                                                        alt=""
+                                                        alt="News Post"
+                                                        className="absolute inset-0 h-full w-full"
                                                         loading="lazy"
-                                                        decoding="async"
-                                                        class="absolute inset-0 h-full w-full object-cover"
                                                 />
                                         ) : (
                                                 <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />

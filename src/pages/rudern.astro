@@ -1,6 +1,8 @@
 ---
 // src/pages/rudern/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
+import OptimizedImg from "../components/OptimizedImg.astro";
+import { rudernDoppelzweier, rudernBreitSport, rudernKind, rudernPodium } from "../assets/images";
 
 const underlinedTitleClass =
     "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
@@ -24,11 +26,11 @@ const ctaBtn =
     "bg-amber-500 text-white hover:bg-amber-600 transition " +
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
 
-// Platzhalter-Bilder (du tauschst die später aus)
-const heroImage = "/images/rudernDoppelzweier.jpg";
-const imgBreitensport = "/images/rudernBreitSport.jpeg";
-const imgKinder = "/images/rudernKind.jpeg";
-const imgRennrudern = "/images/rudernPodium.jpeg";
+// Bilder aus assets
+const heroImage = rudernDoppelzweier;
+const imgBreitensport = rudernBreitSport;
+const imgKinder = rudernKind;
+const imgRennrudern = rudernPodium;
 ---
 
 <SiteLayout
@@ -88,12 +90,11 @@ const imgRennrudern = "/images/rudernPodium.jpeg";
                  transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
                 >
                     <div class="relative aspect-[16/9] bg-neutral-200">
-                        <img
+                        <OptimizedImg
                                 src={imgBreitensport}
-                                alt=""
+                                alt="Breitensport Rudern"
+                                className="absolute inset-0 h-full w-full"
                                 loading="lazy"
-                                decoding="async"
-                                class="absolute inset-0 h-full w-full object-cover"
                         />
                         <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
                     </div>
@@ -121,12 +122,11 @@ const imgRennrudern = "/images/rudernPodium.jpeg";
                  transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
                 >
                     <div class="relative aspect-[16/9] bg-neutral-200">
-                        <img
+                        <OptimizedImg
                                 src={imgKinder}
-                                alt=""
+                                alt="Kinder & Jugendliche Rudern"
+                                className="absolute inset-0 h-full w-full"
                                 loading="lazy"
-                                decoding="async"
-                                class="absolute inset-0 h-full w-full object-cover"
                         />
                         <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
                     </div>
@@ -154,12 +154,11 @@ const imgRennrudern = "/images/rudernPodium.jpeg";
                  transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
                 >
                     <div class="relative aspect-[16/9] bg-neutral-200">
-                        <img
+                        <OptimizedImg
                                 src={imgRennrudern}
-                                alt=""
+                                alt="Rennrudern"
+                                className="absolute inset-0 h-full w-full"
                                 loading="lazy"
-                                decoding="async"
-                                class="absolute inset-0 h-full w-full object-cover"
                         />
                         <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
                     </div>

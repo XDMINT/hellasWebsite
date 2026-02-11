@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../layouts/siteLayout.astro";
 import RuderAmpel from "../components/ruderampel.astro";
+import { rudernEiner, drachenbootNah, rudernBreitSport } from "../assets/images";
 
 const titleClass =
 	"font-albert text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight";
@@ -17,8 +18,8 @@ const ghostButtonClass =
 <SiteLayout
 	pageTitle="WSV Hellas – Start"
 	heroTitle="Wassersportverein Hellas 1920 Gießen e.V"
-	heroSubtitle="„Auf dem Wasser zuhause“"
-	heroImages={["/images/rudernEiner.jpeg", "/images/drachenbootNah.jpeg", "/images/rudernBreitSport.jpeg"]}
+	heroSubtitle={'„Auf dem Wasser zuhause"'}
+	heroImages={[rudernEiner, drachenbootNah, rudernBreitSport]}
 >
 	<div id="top" class="sr-only">Top</div>
 
