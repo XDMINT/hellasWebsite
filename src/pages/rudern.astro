@@ -2,6 +2,7 @@
 // src/pages/rudern/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
 import OptimizedImg from "../components/OptimizedImg.astro";
+import RuderAmpel from "../components/ruderampel.astro";
 import { rudernDoppelzweier, rudernBreitSport, rudernKind, rudernPodium } from "../assets/images";
 
 const underlinedTitleClass =
@@ -40,6 +41,9 @@ const imgRennrudern = rudernPodium;
         heroImage={heroImage}
         showHero={true}
 >
+    <!-- Ruderampel im Hero -->
+    <RuderAmpel slot="heroTopLeft" variant="overlay" />
+
     <div id="top" class="sr-only">Top</div>
 
     <!-- Intro -->
