@@ -1,0 +1,166 @@
+---
+// Cookie Consent Banner für DSGVO-Konformität
+---
+
+<div id="cookie-consent" class="hidden fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6" data-cookie-consent>
+    <div class="mx-auto max-w-4xl bg-white rounded-2xl shadow-2xl ring-1 ring-neutral-200 p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+            <div class="flex-1">
+                <h3 class="font-albert text-lg font-bold text-neutral-900 mb-2">🍪 Cookie-Hinweis</h3>
+                <p class="font-barlow text-sm text-neutral-700 leading-relaxed">
+                    Wir nutzen Google Maps zur Anzeige unseres Bootshauses. Dabei werden Daten an Google übertragen und Cookies gesetzt.
+                    Weitere Infos in unserer <a href="/datenschutz" class="text-blue-600 hover:text-blue-800 underline">Datenschutzerklärung</a>.
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <button
+                    type="button"
+                    class="font-barlow px-5 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    data-cookie-accept
+                >
+                    Akzeptieren
+                </button>
+                <button
+                    type="button"
+                    class="font-barlow px-5 py-2.5 rounded-lg text-sm font-semibold bg-neutral-100 text-neutral-900 hover:bg-neutral-200 transition ring-1 ring-neutral-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-400"
+                    data-cookie-decline
+                >
+                    Ablehnen
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cookie-Einstellungen Button (für späteren Widerruf) -->
+<button
+    type="button"
+    id="cookie-settings-btn"
+    class="hidden fixed bottom-4 left-4 z-40 p-3 rounded-full bg-neutral-800 text-white shadow-lg hover:bg-neutral-700 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600"
+    title="Cookie-Einstellungen"
+    data-cookie-settings
+>
+    🍪
+</button>
+
+<script is:inline>
+    (() => {
+        const CONSENT_KEY = 'wsv-hellas-cookie-consent';
+        const CONSENT_VERSION = '1'; // Bei Änderungen erhöhen
+
+        const banner = document.querySelector('[data-cookie-consent]');
+        const settingsBtn = document.querySelector('[data-cookie-settings]');
+        const acceptBtn = document.querySelector('[data-cookie-accept]');
+        const declineBtn = document.querySelector('[data-cookie-decline]');
+
+        if (!banner || !settingsBtn || !acceptBtn || !declineBtn) {
+            console.error('Cookie-Consent: DOM-Elemente fehlen');
+            return;
+        }
+
+        // Consent-Status laden
+        const getConsent = () => {
+            try {
+                const stored = localStorage.getItem(CONSENT_KEY);
+                if (!stored) return null;
+                const data = JSON.parse(stored);
+                // Prüfe Version
+                if (data.version !== CONSENT_VERSION) return null;
+                return data;
+            } catch (e) {
+                console.error('Cookie-Consent: Fehler beim Laden', e);
+                return null;
+            }
+        };
+
+        // Consent speichern
+        const setConsent = (accepted) => {
+            try {
+                const data = {
+                    accepted: accepted,
+                    version: CONSENT_VERSION,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem(CONSENT_KEY, JSON.stringify(data));
+
+                // Custom Event für andere Komponenten (z.B. Google Maps)
+                window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                    detail: { accepted }
+                }));
+            } catch (e) {
+                console.error('Cookie-Consent: Fehler beim Speichern', e);
+            }
+        };
+
+        // Banner anzeigen
+        const showBanner = () => {
+            banner.classList.remove('hidden');
+            banner.classList.add('animate-slide-up');
+        };
+
+        // Banner verstecken
+        const hideBanner = () => {
+            banner.classList.add('hidden');
+            // Zeige Settings-Button
+            settingsBtn.classList.remove('hidden');
+        };
+
+        // Initialisierung
+        const consent = getConsent();
+
+        if (consent === null) {
+            // Kein Consent gespeichert -> Banner zeigen
+            showBanner();
+        } else {
+            // Consent vorhanden -> Settings-Button zeigen
+            settingsBtn.classList.remove('hidden');
+
+            // Event für bestehenden Consent feuern
+            window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                detail: { accepted: consent.accepted }
+            }));
+        }
+
+        // Event-Listener
+        acceptBtn.addEventListener('click', () => {
+            setConsent(true);
+            hideBanner();
+        });
+
+        declineBtn.addEventListener('click', () => {
+            setConsent(false);
+            hideBanner();
+        });
+
+        settingsBtn.addEventListener('click', () => {
+            // Consent zurücksetzen und Banner neu zeigen
+            localStorage.removeItem(CONSENT_KEY);
+            settingsBtn.classList.add('hidden');
+            showBanner();
+        });
+
+        // Export für andere Scripts
+        window.getCookieConsent = () => {
+            const c = getConsent();
+            return c ? c.accepted : false;
+        };
+    })();
+</script>
+
+<style>
+    @keyframes slide-up {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-slide-up {
+        animation: slide-up 0.3s ease-out;
+    }
+</style>
+

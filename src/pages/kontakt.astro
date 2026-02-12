@@ -231,6 +231,26 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
                                         const title = btn.getAttribute("data-map-title") || "Google Maps";
                                         if (!src) return;
 
+                                        // Prüfe Cookie-Consent
+                                        const hasConsent = window.getCookieConsent ? window.getCookieConsent() : false;
+
+                                        if (!hasConsent) {
+                                            // Zeige Hinweis
+                                            shell.innerHTML = `
+                                                <div class="p-6 sm:p-8 text-center bg-amber-50 ring-1 ring-amber-200">
+                                                    <div class="font-albert text-lg font-bold text-amber-900">
+                                                        ⚠️ Cookie-Zustimmung erforderlich
+                                                    </div>
+                                                    <p class="mt-2 font-barlow text-sm text-amber-800">
+                                                        Um Google Maps zu laden, musst du Cookies akzeptieren. 
+                                                        Scrolle nach unten und klicke auf "Akzeptieren" im Cookie-Banner.
+                                                    </p>
+                                                </div>
+                                            `;
+                                            return;
+                                        }
+
+                                        // Consent vorhanden -> Karte laden
                                         shell.innerHTML = `
               <iframe
                 title="${title}"
