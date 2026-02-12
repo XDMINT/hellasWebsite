@@ -2,6 +2,7 @@
 // src/layouts/SiteLayout.astro
 import Header from "../components/header.astro";
 import Footer from "../components/footer.astro";
+import CookieConsent from "../components/cookieConsent.astro";
 import OptimizedImg from "../components/OptimizedImg.astro";
 import { Image } from "astro:assets";
 import "../styles/global.css"
@@ -144,6 +145,8 @@ const useSlideshow = isHome && heroImages.length > 1;
 		})();
 		</script>
 )}
+
+<CookieConsent />
 </body>
 </html>
 

@@ -122,18 +122,18 @@ const isOverlay = variant === "overlay";
 
                 <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
                     <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar Gießen</h3>
-                    <div id="radar-container" class="relative w-full rounded-lg overflow-hidden" style="height: 360px; background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);">
+                    <div id="radar-container" class="relative w-full rounded-lg overflow-hidden" style="height: 360px;">
                         <div id="radar-map" style="width: 100%; height: 100%;"></div>
                     </div>
                     <div class="mt-2 font-barlow text-xs text-neutral-600">
-                        Echtzeit-Regenradar für Gießen (Datenquelle: RainViewer)
+                        Echtzeit-Regenradar für Gießen
                     </div>
                     <div class="mt-1 font-barlow text-xs text-neutral-500">
-                        API: <a href="https://www.rainviewer.com/api/weather-maps-api.html" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 underline">RainViewer Weather Maps API</a>
+                        Quelle: <a href="https://www.rainviewer.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 underline">RainViewer</a>
                     </div>
                 </div>
 
-                <div class="rounded-xl bg-blue-50 ring-1 ring-blue-200 p-4">
+                 <div class="rounded-xl bg-blue-50 ring-1 ring-blue-200 p-4">
                     <h3 class="font-albert text-base font-bold text-blue-900 mb-2">📋 Ruderregeln</h3>
                     <ul class="font-barlow text-sm text-blue-900 space-y-1">
                         <li>🔴 <strong>Rot:</strong> Ruderverbot (Hochwasser &gt;360cm oder &lt;1°C)</li>
@@ -149,108 +149,116 @@ const isOverlay = variant === "overlay";
 
     <script is:inline define:vars={{ isOverlay }}>
         (() => {
-            // RainViewer Weather Maps API initialisieren
+            // RainViewer Radar mit offizieller API
             const initRadarMap = () => {
                 const mapContainer = document.getElementById("radar-map");
-                if (!mapContainer || mapContainer._mapInitialized) return;
+                if (!mapContainer || mapContainer._initialized) return;
 
-                mapContainer._mapInitialized = true;
+                mapContainer._initialized = true;
 
-                // Leaflet + RainViewer laden
+                // Leaflet CSS & JS laden
                 if (!window.L) {
-                    const cssLink = document.createElement("link");
-                    cssLink.rel = "stylesheet";
-                    cssLink.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
-                    document.head.appendChild(cssLink);
+                    const link = document.createElement("link");
+                    link.rel = "stylesheet";
+                    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+                    document.head.appendChild(link);
 
                     const script = document.createElement("script");
-                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
-                    script.onload = () => createRainViewerMap();
+                    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+                    script.onload = () => setupMap();
                     document.head.appendChild(script);
                 } else {
-                    createRainViewerMap();
+                    setupMap();
                 }
             };
 
-            const createRainViewerMap = () => {
+            const setupMap = () => {
                 const mapContainer = document.getElementById("radar-map");
                 if (!mapContainer) return;
 
                 try {
-                    // Erstelle Karte
-                    const map = window.L.map(mapContainer).setView([50.585, 8.678], 9);
+                    // Karte initialisieren
+                    const map = window.L.map(mapContainer, {
+                        center: [50.585, 8.678],
+                        zoom: 9,
+                        zoomControl: true
+                    });
 
                     // OpenStreetMap Basemap
-                    window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                        attribution: "© OpenStreetMap",
+                    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
                         maxZoom: 18
                     }).addTo(map);
-
-                    // RainViewer Radar-Tiles über Netlify Function
-                    // Die Function proxied die Tiles und löst CORS-Probleme
-                    // Format: /.netlify/functions/rainviewer-proxy?z={z}&x={x}&y={y}
-                    const radarUrl = "/.netlify/functions/rainviewer-proxy?z={z}&x={x}&y={y}&timestamp=0";
-
-                    const radarLayer = window.L.tileLayer(radarUrl, {
-                        attribution: "RainViewer",
-                        maxZoom: 16,
-                        opacity: 0.7,
-                        zIndex: 100,
-                        crossOrigin: "anonymous",
-                        tms: false
-                    });
-
-                    radarLayer.on('error', (e) => {
-                        console.error("Ruderampel: Radar Layer Fehler:", e);
-                    });
-
-                    radarLayer.addTo(map);
 
                     // Gießen Marker
                     window.L.circleMarker([50.585, 8.678], {
                         radius: 8,
                         fillColor: "#3b82f6",
-                        color: "#ffffff",
+                        color: "#fff",
                         weight: 2,
                         opacity: 1,
-                        fillOpacity: 0.9,
-                        zIndex: 200
+                        fillOpacity: 0.9
                     }).addTo(map).bindPopup("<b>Gießen</b><br>Ruderanlegestelle Lahn");
-                } catch (err) {
-                    console.error("Ruderampel: Fehler bei Radar-Initialisierung:", err.message, err);
-                     // Fallback: Zeige wenigstens die Basemap
-                     try {
-                         const map = window.L.map(mapContainer).setView([50.585, 8.678], 9);
-                         window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                             attribution: "© OpenStreetMap",
-                             maxZoom: 18
-                         }).addTo(map);
-                         window.L.circleMarker([50.585, 8.678], {
-                             radius: 8,
-                             fillColor: "#3b82f6",
-                             color: "#ffffff",
-                             weight: 2,
-                             opacity: 1,
-                             fillOpacity: 0.9
-                         }).addTo(map);
-                     } catch (fallbackErr) {
-                         console.error("Ruderampel: Auch Fallback fehlgeschlagen:", fallbackErr);
-                     }
-                 }
-             };
 
-            // Radar beim Modal-Öffnen laden
-            setTimeout(() => {
-                const modal = document.querySelector("[data-ampel-modal]");
-                if (modal) {
-                    const observer = new MutationObserver(() => {
-                        if (!modal.classList.contains("hidden")) {
-                            setTimeout(initRadarMap, 500); // Erhöhe auf 500ms
-                        }
-                    });
-                    observer.observe(modal, { attributes: true });
-                 }
-            }, 100); // Reduziere initiales Delay
+                    // RainViewer API: Lade verfügbare Timestamps
+                    fetch('https://api.rainviewer.com/public/weather-maps.json')
+                        .then(res => res.json())
+                        .then(data => {
+                            if (!data || !data.radar || !data.radar.past || data.radar.past.length === 0) {
+                                console.warn("RainViewer: Keine Radar-Daten verfügbar");
+                                return;
+                            }
+
+                            // Nimm den neuesten Timestamp
+                            const latestFrame = data.radar.past[data.radar.past.length - 1];
+                            const timestamp = latestFrame.time;
+                            const path = latestFrame.path;
+
+                            // Füge Radar-Layer hinzu
+                            const radarUrl = `https://tilecache.rainviewer.com${path}/256/{z}/{x}/{y}/2/1_1.png`;
+
+                            const radarLayer = window.L.tileLayer(radarUrl, {
+                                tileSize: 256,
+                                opacity: 0.6,
+                                zIndex: 10,
+                                attribution: 'RainViewer'
+                            });
+
+                            radarLayer.addTo(map);
+
+                            // Optional: Zeitstempel anzeigen
+                            const timeStr = new Date(timestamp * 1000).toLocaleTimeString('de-DE');
+                            const info = window.L.control({position: 'bottomright'});
+                            info.onAdd = function() {
+                                const div = window.L.DomUtil.create('div', 'radar-info');
+                                div.style.background = 'rgba(255,255,255,0.9)';
+                                div.style.padding = '4px 8px';
+                                div.style.borderRadius = '4px';
+                                div.style.fontSize = '11px';
+                                div.innerHTML = `Radar: ${timeStr}`;
+                                return div;
+                            };
+                            info.addTo(map);
+                        })
+                        .catch(err => {
+                            console.error("RainViewer API Fehler:", err);
+                        });
+
+                } catch (err) {
+                    console.error("Radar-Karte Fehler:", err);
+                }
+            };
+
+            // Initialisiere Radar wenn Modal geöffnet wird
+            const radarModal = document.querySelector("[data-ampel-modal]");
+            if (radarModal) {
+                const radarObserver = new MutationObserver(() => {
+                    if (!radarModal.classList.contains("hidden")) {
+                        setTimeout(initRadarMap, 300);
+                    }
+                });
+                radarObserver.observe(radarModal, { attributes: true, attributeFilter: ['class'] });
+            }
 
             const API = "https://www.pegelonline.wsv.de/webservices/rest-api/v2";
             const STATION = "32807065-b887-49f0-935a-80033e5f3cb0";
