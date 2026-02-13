@@ -25,7 +25,7 @@ const isOverlay = variant === "overlay";
 
     <div id="ampel-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" data-ampel-modal>
          <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto" role="dialog">
-             <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
+             <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between rounded-t-2xl" style="z-index: 1000;">
                  <div class="flex items-center gap-4">
                      <div class="shrink-0 rounded-xl bg-neutral-900 p-2 shadow-inner">
                          <div class="flex flex-col gap-1.5">
@@ -121,17 +121,36 @@ const isOverlay = variant === "overlay";
                 </div>
 
                 <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
-                    <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar Gießen</h3>
-                    <div id="radar-container" class="relative w-full rounded-lg overflow-hidden" style="height: 360px;">
-                        <div id="radar-map" style="width: 100%; height: 100%;"></div>
+                    <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar (animiert)</h3>
+
+                    <div class="relative bg-white rounded-lg overflow-hidden" style="height: 400px; position: relative; z-index: 1;">
+                        <div id="radar-map" class="w-full h-full" style="position: relative; z-index: 1;"></div>
+                        <div class="absolute bottom-2 left-2 bg-white/95 rounded-lg px-3 py-2 shadow-md font-barlow text-xs" style="z-index: 500; pointer-events: none;">
+                            <span data-radar-timestamp>Lade Radar...</span>
+                        </div>
                     </div>
-                    <div class="mt-2 font-barlow text-xs text-neutral-600">
-                        Echtzeit-Regenradar für Gießen
+
+                    <div class="mt-3 flex items-center gap-3">
+                        <button type="button" class="shrink-0 w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition shadow-sm" data-radar-toggle aria-label="Animation starten/stoppen">
+                            <span class="text-base" data-radar-icon>▶</span>
+                        </button>
+
+                        <div class="flex-1">
+                            <div class="relative bg-neutral-200 rounded-full h-3 mb-1.5">
+                                <div class="absolute top-0 left-0 h-full bg-blue-600 rounded-full transition-all duration-300" style="width: 0%;" data-radar-progress></div>
+                                <div class="absolute top-0 left-0 h-full bg-yellow-400 rounded-full transition-all duration-300" style="width: 0%;" data-radar-progress-forecast></div>
+                            </div>
+                            <div class="flex justify-between font-barlow text-[10px] text-neutral-500 px-1" data-radar-timeline>
+                                <span>Lade...</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-1 font-barlow text-xs text-neutral-500">
-                        Quelle: <a href="https://www.rainviewer.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 underline">RainViewer</a>
+
+                    <div class="mt-2 font-barlow text-xs text-neutral-500">
+                        Quelle: Bright Sky / DWD (Deutscher Wetterdienst)
                     </div>
                 </div>
+
 
                  <div class="rounded-xl bg-blue-50 ring-1 ring-blue-200 p-4">
                     <h3 class="font-albert text-base font-bold text-blue-900 mb-2">📋 Ruderregeln</h3>
@@ -147,118 +166,49 @@ const isOverlay = variant === "overlay";
         </div>
     </div>
 
+    <script>
+        // Initialisiere Bright Sky Radar wenn Modal geöffnet wird
+        async function initRadarWhenReady() {
+            console.log('⏳ Warte auf Radar-Modal...');
+
+            const radarModal = document.querySelector("[data-ampel-modal]");
+            if (!radarModal) {
+                console.error('❌ Radar-Modal nicht gefunden');
+                return;
+            }
+
+            console.log('✅ Radar-Modal gefunden');
+            let radarInitialized = false;
+
+            const radarObserver = new MutationObserver(async () => {
+                if (!radarModal.classList.contains("hidden") && !radarInitialized) {
+                    radarInitialized = true;
+                    console.log('🎬 Modal geöffnet - starte Radar-Init...');
+                    try {
+                        // Lade die Radar-Funktion direkt
+                        await window.initBrightSkyRadar('radar-map');
+                    } catch (err) {
+                        console.error('❌ Radar-Init Fehler:', err);
+                    }
+                }
+            });
+            radarObserver.observe(radarModal, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        // Starte wenn DOM ready ist
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initRadarWhenReady);
+        } else {
+            initRadarWhenReady();
+        }
+    </script>
+
+    <script src="../lib/brightsky-radar.js"></script>
+
     <script is:inline define:vars={{ isOverlay }}>
         (() => {
-            // RainViewer Radar mit offizieller API
-            const initRadarMap = () => {
-                const mapContainer = document.getElementById("radar-map");
-                if (!mapContainer || mapContainer._initialized) return;
 
-                mapContainer._initialized = true;
-
-                // Leaflet CSS & JS laden
-                if (!window.L) {
-                    const link = document.createElement("link");
-                    link.rel = "stylesheet";
-                    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-                    document.head.appendChild(link);
-
-                    const script = document.createElement("script");
-                    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-                    script.onload = () => setupMap();
-                    document.head.appendChild(script);
-                } else {
-                    setupMap();
-                }
-            };
-
-            const setupMap = () => {
-                const mapContainer = document.getElementById("radar-map");
-                if (!mapContainer) return;
-
-                try {
-                    // Karte initialisieren
-                    const map = window.L.map(mapContainer, {
-                        center: [50.585, 8.678],
-                        zoom: 9,
-                        zoomControl: true
-                    });
-
-                    // OpenStreetMap Basemap
-                    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap',
-                        maxZoom: 18
-                    }).addTo(map);
-
-                    // Gießen Marker
-                    window.L.circleMarker([50.585, 8.678], {
-                        radius: 8,
-                        fillColor: "#3b82f6",
-                        color: "#fff",
-                        weight: 2,
-                        opacity: 1,
-                        fillOpacity: 0.9
-                    }).addTo(map).bindPopup("<b>Gießen</b><br>Ruderanlegestelle Lahn");
-
-                    // RainViewer API: Lade verfügbare Timestamps
-                    fetch('https://api.rainviewer.com/public/weather-maps.json')
-                        .then(res => res.json())
-                        .then(data => {
-                            if (!data || !data.radar || !data.radar.past || data.radar.past.length === 0) {
-                                console.warn("RainViewer: Keine Radar-Daten verfügbar");
-                                return;
-                            }
-
-                            // Nimm den neuesten Timestamp
-                            const latestFrame = data.radar.past[data.radar.past.length - 1];
-                            const timestamp = latestFrame.time;
-                            const path = latestFrame.path;
-
-                            // Füge Radar-Layer hinzu
-                            const radarUrl = `https://tilecache.rainviewer.com${path}/256/{z}/{x}/{y}/2/1_1.png`;
-
-                            const radarLayer = window.L.tileLayer(radarUrl, {
-                                tileSize: 256,
-                                opacity: 0.6,
-                                zIndex: 10,
-                                attribution: 'RainViewer'
-                            });
-
-                            radarLayer.addTo(map);
-
-                            // Optional: Zeitstempel anzeigen
-                            const timeStr = new Date(timestamp * 1000).toLocaleTimeString('de-DE');
-                            const info = window.L.control({position: 'bottomright'});
-                            info.onAdd = function() {
-                                const div = window.L.DomUtil.create('div', 'radar-info');
-                                div.style.background = 'rgba(255,255,255,0.9)';
-                                div.style.padding = '4px 8px';
-                                div.style.borderRadius = '4px';
-                                div.style.fontSize = '11px';
-                                div.innerHTML = `Radar: ${timeStr}`;
-                                return div;
-                            };
-                            info.addTo(map);
-                        })
-                        .catch(err => {
-                            console.error("RainViewer API Fehler:", err);
-                        });
-
-                } catch (err) {
-                    console.error("Radar-Karte Fehler:", err);
-                }
-            };
-
-            // Initialisiere Radar wenn Modal geöffnet wird
-            const radarModal = document.querySelector("[data-ampel-modal]");
-            if (radarModal) {
-                const radarObserver = new MutationObserver(() => {
-                    if (!radarModal.classList.contains("hidden")) {
-                        setTimeout(initRadarMap, 300);
-                    }
-                });
-                radarObserver.observe(radarModal, { attributes: true, attributeFilter: ['class'] });
-            }
+            // ...Radar-Funktionen jetzt in brightsky-radar.js...
 
             const API = "https://www.pegelonline.wsv.de/webservices/rest-api/v2";
             const STATION = "32807065-b887-49f0-935a-80033e5f3cb0";
@@ -1167,9 +1117,9 @@ const isOverlay = variant === "overlay";
                         const controls = document.querySelector("[data-forecast-controls]");
                         const setActive = (rangeKey) => {
                             controls?.querySelectorAll("[data-forecast-range]").forEach(btn => {
-                                const isActive = btn.getAttribute("data-forecast-range") === rangeKey;
-                                btn.className = `px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold ${isActive ? "bg-blue-600 text-white" : "bg-neutral-200 text-neutral-800"}`;
-                            });
+                            const isActive = btn.getAttribute("data-forecast-range") === rangeKey;
+                            btn.className = `px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold ${isActive ? "bg-blue-600 text-white" : "bg-neutral-300 text-neutral-800"}`;
+                        });
                         };
 
                         controls?.addEventListener("click", (e) => {
