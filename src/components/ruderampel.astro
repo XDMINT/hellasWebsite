@@ -101,7 +101,7 @@ const isOverlay = variant === "overlay";
                     </div>
                     <div class="mt-2">
                         <a href="https://www.hochwasser.rlp.de/flussgebiet/lahn/leun" target="_blank" rel="noopener" class="font-barlow text-xs text-blue-600 hover:text-blue-800 underline">
-                            📊 Offizielle Hochwasservorhersage RLP für Leun
+                            Offizielle Hochwasservorhersage RLP für Leun
                         </a>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ const isOverlay = variant === "overlay";
                 <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
                     <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">Wettervorhersage Gießen</h3>
                     <div class="flex flex-wrap gap-2 mb-3" data-forecast-controls>
-                        <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold bg-blue-600 text-white" data-forecast-range="2h">2h / 30min</button>
+                        <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold bg-blue-600 text-white" data-forecast-range="2h">2h</button>
                         <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold bg-neutral-200 text-neutral-800" data-forecast-range="6h">6h</button>
                         <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold bg-neutral-200 text-neutral-800" data-forecast-range="12h">12h</button>
                         <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-barlow font-semibold bg-neutral-200 text-neutral-800" data-forecast-range="48h">2 Tage</button>
@@ -121,7 +121,7 @@ const isOverlay = variant === "overlay";
                 </div>
 
                 <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
-                    <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar (animiert)</h3>
+                    <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar</h3>
 
                     <div class="relative bg-white rounded-lg overflow-hidden" style="height: 400px; position: relative; z-index: 1;">
                         <div id="radar-map" class="w-full h-full" style="position: relative; z-index: 1;"></div>
@@ -811,7 +811,7 @@ const isOverlay = variant === "overlay";
 
                      if (hint) {
                         hint.textContent = status === "red" ?
-                            (level >= FLOOD ? "Hochwasser aktiv" : "Wassertemperatur zu kalt") :
+                            (level >= FLOOD ? "Hochwasser" : "Wassertemperatur zu kalt") :
                             status === "yellow" ? "Kaltwasser - erhöhte Vorsicht" :
                             "Alle Bedingungen optimal";
                      }
