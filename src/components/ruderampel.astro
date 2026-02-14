@@ -6,7 +6,7 @@ const isOverlay = variant === "overlay";
 
 <div class:list={["w-fit", className]} data-ampel-root>
     <button type="button" class:list={["group inline-flex items-center justify-center rounded-2xl transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 relative z-30 pointer-events-auto cursor-pointer", isOverlay ? "w-12 h-12 sm:w-14 sm:h-14 bg-transparent" : "w-12 h-12 sm:w-14 sm:h-14 bg-neutral-100 ring-1 ring-black/10 shadow-sm hover:shadow-md hover:bg-neutral-50", isOverlay ? "flex-col gap-1.5" : "flex-row"]} aria-label="Ruderampel öffnen" aria-haspopup="dialog" aria-expanded="false" data-ampel-toggle data-ampel-button>
-         <span class="sr-only">Ruderampel</span>
+         <span class="sr-only">Wassersportampel</span>
          {isOverlay ? (
              <span class="flex flex-col items-center gap-1.5 rounded-lg bg-neutral-900/90 p-2 ring-1 ring-black/40 shadow-inner transition group-hover:shadow-md group-hover:shadow-black/40">
                  <span class="block h-3 w-3 rounded-full bg-neutral-400/50" data-ampel-mini-light="red"></span>
@@ -23,7 +23,7 @@ const isOverlay = variant === "overlay";
         )}
      </button>
 
-    <div id="ampel-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" data-ampel-modal>
+    <div id="ampel-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" style="z-index: 9999999" data-ampel-modal>
          <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto" role="dialog">
              <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between rounded-t-2xl" style="z-index: 1000;">
                  <div class="flex items-center gap-4">
@@ -35,7 +35,7 @@ const isOverlay = variant === "overlay";
                          </div>
                      </div>
                      <div>
-                         <h2 class="font-albert text-xl font-extrabold text-neutral-900">Ruderampel</h2>
+                         <h2 class="font-albert text-xl font-extrabold text-neutral-900">Wassersportampel</h2>
                          <p class="font-barlow text-sm text-neutral-600">Lahn-Pegel-Leun</p>
                      </div>
                  </div>
@@ -155,8 +155,8 @@ const isOverlay = variant === "overlay";
                  <div class="rounded-xl bg-blue-50 ring-1 ring-blue-200 p-4">
                     <h3 class="font-albert text-base font-bold text-blue-900 mb-2">📋 Ruderregeln</h3>
                     <ul class="font-barlow text-sm text-blue-900 space-y-1">
-                        <li>🔴 <strong>Rot:</strong> Ruderverbot (Hochwasser &gt;360cm oder &lt;1°C)</li>
-                        <li>🟡 <strong>Gelb:</strong> Eingeschränkt (Kaltwasser 1-10°C)</li>
+                        <li>🔴 <strong>Rot:</strong> Wassersportverbot (Hochwasser &gt;360cm oder &lt;1°C)</li>
+                        <li>🟡 <strong>Gelb:</strong> Eingeschränkter Betrieb (Kaltwasser 1-10°C)</li>
                         <li>🟢 <strong>Grün:</strong> Normaler Betrieb</li>
                     </ul>
                 </div>
@@ -177,13 +177,13 @@ const isOverlay = variant === "overlay";
                 return;
             }
 
-            console.log('✅ Radar-Modal gefunden');
+            console.log('Radar-Modal gefunden');
             let radarInitialized = false;
 
             const radarObserver = new MutationObserver(async () => {
                 if (!radarModal.classList.contains("hidden") && !radarInitialized) {
                     radarInitialized = true;
-                    console.log('🎬 Modal geöffnet - starte Radar-Init...');
+                    console.log('Modal geöffnet - starte Radar-Init...');
                     try {
                         // Lade die Radar-Funktion direkt
                         await window.initBrightSkyRadar('radar-map');
@@ -804,7 +804,7 @@ const isOverlay = variant === "overlay";
                      }
 
                      if (statusTitle) {
-                        statusTitle.textContent = status === "red" ? "⛔ Ruderverbot" :
+                        statusTitle.textContent = status === "red" ? "⛔ Wassersportverbot" :
                                                  status === "yellow" ? "⚠️ Eingeschränkter Betrieb" :
                                                  "✅ Normaler Betrieb";
                      }
@@ -833,7 +833,7 @@ const isOverlay = variant === "overlay";
                                 const trendEl = document.querySelector("[data-trend]");
                                 if (trendEl) {
                                     if (Math.abs(changePerHour) < 0.5) {
-                                        trendEl.textContent = "→ Stabil";
+                                        trendEl.textContent = "→ Stagnierend";
                                         trendEl.className = "font-barlow text-xs text-neutral-600 mt-1";
                                     } else if (changePerHour > 0) {
                                         trendEl.textContent = `↗ Steigend (${changePerHour.toFixed(1)} cm/h)`;
