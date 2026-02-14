@@ -3,6 +3,7 @@
 import SiteLayout from "../layouts/siteLayout.astro";
 import OptimizedImg from "../components/OptimizedImg.astro";
 import { drachenbootAction, drachenbootHinten, drachenbootNah } from "../assets/images";
+import RuderAmpel from "../components/ruderampel.astro";
 
 const underlinedTitleClass =
     "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
@@ -35,6 +36,10 @@ const img2 = drachenbootNah;
         heroImage={heroImage}
         showHero={true}
 >
+
+    <!-- Ruderampel im Hero -->
+    <RuderAmpel slot="heroTopLeft" variant="overlay" />
+
     <div id="top" class="sr-only">Top</div>
 
     <!-- Intro -->
