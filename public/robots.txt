@@ -1,0 +1,16 @@
+# robots.txt für WSV Hellas Gießen
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://wsv-hellas-giessen.de/sitemap-index.xml
+
+# Crawl-Delay für Bots
+Crawl-delay: 10
+
+# Blockiere irrelevante Pfade
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /admin/
+

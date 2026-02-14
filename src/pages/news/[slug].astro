@@ -43,13 +43,22 @@ const contentText = normalizeText(stripHtml(post.content?.rendered ?? ""));
 const showLead =
     excerptText.length > 20 &&
     !contentText.toLowerCase().startsWith(excerptText.slice(0, 80).toLowerCase());
+
+// SEO-Optimierung: Dynamische Meta-Daten aus Post
+const pageTitle = `${post.title.rendered} | News | WSV Hellas Gießen`;
+const pageDescription = excerptText.slice(0, 155) || contentText.slice(0, 155);
+const canonicalURL = `https://wsv-hellas-giessen.de/news/${slug}`;
 ---
 
 <SiteLayout
-        pageTitle={`${post.title.rendered} | WSV Hellas`}
+        pageTitle={pageTitle}
+        description={pageDescription}
+        keywords="WSV Hellas News, Rudern Gießen, Drachenboot Gießen, Wassersport Aktuelles"
         heroTitle="News"
         heroSubtitle={formatDateDE(post.date)}
         heroImage={img ?? "/images/news-header.jpg"}
+        ogType="article"
+        canonicalURL={canonicalURL}
 >
 
     <section class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-14">

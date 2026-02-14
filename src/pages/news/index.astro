@@ -148,9 +148,25 @@ const pageNums = (() => {
 })();
 
 const featuredImg = featured ? getFeaturedImage(featured) : null;
+
+// Dynamische SEO-Daten basierend auf Filter/Seite
+const pageTitle = tagSlug
+    ? `News: ${selectedTag?.name || tagSlug} | WSV Hellas Gießen`
+    : page > 1
+        ? `News - Seite ${page} | WSV Hellas Gießen`
+        : "News & Aktuelles | WSV Hellas Gießen";
+
+const pageDescription = tagSlug
+    ? `Alle Beiträge zum Thema "${selectedTag?.name || tagSlug}" vom WSV Hellas 1920 Gießen e.V.`
+    : "Aktuelle News, Berichte und Termine vom Wassersportverein Hellas 1920 Gießen e.V. - Rudern, Drachenboot und Vereinsleben.";
 ---
 
-<SiteLayout pageTitle="News | WSV Hellas" showHero={false}>
+<SiteLayout
+    pageTitle={pageTitle}
+    description={pageDescription}
+    keywords="WSV Hellas News, Rudern Gießen Aktuelles, Drachenboot News, Vereinsnachrichten Wassersport"
+    showHero={false}
+>
     <section class="space-y-8">
         <!-- Kopfbox -->
         <div class="bg-neutral-100 rounded-2xl px-6 py-8 sm:px-10 sm:py-10">
