@@ -34,7 +34,7 @@ const {
 	canonicalURL
 } = Astro.props as Props;
 
-const siteURL = "https://wsv-hellas-giessen.de";
+const siteURL = "https://wsv-hellas.de";
 const currentURL = canonicalURL || new URL(Astro.url.pathname, siteURL).href;
 const ogImagePath = typeof heroImage === 'string' ? heroImage : heroImage.src;
 
@@ -94,15 +94,15 @@ const useSlideshow = isHome && heroImages.length > 1;
 			"@type": "SportsOrganization",
 			"name": "WSV Hellas 1920 Gießen e.V.",
 			"alternateName": "Wassersportverein Hellas Gießen",
-			"url": "https://wsv-hellas-giessen.de",
-			"logo": "https://wsv-hellas-giessen.de/images/220926_HellasGiessen-Logo-Web.png",
+			"url": "https://wsv-hellas.de",
+			"logo": "https://wsv-hellas.de/images/220926_HellasGiessen-Logo-Web.png",
 			"description": "Wassersportverein in Gießen für Rudern, Drachenboot und allgemeinen Sport",
 			"foundingDate": "1920-09",
 			"address": {
 				"@type": "PostalAddress",
-				"streetAddress": "Bootshaus an der Lahn",
+				"streetAddress": "Wißmarer Weg 125",
 				"addressLocality": "Gießen",
-				"postalCode": "35390",
+				"postalCode": "35396",
 				"addressCountry": "DE"
 			},
 			"geo": {
