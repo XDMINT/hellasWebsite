@@ -16,6 +16,8 @@ type Props = {
 	heroSubtitle?: string;
 	heroImage?: string | ImageMetadata;
 	heroImages?: (string | ImageMetadata)[];
+	heroImageCredit?: string;
+	heroImageCredits?: (string | undefined)[];
 	showHero?: boolean;
 	ogType?: string;
 	canonicalURL?: string;
@@ -29,6 +31,8 @@ const {
 	heroSubtitle,
 	heroImage = "/images/header-default.jpg",
 	heroImages = ["/images/home-1.jpg", "/images/home-2.jpg", "/images/home-3.jpg"],
+	heroImageCredit,
+	heroImageCredits,
 	showHero = true,
 	ogType = "website",
 	canonicalURL
@@ -52,7 +56,7 @@ const useSlideshow = isHome && heroImages.length > 1;
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<!-- Favicons -->
-	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="icon" type="image/jpg" href="/hellasLogoNeu.jpg" />
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<link rel="manifest" href="/site.webmanifest" />
 
@@ -154,6 +158,11 @@ const useSlideshow = isHome && heroImages.length > 1;
 								loading="eager"
 							/>
 						)}
+						{heroImageCredits?.[idx] && (
+							<div class="absolute bottom-2 right-2 z-20 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white">
+								{heroImageCredits[idx]}
+							</div>
+						)}
 					</div>
 				))}
 			</div>
@@ -175,6 +184,12 @@ const useSlideshow = isHome && heroImages.length > 1;
 				/>
 			)
 		)}
+
+			{!useSlideshow && (heroImageCredit || heroImageCredits?.[0]) && (
+				<div class="absolute bottom-2 right-2 z-20 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white">
+					{heroImageCredit || heroImageCredits?.[0]}
+				</div>
+			)}
 
 			{/* Text sitzt unten im Bild (statt mittig) */}
 			<div class="absolute inset-0 flex items-end justify-center px-4 sm:px-6 lg:px-8 pb-10 sm:pb-12 lg:pb-14">

@@ -12,6 +12,7 @@ interface Props {
   aspectRatio?: string;
   loading?: "lazy" | "eager";
   decoding?: "async" | "sync";
+  credit?: string;
 }
 
 const {
@@ -24,6 +25,7 @@ const {
   aspectRatio,
   loading = "lazy",
   decoding = "async",
+  credit,
 } = Astro.props;
 
 // Prüfe ob es ein lokales Asset ist (ImageMetadata) oder externe URL
@@ -33,12 +35,42 @@ const isLocalAsset = typeof src !== "string";
 // Wenn externe URL: nutze normales <img>
 ---
 
-{isLocalAsset ? (
+{credit ? (
+  <figure class="relative w-full h-full">
+    {isLocalAsset ? (
+      <Image
+        src={src}
+        alt={alt}
+        title={title}
+        class={`${className} object-cover w-full block`}
+        {...(width && { width })}
+        {...(height && { height })}
+        loading={loading}
+        decoding={decoding}
+      />
+    ) : (
+      <img
+        src={src}
+        alt={alt}
+        title={title}
+        class={`${className} object-cover w-full block`}
+        style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : ""}
+        {...(width && { width })}
+        {...(height && { height })}
+        loading={loading}
+        decoding={decoding}
+      />
+    )}
+    <figcaption class="absolute bottom-2 right-2 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white">
+      {credit}
+    </figcaption>
+  </figure>
+) : isLocalAsset ? (
   <Image
     src={src}
     alt={alt}
     title={title}
-    class={`${className} object-cover w-full`}
+    class={`${className} object-cover w-full block`}
     {...(width && { width })}
     {...(height && { height })}
     loading={loading}
@@ -49,7 +81,7 @@ const isLocalAsset = typeof src !== "string";
     src={src}
     alt={alt}
     title={title}
-    class={`${className} object-cover w-full`}
+    class={`${className} object-cover w-full block`}
     style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : ""}
     {...(width && { width })}
     {...(height && { height })}
@@ -57,4 +89,3 @@ const isLocalAsset = typeof src !== "string";
     decoding={decoding}
   />
 )}
-
