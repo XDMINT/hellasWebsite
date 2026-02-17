@@ -27,6 +27,11 @@ const ctaBtn =
     "bg-amber-500 text-white hover:bg-amber-600 transition " +
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
 
+const secondaryBtn =
+    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
+    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+
 // Bilder aus assets
 const heroImage = rudernDoppelzweier;
 const imgBreitensport = rudernBreitSport;
@@ -67,12 +72,7 @@ const imgRennrudern = rudernPodium;
 
                         <div class="mt-6 flex flex-wrap gap-3">
                             <a class={ctaBtn} href="/trainingszeiten">Trainingszeiten ansehen</a>
-                            <a
-                                    class="inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold
-                       bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
-                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
-                                    href="/kontakt"
-                            >
+                            <a class={secondaryBtn} href="/kontakt">
                                 Kontakt & Probetraining
                             </a>
                         </div>
@@ -205,14 +205,8 @@ const imgRennrudern = rudernPodium;
 
                     <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
                         <a class={ctaBtn} href="/kontakt">Jetzt anfragen</a>
-
-                        <a
-                                class="inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold
-                   bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
-                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
-                                href="/trainingszeiten"
-                        >
-                            Trainingszeiten
+                        <a class={secondaryBtn} href="/mitglied-werden">
+                            Mitglied werden
                         </a>
                     </div>
                 </div>

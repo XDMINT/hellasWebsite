@@ -48,6 +48,16 @@ const showLead =
 const pageTitle = `${post.title.rendered} | News | WSV Hellas Gießen`;
 const pageDescription = excerptText.slice(0, 155) || contentText.slice(0, 155);
 const canonicalURL = `https://wsv-hellas-giessen.de/news/${slug}`;
+
+const btnSecondary =
+    "font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2 " +
+    "bg-neutral-100 text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+
+const btnPrimary =
+    "font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2 " +
+    "bg-blue-600 text-white hover:bg-blue-700 transition " +
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
 ---
 
 <SiteLayout
@@ -118,18 +128,14 @@ const canonicalURL = `https://wsv-hellas-giessen.de/news/${slug}`;
                     <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <a
                                 href="/news"
-                                class="font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2
-                     bg-neutral-100 text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition
-                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                                class={btnSecondary}
                         >
                             ← Zurück zur Übersicht
                         </a>
 
                         <a
                                 href="#top"
-                                class="font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2
-                     bg-blue-600 text-white hover:bg-blue-700 transition
-                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                                class={btnPrimary}
                         >
                             Nach oben ↑
                         </a>

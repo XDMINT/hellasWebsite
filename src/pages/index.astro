@@ -9,10 +9,12 @@ const underlinedTitleClass =
 	`${titleClass} relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 after:h-1 after:rounded-full after:bg-blue-500`;
 
 const bodyClass = "font-barlow text-neutral-700 leading-relaxed";
-const buttonClass =
+const ctaBtn =
 	"font-barlow inline-flex items-center justify-center rounded-md bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300";
-const ghostButtonClass =
+const secondaryBtn =
 	"font-barlow inline-flex items-center justify-center rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 shadow-sm ring-1 ring-neutral-200 hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300";
+const tertiaryBtn =
+	"font-barlow inline-flex items-center justify-center rounded-md bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50";
 ---
 
 <SiteLayout
@@ -46,8 +48,8 @@ const ghostButtonClass =
 						</p>
 
 						<div class="mt-6 flex flex-wrap gap-3">
-							<a class={buttonClass} href="/vorstand">Vorstand</a>
-							<a class={ghostButtonClass} href="/news">News</a>
+							<a class={ctaBtn} href="/vorstand">Vorstand</a>
+							<a class={secondaryBtn} href="/news">News</a>
 						</div>
 					</div>
 				</div>
@@ -208,12 +210,10 @@ const ghostButtonClass =
 					Schreib uns oder komm zu einem Probetraining vorbei – wir freuen uns auf neue Gesichter im Boot und am Land.
 				</p>
 				<div class="mt-6 flex flex-wrap justify-center gap-3">
-					<a class="font-barlow rounded-md bg-amber-500 px-6 py-3 text-sm font-semibold text-white hover:bg-amber-600 transition"
-					   href="/kontakt">
+					<a class={ctaBtn} href="/kontakt">
 						Kontakt
 					</a>
-					<a class="font-barlow rounded-md bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15 transition"
-					   href="/mitglied-werden">
+					<a class={tertiaryBtn} href="/mitglied-werden">
 						Mitglied werden
 					</a>
 				</div>
