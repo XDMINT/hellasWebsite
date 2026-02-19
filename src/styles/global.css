@@ -2,9 +2,17 @@
 
 @font-face {
     font-family: "Albert Sans";
-    src: url("/fonts/Albert_Sans/AlbertSans-VariableFont_wght.ttf") format("truetype");
+    src: url("/fonts/Albert_Sans/AlbertSans-VariableFont_wght.woff2") format("woff2");
     font-weight: bold;
     font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Albert Sans";
+    src: url("/fonts/Albert_Sans/AlbertSans-Italic-VariableFont_wght.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: italic;
     font-display: swap;
 }
 /* Überschriften */
@@ -29,8 +37,24 @@ button,
 
 @font-face {
     font-family: "Barlow";
-    src: url("/fonts/Barlow/Barlow-Regular.ttf") format("truetype");
+    src: url("/fonts/Barlow/Barlow-Regular.woff2") format("woff2");
     font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Barlow";
+    src: url("/fonts/Barlow/Barlow-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Barlow";
+    src: url("/fonts/Barlow/Barlow-SemiBold.woff2") format("woff2");
+    font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
@@ -165,7 +189,3 @@ p {
         display: block !important;
     }
 }
-
-
-
-
