@@ -55,6 +55,10 @@ const useSlideshow = isHome && heroImages.length > 1;
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+	<!-- Font Preloads: kritische Schriften früh laden, damit sie nicht den Render blockieren -->
+	<link rel="preload" href="/fonts/Albert_Sans/AlbertSans-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+	<link rel="preload" href="/fonts/Barlow/Barlow-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
 	<!-- Favicons -->
 	<link rel="icon" type="image/jpg" href="/hellasLogoNeu.jpg" />
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -146,8 +150,9 @@ const useSlideshow = isHome && heroImages.length > 1;
 							<img
 								src={img}
 								alt=""
-								loading="eager"
+								loading={idx === 0 ? "eager" : "lazy"}
 								decoding="async"
+								fetchpriority={idx === 0 ? "high" : "auto"}
 								class="absolute inset-0 h-full w-full object-cover"
 							/>
 						) : (
@@ -155,11 +160,12 @@ const useSlideshow = isHome && heroImages.length > 1;
 								src={img}
 								alt=""
 								class="absolute inset-0 h-full w-full object-cover"
-								loading="eager"
+								loading={idx === 0 ? "eager" : "lazy"}
+								fetchpriority={idx === 0 ? "high" : "auto"}
 							/>
 						)}
 						{heroImageCredits?.[idx] && (
-							<div class="absolute bottom-2 right-2 z-20 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white">
+							<div class="absolute bottom-2 right-2 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white" style="z-index: 2;">
 								{heroImageCredits[idx]}
 							</div>
 						)}
@@ -173,6 +179,7 @@ const useSlideshow = isHome && heroImages.length > 1;
 					alt=""
 					loading="eager"
 					decoding="async"
+					fetchpriority="high"
 					class="absolute inset-0 h-full w-full object-cover"
 				/>
 			) : (
@@ -181,12 +188,13 @@ const useSlideshow = isHome && heroImages.length > 1;
 					alt=""
 					class="absolute inset-0 h-full w-full object-cover"
 					loading="eager"
+					fetchpriority="high"
 				/>
 			)
 		)}
 
 			{!useSlideshow && (heroImageCredit || heroImageCredits?.[0]) && (
-				<div class="absolute bottom-2 right-2 z-20 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white">
+				<div class="absolute bottom-2 right-2 rounded bg-black/60 px-2 py-0.5 font-barlow text-[10px] text-white" style="z-index: 2;">
 					{heroImageCredit || heroImageCredits?.[0]}
 				</div>
 			)}
