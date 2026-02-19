@@ -17,5 +17,8 @@
     "node-fetch": "^2.7.0",
     "sharp": "^0.33.5",
     "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21"
   }
 }
