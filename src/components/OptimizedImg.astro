@@ -13,6 +13,8 @@ interface Props {
   loading?: "lazy" | "eager";
   decoding?: "async" | "sync";
   credit?: string;
+  widths?: number[];
+  sizes?: string;
 }
 
 const {
@@ -26,6 +28,8 @@ const {
   loading = "lazy",
   decoding = "async",
   credit,
+  widths,
+  sizes,
 } = Astro.props;
 
 // Prüfe ob es ein lokales Asset ist (ImageMetadata) oder externe URL
@@ -45,6 +49,8 @@ const isLocalAsset = typeof src !== "string";
         class={`${className} object-cover w-full block`}
         {...(width && { width })}
         {...(height && { height })}
+        {...(widths && { widths })}
+        {...(sizes && { sizes })}
         loading={loading}
         decoding={decoding}
       />
@@ -73,6 +79,8 @@ const isLocalAsset = typeof src !== "string";
     class={`${className} object-cover w-full block`}
     {...(width && { width })}
     {...(height && { height })}
+    {...(widths && { widths })}
+    {...(sizes && { sizes })}
     loading={loading}
     decoding={decoding}
   />

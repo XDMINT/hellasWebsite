@@ -162,6 +162,8 @@ const useSlideshow = isHome && heroImages.length > 1;
 								class="absolute inset-0 h-full w-full object-cover"
 								loading={idx === 0 ? "eager" : "lazy"}
 								fetchpriority={idx === 0 ? "high" : "auto"}
+								widths={[640, 960, 1280, 1920]}
+								sizes="100vw"
 							/>
 						)}
 						{heroImageCredits?.[idx] && (
@@ -189,6 +191,8 @@ const useSlideshow = isHome && heroImages.length > 1;
 					class="absolute inset-0 h-full w-full object-cover"
 					loading="eager"
 					fetchpriority="high"
+					widths={[640, 960, 1280, 1920]}
+					sizes="100vw"
 				/>
 			)
 		)}
