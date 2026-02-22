@@ -6,14 +6,22 @@ Astro.response.headers.set(
     "public, max-age=0, must-revalidate"
 );
 
+// Bei ~3 Artikeln/Monat und ~38 Besuchern/Tag großzügig cachen.
+// s-maxage=43200: Cache 12 h frisch → fast alle Besucher bekommen einen Cache-Hit.
+// stale-while-revalidate=43200: danach nochmal 12 h im Hintergrund aktualisieren.
+// → Neue WP-Artikel sind nach max. 24 h sichtbar.
+// stale-if-error=604800: Bei WP-Ausfall bleibt die letzte Version 7 Tage verfügbar.
 Astro.response.headers.set(
     "Netlify-CDN-Cache-Control",
-    "public, s-maxage=1800, stale-while-revalidate=86400"
+    "public, s-maxage=43200, stale-while-revalidate=43200, stale-if-error=604800"
 );
+
+// Cache-Tag: ermöglicht gezieltes Purgen ohne Deploy (via /api/purge-news)
+Astro.response.headers.set("Netlify-Cache-Tag", "news");
 
 import SiteLayout from "../../layouts/siteLayout.astro";
 import OptimizedImg from "../../components/OptimizedImg.astro";
-import { WP_BASE, fetchWp, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
+import { fetchWp, fetchWpWithHeaders, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
 
 type WpTag = { id: number; name: string; slug: string; count: number };
 
@@ -60,17 +68,6 @@ const pageBtnInactive =
 const pageBtnActive =
     "bg-amber-500 text-white ring-1 ring-amber-500 hover:bg-amber-600";
 
-// Helper: totals aus WP-Headers holen (ohne wp.ts zu ändern)
-async function fetchWpTotals(path: string): Promise<{ total: number; totalPages: number }> {
-    const url = `${WP_BASE}${path}`;
-    let res = await fetch(url, { method: "HEAD" });
-    if (!res.ok) res = await fetch(url, { method: "GET" });
-
-    const total = Number(res.headers.get("X-WP-Total") ?? "0");
-    const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? "0");
-    return { total, totalPages };
-}
-
 // Data
 let error: string | null = null;
 
@@ -84,12 +81,21 @@ let totalPosts = 0;
 let totalPages = 1;
 
 try {
-    // Tags UI
-    tags = await fetchWp<WpTag[]>(
-        `/wp-json/wp/v2/tags?per_page=20&orderby=count&order=desc`
-    );
+    // Schritt 1: Tags + Posts-Totals parallel holen
+    const [tagsResult, firstPostResult] = await Promise.all([
+        fetchWp<WpTag[]>(`/wp-json/wp/v2/tags?per_page=20&orderby=count&order=desc`),
+        // erster Post liefert uns X-WP-Total ohne eigenen HEAD-Request;
+        // tag-Filter kommt in Schritt 2, wenn wir die ID kennen
+        tagSlug
+            ? Promise.resolve(null) // wird in Schritt 2 nachgeholt
+            : fetchWpWithHeaders<WpPost[]>(
+                `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc`
+              ),
+    ]);
 
-    // Selected tag slug -> id
+    tags = tagsResult;
+
+    // Selected tag slug -> id (aus gecachten Tags)
     if (tagSlug) {
         selectedTag = tags.find((t) => t.slug === tagSlug) ?? null;
         if (!selectedTag) {
@@ -99,12 +105,22 @@ try {
             selectedTag = bySlug?.[0] ?? null;
         }
     }
+
     const tagFilter = selectedTag ? `&tags=${selectedTag.id}` : "";
 
-    // Total count (für aktuellen Filter)
-    const totals = await fetchWpTotals(
-        `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc${tagFilter}`
-    );
+    // Total count ermitteln
+    let totals: { total: number; totalPages: number };
+    if (firstPostResult) {
+        // kein Tag-Filter: Totals kamen bereits aus Schritt 1
+        totals = { total: firstPostResult.total, totalPages: firstPostResult.totalPages };
+    } else {
+        // Tag-Filter aktiv: separaten Request mit korrektem Filter
+        const r = await fetchWpWithHeaders<WpPost[]>(
+            `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc${tagFilter}`
+        );
+        totals = { total: r.total, totalPages: r.totalPages };
+    }
+
     totalPosts = totals.total;
 
     // Pagination abhängig davon, ob featured angezeigt wird
@@ -115,18 +131,20 @@ try {
     page = Math.min(Math.max(page, 1), totalPages);
 
     if (showFeatured) {
-        // Featured holen
-        const featuredArr = await fetchWp<WpPost[]>(
-            `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed=1${tagFilter}`
-        );
-        featured = featuredArr?.[0] ?? null;
-
-        // Grid ohne Featured: Offset = 1 + (page-1)*PER_PAGE (page ist hier 1)
+        // Featured + Grid parallel holen (offset=1 für Grid, da Featured Platz 0 belegt)
         const offset = 1 + (page - 1) * PER_PAGE;
 
-        gridPosts = await fetchWp<WpPost[]>(
-            `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
-        );
+        const [featuredArr, gridArr] = await Promise.all([
+            fetchWp<WpPost[]>(
+                `/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed=1${tagFilter}`
+            ),
+            fetchWp<WpPost[]>(
+                `/wp-json/wp/v2/posts?per_page=${PER_PAGE}&offset=${offset}&orderby=date&order=desc&_embed=1${tagFilter}`
+            ),
+        ]);
+
+        featured = featuredArr?.[0] ?? null;
+        gridPosts = gridArr;
     } else {
         // KEIN Featured: normales Paging mit 12 pro Seite
         const offset = (page - 1) * PER_PAGE;
