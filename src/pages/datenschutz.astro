@@ -1,27 +1,6 @@
 ---
 import SiteLayout from "../layouts/siteLayout.astro";
-
-const underlinedTitleClass =
-    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
-    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
-    "after:h-1 after:rounded-full after:bg-blue-500";
-
-const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
-const smallClass = "font-barlow text-sm text-neutral-600";
-const accentBar = "h-1 w-12 rounded-full bg-blue-500/90";
-
-const box = "bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12";
-const card = "bg-white rounded-2xl ring-1 ring-black/10 p-6";
-
-const ctaBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-amber-500 text-white hover:bg-amber-600 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
-
-const secondaryBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
+import { underlinedTitleClass, bodyClass, smallClass, accentBar, box, card, ctaBtn, secondaryBtn } from "../lib/styles";
 ---
 
 <SiteLayout pageTitle="Datenschutzerklärung | WSV Hellas" showHero={false}>
@@ -34,7 +13,7 @@ const secondaryBtn =
                         Informationen zum Umgang mit personenbezogenen Daten gemäß DSGVO.
                     </p>
                     <p class={"mt-3 " + smallClass}>
-                        Stand: <strong>17.02.2026</strong>
+                        Stand: <strong>04.03.2026</strong>
                     </p>
                 </div>
 
@@ -71,34 +50,37 @@ const secondaryBtn =
                             3. Hosting & technische Infrastruktur
                         </h2>
                         <p class={"mt-3 " + smallClass}>
-                            Diese Website wird bei <strong>Netlify</strong> gehostet. Beim Aufruf der Website erhebt der Hoster
-                            automatisch Daten in sogenannten Server-Logfiles (z. B. IP-Adresse, Datum/Uhrzeit, aufgerufene Seite,
-                            Referrer-URL, Browser/OS). Die Verarbeitung erfolgt zur Sicherstellung des technischen Betriebs und zur
-                            Abwehr von Missbrauch (Art. 6 Abs. 1 lit. f DSGVO).
+                            Diese Website wird bei <strong>Netlify, Inc.</strong> (44 Montgomery Street, Suite 300, San Francisco, CA 94104, USA) gehostet.
+                            Beim Aufruf der Website erhebt der Hoster automatisch Daten in sogenannten Server-Logfiles
+                            (z. B. IP-Adresse, Datum/Uhrzeit, aufgerufene Seite, Referrer-URL, Browser/OS).
+                            Die Verarbeitung erfolgt zur Sicherstellung des technischen Betriebs und zur Abwehr von Missbrauch
+                            (Art. 6 Abs. 1 lit. f DSGVO). Mit Netlify besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO;
+                            die Übermittlung in die USA erfolgt auf Basis von Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
                         </p>
                         <p class={"mt-3 " + smallClass}>
-                            Für den Bezug von News/Beiträgen nutzen wir ein externes <strong>WordPress</strong>-System, das bei
-                            <strong>IONOS</strong> betrieben wird. Bei der Abfrage der Inhalte werden technische Zugriffsdaten
-                            (z. B. IP-Adresse, Zeitpunkt der Anfrage) verarbeitet, um die Inhalte bereitzustellen (Art. 6 Abs. 1 lit. f DSGVO).
-                        </p>
-                        <p class={"mt-3 " + smallClass}>
-                            Hinweis zu Drittlandübermittlungen: Bei einzelnen Dienstleistern kann eine Verarbeitung in Drittländern
-                            (z. B. USA) nicht ausgeschlossen werden. In solchen Fällen gelten die von den Anbietern bereitgestellten
-                            Standardvertragsklauseln und Schutzmaßnahmen.
+                            Zur Darstellung von News und Vereinsbeiträgen ruft unser Server beim Seitenaufbau öffentlich zugängliche
+                            Inhalte von einem <strong>WordPress</strong>-System ab, das bei <strong>IONOS SE</strong> betrieben wird.
+                            Dabei handelt es sich um einen rein serverseitigen Abruf öffentlicher Artikel; personenbezogene Daten
+                            der Websitebesucher werden dabei nicht an IONOS übermittelt und nicht in deren Auftrag verarbeitet.
+                            Ein Auftragsverarbeitungsvertrag ist für diesen Vorgang nicht erforderlich.
                         </p>
                     </div>
 
                     <div class={card}>
                         <div class={accentBar}></div>
                         <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
-                            4. Kontaktaufnahme
+                            4. Kontaktaufnahme & Kontaktformular
                         </h2>
                         <p class={"mt-3 " + smallClass}>
-                            Wenn du uns per E-Mail oder Kontaktformular kontaktierst, verarbeiten wir die von dir übermittelten Daten
-                            (z. B. Name, E-Mail-Adresse, Nachricht), um deine Anfrage zu bearbeiten (Art. 6 Abs. 1 lit. b DSGVO –
-                            vorvertragliche/vertragliche Maßnahmen bzw. Art. 6 Abs. 1 lit. f DSGVO – berechtigtes Interesse an Kommunikation).
+                            Wenn du uns per E-Mail oder über das Kontaktformular kontaktierst, verarbeiten wir die von dir
+                            übermittelten Daten (z. B. Name, E-Mail-Adresse, Nachricht), um deine Anfrage zu bearbeiten.
+                            Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche/vertragliche Maßnahmen) bzw.
+                            Art. 6 Abs. 1 lit. a DSGVO (Einwilligung, die du durch Setzen der Datenschutz-Checkbox erteilst).
+                            Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO).
                         </p>
                         <p class={"mt-3 " + smallClass}>
+                            Formulardaten werden über den Dienst <strong>Netlify Forms</strong> (Netlify, Inc., USA) entgegengenommen
+                            und gespeichert. Mit Netlify besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO.
                             Die Daten werden gelöscht, sobald sie für die Bearbeitung nicht mehr erforderlich sind und keine
                             gesetzlichen Aufbewahrungspflichten entgegenstehen.
                         </p>
@@ -135,16 +117,15 @@ const secondaryBtn =
                     <div class={card}>
                         <div class={accentBar}></div>
                         <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
-                            7. Externe Datenquellen (News, Wetter & Pegel)
+                            7. Externe Datenquellen (Wetter & Pegel)
                         </h2>
                         <p class={"mt-3 " + smallClass}>
-                            Zur Darstellung von Inhalten und Live-Daten werden externe Dienste abgefragt. Dabei können technische
-                            Zugriffsdaten verarbeitet werden (z. B. IP-Adresse, Zeitpunkt der Anfrage). Dies ist für die Bereitstellung
-                            der Inhalte erforderlich (Art. 6 Abs. 1 lit. f DSGVO).
+                            Zur Darstellung von Live-Daten werden beim Seitenaufbau auf unserem Server externe Dienste abgefragt.
+                            Diese Abfragen erfolgen serverseitig; deine IP-Adresse wird dabei nicht an die jeweiligen Anbieter übermittelt.
                         </p>
                         <p class={"mt-3 " + smallClass}>
-                            Eingesetzte Quellen: <strong>WordPress</strong> (News/Beiträge), <strong>Pegelonline</strong> (Pegelstände),
-                            <strong>Meteo</strong>, <strong>Bright Sky</strong> (Wetter/Radar) sowie weitere Wetterdatenanbieter.
+                            Eingesetzte Quellen: <strong>Pegelonline</strong> (Pegelstände, Betreiber: Bundesanstalt für Gewässerkunde),
+                            <strong>Bright Sky</strong> (Wetter/Radar, Open-Source-Dienst des Deutschen Wetterdienstes).
                         </p>
                     </div>
 
