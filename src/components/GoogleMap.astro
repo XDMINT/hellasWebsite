@@ -1,0 +1,115 @@
+---
+/**
+ * GoogleMap – 2-Klick-Google-Maps-Einbettung mit Cookie-Consent-Prüfung
+ *
+ * Props:
+ *   mapSrc       – Embed-URL (mit &output=embed)
+ *   mapQuery     – Such-Query für "In Google Maps öffnen"-Link
+ *   title        – Iframe-Titel / Box-Überschrift (optional, default: "Karte")
+ *   primaryLabel – Beschriftung des Lade-Buttons (optional)
+ *   ctaBtnClass  – Tailwind-Klassen für den primären Button (optional)
+ *   secBtnClass  – Tailwind-Klassen für den sekundären Button (optional)
+ */
+interface Props {
+  mapSrc: string;
+  mapQuery: string;
+  title?: string;
+  primaryLabel?: string;
+  ctaBtnClass?: string;
+  secBtnClass?: string;
+}
+
+const {
+  mapSrc,
+  mapQuery,
+  title = "Karte",
+  primaryLabel = "Google Maps anzeigen",
+  ctaBtnClass = "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold bg-amber-500 text-white hover:bg-amber-600 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300 relative z-10",
+  secBtnClass = "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300",
+} = Astro.props;
+
+const externalHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+---
+
+<div
+  class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 bg-white"
+  data-map-shell
+>
+  <div class="p-6 sm:p-8 text-center">
+    <div class="font-albert text-lg sm:text-xl font-extrabold text-neutral-900">
+      Karte laden
+    </div>
+    <p class="mt-2 mx-auto max-w-2xl font-barlow text-sm text-neutral-600">
+      Beim Laden der Karte können Daten an Google übertragen werden. Alternativ kannst du direkt
+      eine Route in Google Maps öffnen.
+    </p>
+
+    <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <button
+        type="button"
+        class={ctaBtnClass}
+        data-map-load
+        data-map-src={mapSrc}
+        data-map-title={title}
+      >
+        {primaryLabel}
+      </button>
+
+      <a
+        class={secBtnClass}
+        href={externalHref}
+        target="_blank"
+        rel="noreferrer"
+      >
+        In Google Maps öffnen
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // Guard: nur einmal registrieren, auch wenn die Komponente mehrfach genutzt wird
+  if (!window.__hellasMapDelegationInstalled) {
+    window.__hellasMapDelegationInstalled = true;
+
+    document.addEventListener("click", (ev) => {
+      const btn = ev.target.closest("[data-map-load]");
+      if (!btn) return;
+
+      const shell = btn.closest("[data-map-shell]");
+      if (!shell) return;
+
+      const src = btn.getAttribute("data-map-src");
+      const title = btn.getAttribute("data-map-title") || "Google Maps";
+      if (!src) return;
+
+      const hasConsent = window.getCookieConsent ? window.getCookieConsent() : false;
+
+      if (!hasConsent) {
+        shell.innerHTML = `
+          <div class="p-6 sm:p-8 text-center bg-amber-50 ring-1 ring-amber-200 rounded-2xl">
+            <div class="font-albert text-lg font-bold text-amber-900">
+              ⚠️ Cookie-Zustimmung erforderlich
+            </div>
+            <p class="mt-2 font-barlow text-sm text-amber-800">
+              Um Google Maps zu laden, musst du Cookies akzeptieren.
+              Scrolle nach unten und klicke auf "Akzeptieren" im Cookie-Banner.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      shell.innerHTML = `
+        <iframe
+          title="${title}"
+          src="${src}"
+          class="block w-full h-[360px] sm:h-[420px]"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      `;
+    });
+  }
+</script>
+

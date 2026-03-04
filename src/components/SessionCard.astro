@@ -1,0 +1,35 @@
+---
+/**
+ * SessionCard – Mobile Karte für eine Trainingseinheit (trainingszeiten.astro)
+ *
+ * Props entsprechen dem Session-Typ aus trainingszeiten.astro
+ */
+interface Props {
+  day: string;
+  time: string;
+  title: string;
+  group: string;
+  location: string;
+  contact?: string;
+  note?: string;
+}
+
+const { day, time, title, group, location, contact, note } = Astro.props;
+---
+
+<div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+  <div class="h-1 w-12 rounded-full bg-blue-500/90"></div>
+
+  <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <div class="font-barlow font-semibold text-neutral-900">{day}</div>
+    <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">{time}</div>
+  </div>
+
+  <div class="mt-2 font-albert font-extrabold text-neutral-900">{title}</div>
+  <div class="mt-1 font-barlow text-sm text-neutral-600">
+    {group} · {location}{contact ? ` · ${contact}` : ""}
+  </div>
+
+  {note && <div class="mt-2 font-barlow text-sm text-neutral-600">{note}</div>}
+</div>
+

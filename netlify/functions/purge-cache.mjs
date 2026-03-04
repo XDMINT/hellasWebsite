@@ -46,7 +46,7 @@ export default async (req) => {
     }
 
     // Optional: einzelnen Slug aus Body lesen
-    let slug: string | null = null;
+    let slug = null;
     try {
         const body = await req.json();
         slug = body?.slug ?? null;

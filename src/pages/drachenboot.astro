@@ -1,32 +1,11 @@
 ---
-// src/pages/drachenboot/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import CtaSection from "../components/CtaSection.astro";
 import OptimizedImg from "../components/OptimizedImg.astro";
-import { drachenbootAction, drachenbootHinten, drachenbootNah } from "../assets/images";
 import RuderAmpel from "../components/ruderampel.astro";
-
-const underlinedTitleClass =
-    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
-    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
-    "after:h-1 after:rounded-full after:bg-blue-500";
-
-const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
-const smallClass = "font-barlow text-sm text-neutral-600";
-
-const ctaBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-amber-500 text-white hover:bg-amber-600 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
-
-const secondaryBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
-
-// Bilder aus assets
-const heroImage = drachenbootAction;
-const img1 = drachenbootHinten;
-const img2 = drachenbootNah;
+import { drachenbootAction, drachenbootHinten, drachenbootNah } from "../assets/images";
+import { ctaBtn, secondaryBtn, bodyClass, smallClass } from "../lib/styles";
 ---
 
 <SiteLayout
@@ -35,50 +14,36 @@ const img2 = drachenbootNah;
         keywords="Drachenboot Gießen, Drachenboot Cup, Drachenboot Lahn, Drachenboot Training, Firmenevents Drachenboot, Teambuilding Gießen, Drachenboot Schnuppern, Wassersport Team, Drachenboot Wettkampf"
         heroTitle="Drachenboot"
         heroSubtitle="Team, Takt und Tempo – gemeinsam im Boot"
-        heroImage={heroImage}
+        heroImage={drachenbootAction}
         showHero={true}
         heroImageCredit="© Dieter Nuber"
 >
-
-    <!-- Ruderampel im Hero -->
     <RuderAmpel slot="heroTopLeft" variant="overlay" />
 
     <div id="top" class="sr-only">Top</div>
 
     <!-- Intro -->
-    <section class="bg-white">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
-                <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
-                    <div class="lg:col-span-4 flex justify-center lg:justify-center">
-                        <h2 class={underlinedTitleClass}>Was ist Drachenboot?</h2>
-                    </div>
+    <SectionIntro title="Was ist Drachenboot?">
+        <p class={bodyClass}>
+            Drachenboot ist Mannschaftssport auf dem Wasser: Ein großes Boot, viele Paddel – und ein gemeinsamer Rhythmus.
+            Entscheidend sind Timing, Technik und Teamgeist. Genau das macht Drachenboot so besonders: Man wächst schnell als
+            Crew zusammen und merkt sofort, wie viel Geschwindigkeit durch gutes Zusammenspiel entsteht.
+        </p>
 
-                    <div class="lg:col-span-8">
-                        <p class={bodyClass}>
-                            Drachenboot ist Mannschaftssport auf dem Wasser: Ein großes Boot, viele Paddel – und ein gemeinsamer Rhythmus.
-                            Entscheidend sind Timing, Technik und Teamgeist. Genau das macht Drachenboot so besonders: Man wächst schnell als
-                            Crew zusammen und merkt sofort, wie viel Geschwindigkeit durch gutes Zusammenspiel entsteht.
-                        </p>
+        <p class={"mt-4 " + bodyClass}>
+            Bei uns steht das Miteinander im Vordergrund – mit Spaß am Training, klaren Abläufen und dem Ziel,
+            als Team besser zu werden. Ob du neu reinschnuppern möchtest oder schon Erfahrung hast: Du bist willkommen.
+        </p>
 
-                        <p class={"mt-4 " + bodyClass}>
-                            Bei uns steht das Miteinander im Vordergrund – mit Spaß am Training, klaren Abläufen und dem Ziel,
-                            als Team besser zu werden. Ob du neu reinschnuppern möchtest oder schon Erfahrung hast: Du bist willkommen.
-                        </p>
-
-                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
-                            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
-                        </div>
-
-                        <p class={"mt-4 " + smallClass}>
-                            Tipp: Sportsachen, Trinkflasche und ggf. Wechselshirt reichen für den Einstieg völlig aus.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
+            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
         </div>
-    </section>
+
+        <p class={"mt-4 " + smallClass}>
+            Tipp: Sportsachen, Trinkflasche und ggf. Wechselshirt reichen für den Einstieg völlig aus.
+        </p>
+    </SectionIntro>
 
     <!-- Bild + Trainingsinfos -->
     <section class="bg-white">
@@ -89,7 +54,7 @@ const img2 = drachenbootNah;
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[16/10]">
                             <OptimizedImg
-                                    src={img1}
+                                    src={drachenbootHinten}
                                     alt="Drachenboot Training"
                                     className="absolute inset-0 h-full w-full"
                                     loading="lazy"
@@ -98,9 +63,7 @@ const img2 = drachenbootNah;
                             />
                         </div>
                     </div>
-                    <p class={"mt-3 " + smallClass}>
-                        Bild: ©No4Any
-                    </p>
+                    <p class={"mt-3 " + smallClass}>Bild: ©No4Any</p>
                 </div>
 
                 <!-- Textblock -->
@@ -130,7 +93,7 @@ const img2 = drachenbootNah;
         </div>
     </section>
 
-    <!-- Wettkämpfe / Events + optional Bild 2 -->
+    <!-- Wettkämpfe / Events + Bild 2 -->
     <section class="bg-white">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
             <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
@@ -156,12 +119,12 @@ const img2 = drachenbootNah;
                         </div>
                     </div>
 
-                    <!-- Bild 2 (optional) -->
+                    <!-- Bild 2 -->
                     <div class="lg:col-span-5">
                         <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                             <div class="relative aspect-[4/3]">
                                 <OptimizedImg
-                                        src={img2}
+                                        src={drachenbootNah}
                                         alt="Drachenboot Event"
                                         className="absolute inset-0 h-full w-full"
                                         loading="lazy"
@@ -170,16 +133,14 @@ const img2 = drachenbootNah;
                                 />
                             </div>
                         </div>
-                        <p class={"mt-3 " + smallClass}>
-                            Bild: ©No4Any
-                        </p>
+                        <p class={"mt-3 " + smallClass}>Bild: ©No4Any</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Kurzinfo / FAQ -->
+    <!-- Kurzinfo -->
     <section class="bg-white">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
             <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
@@ -189,35 +150,23 @@ const img2 = drachenbootNah;
 
                 <div class="mt-8 grid gap-6 md:grid-cols-3">
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
-                        <!-- dezenter blauer Strich wie auf Home -->
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
-
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Für wen?</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Für alle, die Teamsport mögen – egal ob Einsteiger oder mit Erfahrung.
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Für alle, die Teamsport mögen – egal ob Einsteiger oder mit Erfahrung.</p>
                     </div>
 
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
-
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Was braucht man?</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Sportkleidung, Trinkflasche – ggf. Wechselshirt. Paddel/Boot stellen wir.
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Sportkleidung, Trinkflasche – ggf. Wechselshirt. Paddel/Boot stellen wir.</p>
                     </div>
 
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
-
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Wie starten?</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Einfach Kontakt aufnehmen und zum Probetraining kommen.
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Einfach Kontakt aufnehmen und zum Probetraining kommen.</p>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </section>

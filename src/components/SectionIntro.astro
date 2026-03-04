@@ -1,0 +1,56 @@
+---
+/**
+ * SectionIntro – Grauer 12-Spalten-Intro-Block
+ *
+ * Props:
+ *   title       – Überschrift (required)
+ *   titleTag    – HTML-Tag der Überschrift (default: "h2")
+ *   centered    – Zentrierter Titel statt linksbündig (default: false)
+ *   titleSize   – Tailwind-Größenklassen für den Titel (default: "text-3xl sm:text-4xl")
+ */
+import { makeUnderlinedTitle } from "../lib/styles";
+
+interface Props {
+  title: string;
+  titleTag?: "h1" | "h2" | "h3";
+  centered?: boolean;
+  titleSize?: string;
+}
+
+const {
+  title,
+  titleTag = "h2",
+  centered = false,
+  titleSize = "text-3xl sm:text-4xl",
+} = Astro.props;
+
+const underlinedTitleClass = makeUnderlinedTitle(titleSize);
+const Tag = titleTag;
+---
+
+<section class="bg-white">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+    <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+      {centered ? (
+        <div>
+          <div class="text-center">
+            <Tag class={`${underlinedTitleClass} mx-auto`}>{title}</Tag>
+          </div>
+          <div class="mt-8">
+            <slot />
+          </div>
+        </div>
+      ) : (
+        <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div class="lg:col-span-4 flex justify-center lg:justify-center">
+            <Tag class={underlinedTitleClass}>{title}</Tag>
+          </div>
+          <div class="lg:col-span-8">
+            <slot />
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+

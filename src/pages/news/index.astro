@@ -21,6 +21,7 @@ Astro.response.headers.set("Netlify-Cache-Tag", "news");
 
 import SiteLayout from "../../layouts/siteLayout.astro";
 import OptimizedImg from "../../components/OptimizedImg.astro";
+import NewsCard from "../../components/NewsCard.astro";
 import { fetchWp, fetchWpWithHeaders, type WpPost, getFeaturedImage, stripHtml, formatDateDE } from "../../lib/wp";
 
 type WpTag = { id: number; name: string; slug: string; count: number };
@@ -310,53 +311,15 @@ const pageDescription = tagSlug
         <!-- Grid: immer 12 pro Seite -->
         {!error && gridPosts.length > 0 && (
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {gridPosts.map((post) => {
-                        const img = getFeaturedImage(post);
-                        const excerpt = stripHtml(post.excerpt?.rendered ?? "");
-
-                        return (
-                                <a
-                                        href={`/news/${post.slug}/`}
-                                        data-astro-prefetch
-                                        class="group rounded-2xl overflow-hidden bg-white ring-1 ring-neutral-200 shadow-sm
-                     transition duration-200 ease-out hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5"
-                                >
-                                    <div class="relative aspect-[16/9] bg-neutral-200">
-                                        {img ? (
-                                                <OptimizedImg
-                                                        src={img}
-                                                        alt="News Post"
-                                                        className="absolute inset-0 h-full w-full"
-                                                        loading="lazy"
-                                                />
-                                        ) : (
-                                                <div class="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
-                                        )}
-                                        <div class="absolute left-4 bottom-4 h-1 w-16 rounded-full bg-blue-500/90 group-hover:bg-white/80 transition-colors"></div>
-                                    </div>
-
-                                    <div class="p-5">
-                                        <div class="font-barlow text-xs text-neutral-500 group-hover:text-white/80 transition-colors">
-                                            {formatDateDE(post.date)}
-                                        </div>
-
-                                        <h3 class="mt-2 font-albert text-lg font-extrabold tracking-tight text-neutral-900 group-hover:text-white transition-colors">
-                                            {post.title?.rendered ?? "Ohne Titel"}
-                                        </h3>
-
-                                        <p class="mt-2 font-barlow text-sm text-neutral-700 group-hover:text-white/90 transition-colors line-clamp-3">
-                                            {excerpt}
-                                        </p>
-
-                                        <div class="mt-4 font-barlow text-sm font-semibold text-blue-600 group-hover:text-white/90 transition-colors">
-                  <span class="inline-flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-1">
-                    Weiterlesen <span aria-hidden="true">→</span>
-                  </span>
-                                        </div>
-                                    </div>
-                                </a>
-                        );
-                    })}
+                    {gridPosts.map((post) => (
+                        <NewsCard
+                            href={`/news/${post.slug}/`}
+                            imgSrc={getFeaturedImage(post)}
+                            date={formatDateDE(post.date)}
+                            title={post.title?.rendered ?? "Ohne Titel"}
+                            excerpt={stripHtml(post.excerpt?.rendered ?? "")}
+                        />
+                    ))}
                 </div>
         )}
 

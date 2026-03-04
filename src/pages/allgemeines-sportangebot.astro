@@ -1,36 +1,12 @@
 ---
 // src/pages/weiteres-sportangebot/index.astro
 import SiteLayout from "../layouts/siteLayout.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import GoogleMap from "../components/GoogleMap.astro";
 import OptimizedImg from "../components/OptimizedImg.astro";
 import { logo, hallensport, sportabzeichen } from "../assets/images";
+import { ctaBtn, secondaryBtn, bodyClass, smallClass, sectionTitleClass } from "../lib/styles";
 
-const underlinedTitleClass =
-    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
-    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
-    "after:h-1 after:rounded-full after:bg-blue-500";
-
-const sectionTitleClass =
-    "font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900";
-
-const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
-const smallClass = "font-barlow text-sm text-neutral-600";
-
-const ctaBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-amber-500 text-white hover:bg-amber-600 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
-
-const secondaryBtn =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
-
-// Bilder aus assets
-const heroImage = logo;
-const imgHall = hallensport;
-const imgSportabzeichen = sportabzeichen;
-
-// Karte – Sandfeldschule Gießen
 const sandfeldQuery = "Sandfeldschule, Sandfeld, 35394 Gießen";
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery)}&output=embed`;
 ---
@@ -41,76 +17,43 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
         keywords="Hallensport Gießen, Sportabzeichen Gießen, Breitensport Gießen, SUP Gießen, Kindersport Gießen, Vereinssport"
         heroTitle="Allgemeines Sportangebot"
         heroSubtitle="Hallensport, Sportabzeichen & mehr – für Kinder, Jugendliche und Erwachsene"
-        heroImage={heroImage}
+        heroImage={logo}
         showHero={true}
 >
     <div id="top" class="sr-only">Top</div>
 
     <!-- Intro + Quicklinks -->
-    <section class="bg-white">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
-                <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
-                    <div class="lg:col-span-4 flex justify-center lg:justify-center">
-                        <h2 class={underlinedTitleClass}>Übersicht</h2>
-                    </div>
+    <SectionIntro title="Übersicht">
+        <p class={bodyClass}>
+            Der WSV Hellas bietet auch noch mehr Sportmöglichkeiten an.
+            Vor allem die ganzjährigen <strong>Hallensportstunden</strong> bieten hier viele Bewegungsangebote
+            für Kinder und Jugendliche ab 3 Jahren, bis hin zu verschiedenen Sportgruppen
+            für Erwachsene. Ein <strong>Sportabzeichen-Treff</strong> für alle Interessierten, sowie gelegentliches
+            Yoga runden das Angebot in und um die Sporthalle ab. Auf dem Wasser gibt es noch
+            <strong>Stand-Up-Paddling</strong> und die Möglichkeit zum Paddeln in Kanu oder Kajak.
+        </p>
 
-                    <div class="lg:col-span-8">
-                        <p class={bodyClass}>
-                            Der WSV Hellas bietet auch noch mehr Sportmöglichkeiten an.
-                            Vor allem die ganzjährigen <strong>Hallensportstunden</strong> bieten hier viele Bewegungsangebote
-                            für Kinder und Jugendliche ab 3 Jahren, bis hin zu verschiedenen Sportgruppen
-                            für Erwachsene. Ein <strong>Sportabzeichen-Treff</strong> für alle Interessierten, sowie gelegentliches
-                            Yoga runden das Angebot in und um die Sporthalle ab. Auf dem Wasser gibt es noch
-                            <strong>Stand-Up-Paddling</strong> und die Möglichkeit zum Paddeln in Kanu oder Kajak.
-                        </p>
-
-                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
-                            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
-                        </div>
-
-                        <div class="mt-8 flex flex-wrap gap-2">
-                            <a
-                                    href="#hallensport"
-                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
-                            >
-                                Hallensport
-                            </a>
-                            <a
-                                    href="#sportabzeichen"
-                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
-                            >
-                                Sportabzeichen-Treff
-                            </a>
-                            <a
-                                    href="#weitere-angebote"
-                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
-                            >
-                                Weitere Angebote
-                            </a>
-                            <a
-                                    href="#anfahrt"
-                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
-                            >
-                                Anfahrt & Lage
-                            </a>
-                        </div>
-
-                        <p class={"mt-4 " + smallClass}>
-                            Hinweis: In den Schulferien ist die Sporthalle geschlossen.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
+            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
         </div>
-    </section>
+
+        <div class="mt-8 flex flex-wrap gap-2">
+            <a href="#hallensport" class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition">Hallensport</a>
+            <a href="#sportabzeichen" class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition">Sportabzeichen-Treff</a>
+            <a href="#weitere-angebote" class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition">Weitere Angebote</a>
+            <a href="#anfahrt" class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition">Anfahrt & Lage</a>
+        </div>
+
+        <p class={"mt-4 " + smallClass}>
+            Hinweis: In den Schulferien ist die Sporthalle geschlossen.
+        </p>
+    </SectionIntro>
 
     <!-- Hallensport -->
     <section id="hallensport" class="bg-white">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
             <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
-                <!-- Text -->
                 <div class="lg:col-span-7">
                     <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
                         <h3 class={sectionTitleClass}>Hallensport</h3>
@@ -123,70 +66,41 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                             wo es eine reine Frauensportstunde und eine mit Frauen und Männern gemischte Sportgruppe gibt.
                         </p>
 
-
-
-                        <!-- Kinder & Jugendliche Zeiten -->
                         <div class="mt-8">
-                            <div class="flex items-end justify-between gap-3">
-                                <div class="font-albert text-xl font-extrabold text-neutral-900">Kinder & Jugendliche</div>
-                            </div>
-
+                            <div class="font-albert text-xl font-extrabold text-neutral-900">Kinder & Jugendliche</div>
                             <div class="mt-4 overflow-hidden rounded-2xl bg-white ring-1 ring-black/10">
                                 <div class="divide-y divide-black/10">
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">3–6 Jahre</div>
-                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900">3–6 Jahre</div>
                                         <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 16:05–17:00</div>
                                     </div>
-
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">6–10 Jahre</div>
-                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900">6–10 Jahre</div>
                                         <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 17:05–18:05</div>
                                     </div>
-
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">10–14 Jahre</div>
-                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900">10–14 Jahre</div>
                                         <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 18:10–19:25</div>
                                     </div>
                                 </div>
                             </div>
-
-                            <p class={"mt-3 " + smallClass}>
-                                Du bist unsicher, welche Gruppe passt? Schreib uns kurz – wir helfen dir beim Einstieg.
-                            </p>
+                            <p class={"mt-3 " + smallClass}>Du bist unsicher, welche Gruppe passt? Schreib uns kurz – wir helfen dir beim Einstieg.</p>
                         </div>
 
-                        <!-- Erwachsene Zeiten -->
                         <div class="mt-10">
                             <div class="font-albert text-xl font-extrabold text-neutral-900">Erwachsene</div>
-
                             <div class="mt-4 overflow-hidden rounded-2xl bg-white ring-1 ring-black/10">
                                 <div class="divide-y divide-black/10">
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">Frauen-Sportstunde (ab 18)</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Mittwoch 20:00–21:30</div>
-                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900">Frauen-Sportstunde (ab 18)</div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Mittwoch 20:00–21:30</div>
                                     </div>
-
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">Gemischt Sportstunde (Frauen & Männer)</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Freitag 20:00–21:45</div>
-                                        </div>
+                                        <div class="font-barlow font-semibold text-neutral-900">Gemischt Sportstunde (Frauen & Männer)</div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Freitag 20:00–21:45</div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="mt-6 flex flex-col sm:flex-row gap-3">
                                 <a class={ctaBtn} href="/mitglied-werden">Mitmachen</a>
                                 <a class={secondaryBtn} href="/trainingszeiten">Alle Zeiten</a>
@@ -195,23 +109,13 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                     </div>
                 </div>
 
-                <!-- Bild -->
                 <div class="lg:col-span-5">
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[4/3]">
-                            <OptimizedImg
-                                    src={imgHall}
-                                    alt="Hallensport"
-                                    className="absolute inset-0 h-full w-full"
-                                    loading="lazy"
-                                    widths={[400, 640, 960]}
-                                    sizes="(min-width: 1024px) 50vw, 100vw"
-                            />
+                            <OptimizedImg src={hallensport} alt="Hallensport" className="absolute inset-0 h-full w-full" loading="lazy" widths={[400, 640, 960]} sizes="(min-width: 1024px) 50vw, 100vw" />
                         </div>
                     </div>
-                    <p class={"mt-3 " + smallClass}>
-                        Bild: Hallensport / Kindergruppe
-                    </p>
+                    <p class={"mt-3 " + smallClass}>Bild: Hallensport / Kindergruppe</p>
                 </div>
             </div>
         </div>
@@ -221,30 +125,18 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
     <section id="sportabzeichen" class="bg-white">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
             <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
-                <!-- Bild -->
                 <div class="lg:col-span-5 lg:order-1 order-2">
                     <div class="overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-sm bg-neutral-200">
                         <div class="relative aspect-[4/3]">
-                            <OptimizedImg
-                                    src={imgSportabzeichen}
-                                    alt="Sportabzeichen"
-                                    className="absolute inset-0 h-full w-full"
-                                    loading="lazy"
-                                    widths={[400, 640, 960]}
-                                    sizes="(min-width: 1024px) 50vw, 100vw"
-                            />
+                            <OptimizedImg src={sportabzeichen} alt="Sportabzeichen" className="absolute inset-0 h-full w-full" loading="lazy" widths={[400, 640, 960]} sizes="(min-width: 1024px) 50vw, 100vw" />
                         </div>
                     </div>
-                    <p class={"mt-3 " + smallClass}>
-                        Bild: DOSB
-                    </p>
+                    <p class={"mt-3 " + smallClass}>Bild: DOSB</p>
                 </div>
 
-                <!-- Text -->
                 <div class="lg:col-span-7 lg:order-2 order-1">
                     <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
                         <h3 class={sectionTitleClass}>Sportabzeichen-Treff</h3>
-
                         <p class={"mt-3 " + bodyClass}>
                             Das <strong>Deutsche Sportabzeichen</strong> bietet die alljährliche Möglichkeit, seine Fitness und
                             Sportlichkeit zu trainieren und immer wieder neu unter Beweis zu stellen. In einer motivierten und bunt
@@ -257,23 +149,18 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                             <div class="rounded-2xl bg-white ring-1 ring-black/10 p-5">
                                 <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
                                 <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Ort</div>
-                                <p class={"mt-2 " + smallClass}>
-                                    Sportanlagen der Sandfeldschule Gießen
-                                </p>
+                                <p class={"mt-2 " + smallClass}>Sportanlagen der Sandfeldschule Gießen</p>
                             </div>
-
                             <div class="rounded-2xl bg-white ring-1 ring-black/10 p-5">
                                 <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
                                 <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Zeit</div>
-                                <p class={"mt-2 " + smallClass}>
-                                    Freitags ca. 18:00–20:00 Uhr (Sommermonate, zwischen Oster- und Herbstferien)
-                                </p>
+                                <p class={"mt-2 " + smallClass}>Freitags ca. 18:00–20:00 Uhr (Sommermonate, zwischen Oster- und Herbstferien)</p>
                             </div>
                         </div>
 
                         <ul class="mt-6 space-y-2 font-barlow text-base text-neutral-700">
                             <li>• Teilnahme ist auch <strong>ohne Vereinsmitgliedschaft</strong> möglich</li>
-                            <li>• Training + Abnahme in Leichtathletik-, Turn- und Radfahr-Disziplinen </li>
+                            <li>• Training + Abnahme in Leichtathletik-, Turn- und Radfahr-Disziplinen</li>
                             <li>• Ideal als persönlicher Fitness-Check oder gemeinsames Saison-Ziel</li>
                         </ul>
 
@@ -282,9 +169,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                             <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
                         </div>
 
-                        <p class={"mt-4 " + smallClass}>
-                            Wetter- und ferienabhängig – bei Unsicherheiten einfach kurz nachfragen.
-                        </p>
+                        <p class={"mt-4 " + smallClass}>Wetter- und ferienabhängig – bei Unsicherheiten einfach kurz nachfragen.</p>
                     </div>
                 </div>
             </div>
@@ -303,7 +188,6 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                 </p>
 
                 <div class="mt-8 grid gap-6 lg:grid-cols-12 lg:items-start">
-                    <!-- Info-Kacheln -->
                     <div class="lg:col-span-4 flex flex-col gap-4">
                         <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
                             <div class="h-1 w-12 rounded-full bg-blue-500/90"></div>
@@ -324,92 +208,21 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                         </div>
                     </div>
 
-                    <!-- Karte -->
                     <div class="lg:col-span-8">
-                        <div
-                            class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 bg-white"
-                            data-map-shell
-                        >
-                            <div class="p-6 sm:p-8 text-center">
-                                <div class="font-albert text-lg sm:text-xl font-extrabold text-neutral-900">
-                                    Karte laden
-                                </div>
-                                <p class={"mt-2 mx-auto max-w-xl " + smallClass}>
-                                    Beim Laden der Karte können Daten an Google übertragen werden.
-                                </p>
-                                <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-                                    <button
-                                        type="button"
-                                        class={ctaBtn + " relative z-10"}
-                                        data-map-load
-                                        data-map-src={mapSrc}
-                                        data-map-title="Karte: Sandfeldschule Gießen"
-                                    >
-                                        Google Maps anzeigen
-                                    </button>
-                                    <a
-                                        class={secondaryBtn}
-                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sandfeldQuery)}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        In Google Maps öffnen
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script is:inline>
-                            if (!window.__hellasMapDelegationInstalled) {
-                                window.__hellasMapDelegationInstalled = true;
-
-                                document.addEventListener("click", (ev) => {
-                                    const btn = ev.target.closest("[data-map-load]");
-                                    if (!btn) return;
-
-                                    const shell = btn.closest("[data-map-shell]");
-                                    if (!shell) return;
-
-                                    const src = btn.getAttribute("data-map-src");
-                                    const title = btn.getAttribute("data-map-title") || "Google Maps";
-                                    if (!src) return;
-
-                                    const hasConsent = window.getCookieConsent ? window.getCookieConsent() : false;
-
-                                    if (!hasConsent) {
-                                        shell.innerHTML = `
-                                            <div class="p-6 sm:p-8 text-center bg-amber-50 ring-1 ring-amber-200 rounded-2xl">
-                                                <div class="font-albert text-lg font-bold text-amber-900">
-                                                    ⚠️ Cookie-Zustimmung erforderlich
-                                                </div>
-                                                <p class="mt-2 font-barlow text-sm text-amber-800">
-                                                    Um Google Maps zu laden, musst du Cookies akzeptieren.
-                                                    Scrolle nach unten und klicke auf "Akzeptieren" im Cookie-Banner.
-                                                </p>
-                                            </div>
-                                        `;
-                                        return;
-                                    }
-
-                                    shell.innerHTML = `
-                                        <iframe
-                                            title="${title}"
-                                            src="${src}"
-                                            class="block w-full h-[360px] sm:h-[420px]"
-                                            loading="lazy"
-                                            referrerpolicy="no-referrer-when-downgrade"
-                                        ></iframe>
-                                    `;
-                                });
-                            }
-                        </script>
+                        <GoogleMap
+                            mapSrc={mapSrc}
+                            mapQuery={sandfeldQuery}
+                            title="Karte: Sandfeldschule Gießen"
+                            ctaBtnClass={ctaBtn + " relative z-10"}
+                            secBtnClass={secondaryBtn}
+                        />
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Weitere Angebote (kurz, untergeordnet) -->
+    <!-- Weitere Angebote -->
     <section id="weitere-angebote" class="bg-white">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
             <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
@@ -421,25 +234,17 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Kraftraum (Winter)</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Ergänzendes Training – besonders im Winterhalbjahr.
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Ergänzendes Training – besonders im Winterhalbjahr.</p>
                     </div>
-
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">SUP-Treff</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Stand Up Paddling auf der Lahn – Technik & Sicherheit in der Gruppe (saisonal).
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Stand Up Paddling auf der Lahn – Technik & Sicherheit in der Gruppe (saisonal).</p>
                     </div>
-
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
                         <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Yoga</div>
-                        <p class={"mt-2 " + smallClass}>
-                            Aktuell nur unregelmäßiges Angebot. Bei Interesse bitte kurz melden.
-                        </p>
+                        <p class={"mt-2 " + smallClass}>Aktuell nur unregelmäßiges Angebot. Bei Interesse bitte kurz melden.</p>
                     </div>
                 </div>
 

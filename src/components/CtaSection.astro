@@ -1,0 +1,81 @@
+---
+/**
+ * CtaSection – Zentrier­ter CTA-Block (hell oder dunkel)
+ *
+ * Props:
+ *   title           – Überschrift (required)
+ *   body            – Beschreibungstext (required)
+ *   primaryHref     – URL des primären Buttons (required)
+ *   primaryLabel    – Label des primären Buttons (required)
+ *   secondaryHref   – URL des sekundären Buttons (optional)
+ *   secondaryLabel  – Label des sekundären Buttons (optional)
+ *   dark            – true → bg-neutral-900, false/default → bg-neutral-100
+ *   paddingBottom   – extra Tailwind-Klasse für unten-Padding (default: "pb-14")
+ */
+import { ctaBtn, secondaryBtn, tertiaryBtn } from "../lib/styles";
+
+interface Props {
+  title: string;
+  body: string;
+  primaryHref: string;
+  primaryLabel: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  dark?: boolean;
+  paddingBottom?: string;
+}
+
+const {
+  title,
+  body,
+  primaryHref,
+  primaryLabel,
+  secondaryHref,
+  secondaryLabel,
+  dark = false,
+  paddingBottom = "pb-14",
+} = Astro.props;
+---
+
+<section class="bg-white">
+  <div class={`mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 ${paddingBottom}`}>
+    <div
+      class={`rounded-2xl px-6 py-10 sm:px-10 sm:py-12 text-center ${
+        dark ? "bg-neutral-900" : "bg-neutral-100"
+      }`}
+    >
+      <h2
+        class={`font-albert text-2xl sm:text-3xl font-extrabold tracking-tight ${
+          dark ? "text-white" : "text-neutral-900"
+        }`}
+      >
+        {title}
+      </h2>
+
+      <p
+        class={`mt-3 font-barlow max-w-2xl mx-auto leading-relaxed ${
+          dark ? "text-neutral-200" : "text-neutral-700"
+        }`}
+      >
+        {body}
+      </p>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a class={ctaBtn} href={primaryHref}>{primaryLabel}</a>
+
+        {secondaryHref && secondaryLabel && (
+          <a
+            class={dark ? tertiaryBtn : secondaryBtn}
+            href={secondaryHref}
+          >
+            {secondaryLabel}
+          </a>
+        )}
+      </div>
+
+      {/* Optionaler Extra-Slot für Hinweise o. ä. */}
+      <slot />
+    </div>
+  </div>
+</section>
+

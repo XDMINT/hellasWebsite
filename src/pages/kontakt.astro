@@ -1,47 +1,14 @@
 ---
 import SiteLayout from "../layouts/siteLayout.astro";
-
-const underlinedTitleClass =
-    "font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 " +
-    "relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 " +
-    "after:h-1 after:rounded-full after:bg-blue-500";
-
-const bodyClass = "font-barlow text-base sm:text-lg leading-relaxed text-neutral-700";
-const smallClass = "font-barlow text-sm text-neutral-600";
-const accentBar = "h-1 w-12 rounded-full bg-blue-500/90";
-
-const box = "bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12";
-const card = "bg-white rounded-2xl ring-1 ring-black/10 p-6";
-
-const inputClass =
-    "w-full rounded-xl bg-white px-4 py-3 font-barlow text-sm sm:text-base text-neutral-900 " +
-    "ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-blue-300";
-
-const labelClass = "font-barlow text-sm font-semibold text-neutral-700";
-const btnPrimary =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-amber-500 text-white hover:bg-amber-600 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300";
-
-const btnSecondary =
-    "inline-flex items-center justify-center rounded-xl px-4 py-3 font-barlow text-sm sm:text-base font-semibold " +
-    "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-neutral-50 transition " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300";
-
+import GoogleMap from "../components/GoogleMap.astro";
+import { accentBar, box, card, bodyClass, smallClass, ctaBtn, secondaryBtn, inputClass, labelClass } from "../lib/styles";
 
 const clubName = "Wassersportverein Hellas 1920 Gießen e. V.";
-const addressLines = [
-    "Wißmarer Weg 125",
-    "35396 Gießen",
-    "Deutschland",
-];
-const email = "kontakt@wsv-hellas.de"; // ggf. anpassen
-const phone = "+49 …";             // ggf. anpassen
+const addressLines = ["Wißmarer Weg 125", "35396 Gießen", "Deutschland"];
+const email = "kontakt@wsv-hellas.de";
 
-// Google Maps Query (Marker über Such-Query)
 const mapQuery = `${clubName}, Wißmarer Weg 125, 35396 Gießen`;
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
-
 ---
 
 <SiteLayout
@@ -54,18 +21,18 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
             <div class={box}>
                 <div class="text-center">
-                    <h1 class={underlinedTitleClass}>Kontakt</h1>
+                    <h1 class="font-albert text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 after:h-1 after:rounded-full after:bg-blue-500">Kontakt</h1>
                     <p class={"mt-5 mx-auto max-w-3xl " + bodyClass}>
                         Du hast Fragen zu Training, Mitgliedschaft oder Veranstaltungen? Schreib uns – wir melden uns schnellstmöglich zurück.
                     </p>
                     <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <a class={btnSecondary} href="/trainingszeiten">Trainingszeiten</a>
-                        <a class={btnSecondary} href="/vorstand">Ansprechpartner</a>
+                        <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
+                        <a class={secondaryBtn} href="/vorstand">Ansprechpartner</a>
                     </div>
                 </div>
 
                 <div class="mt-10 grid gap-6 lg:grid-cols-2 lg:items-start">
-                    {/* FORMULAR (Netlify Forms kompatibel) */}
+                    {/* FORMULAR */}
                     <div class={card}>
                         <div class={accentBar}></div>
                         <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
@@ -81,7 +48,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
                         >
                             <input type="hidden" name="form-name" value="kontakt" />
                             <p class="hidden">
-                                <label>Don’t fill this out: <input name="bot-field" /></label>
+                                <label>Don't fill this out: <input name="bot-field" /></label>
                             </p>
 
                             <div>
@@ -109,25 +76,26 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
 
                             <div>
                                 <label class={labelClass} for="message">Nachricht</label>
-                                <textarea
-                                        id="message"
-                                        name="message"
-                                        rows="6"
-                                        class={inputClass}
-                                        placeholder="Worum geht’s?"
-                                        required
-                                />
+                                <textarea id="message" name="message" rows="6" class={inputClass} placeholder="Worum geht's?" required />
                             </div>
 
                             <div class="pt-2 flex flex-col sm:flex-row gap-3">
-                                <button type="submit" class={btnPrimary}>Absenden</button>
-                                <a class={btnSecondary} href={`mailto:${email}`}>Oder per E-Mail</a>
+                                <button type="submit" class={ctaBtn}>Absenden</button>
+                                <a class={secondaryBtn} href={`mailto:${email}`}>Oder per E-Mail</a>
                             </div>
 
-                            <p class={"pt-1 " + smallClass}>
-                                Mit dem Absenden erklärst du dich mit der Verarbeitung deiner Angaben zur Bearbeitung der Anfrage einverstanden.
-                                Details siehe <a class="text-blue-700 font-semibold hover:underline" href="/datenschutz">Datenschutz</a>.
-                            </p>
+                            <div class="flex items-start gap-3 pt-2">
+                                <input
+                                    id="privacy"
+                                    name="privacy"
+                                    type="checkbox"
+                                    required
+                                    class="mt-1 h-4 w-4 shrink-0 rounded border-neutral-300 accent-blue-600 cursor-pointer"
+                                />
+                                <label for="privacy" class="font-barlow text-sm text-neutral-600 cursor-pointer">
+                                    Ich habe die <a class="text-blue-700 font-semibold hover:underline" href="/datenschutz">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Angaben zur Bearbeitung meiner Anfrage einverstanden. *
+                                </label>
+                            </div>
                         </form>
                     </div>
 
@@ -156,7 +124,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <div>
                                     <div class="font-barlow text-sm font-semibold text-neutral-700">E-Mail</div>
-                                    <a class={"mt-1 inline-block font-barlow font-semibold text-blue-700 hover:underline"} href={`mailto:${email}`}>
+                                    <a class="mt-1 inline-block font-barlow font-semibold text-blue-700 hover:underline" href={`mailto:${email}`}>
                                         {email}
                                     </a>
                                 </div>
@@ -165,114 +133,33 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
                             <div class="pt-2">
                                 <div class="font-barlow text-sm font-semibold text-neutral-700">Schnelllinks</div>
                                 <div class="mt-2 flex flex-wrap gap-3">
-                                    <a class={btnSecondary} href="/trainingszeiten">Trainingszeiten</a>
-                                    <a class={btnSecondary} href="/news">News</a>
-                                    <a class={btnSecondary} href="/impressum">Impressum</a>
+                                    <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
+                                    <a class={secondaryBtn} href="/news">News</a>
+                                    <a class={secondaryBtn} href="/impressum">Impressum</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* MAP (2-Klick) */}
-                {/* MAP (2-Klick) */}
+                {/* MAP */}
                 <div class="mt-6">
                     <div class={card}>
                         <div class={accentBar}></div>
                         <h2 class="mt-4 font-albert text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-900">
                             Anfahrt
                         </h2>
-
                         <div class="mt-5">
-                            <div
-                                    class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 bg-white"
-                                    data-map-shell
-                            >
-                                <div class="p-6 sm:p-8 text-center">
-                                    <div class="font-albert text-lg sm:text-xl font-extrabold text-neutral-900">
-                                        Karte laden
-                                    </div>
-                                    <p class={"mt-2 mx-auto max-w-2xl " + smallClass}>
-                                        Beim Laden der Karte können Daten an Google übertragen werden. Alternativ kannst du direkt
-                                        eine Route in Google Maps öffnen.
-                                    </p>
-
-                                    <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-                                        <button
-                                                type="button"
-                                                class={btnPrimary + " relative z-10"}
-                                                data-map-load
-                                                data-map-src={mapSrc}
-                                                data-map-title={`Karte: ${clubName}`}
-                                        >
-                                            Google Maps anzeigen
-                                        </button>
-
-                                        <a
-                                                class={btnSecondary}
-                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                        >
-                                            In Google Maps öffnen
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <script is:inline>
-                                // Guard: nicht mehrfach registrieren (falls Astro irgendwann mehrfach rendert)
-                                if (!window.__hellasMapDelegationInstalled) {
-                                    window.__hellasMapDelegationInstalled = true;
-
-                                    document.addEventListener("click", (ev) => {
-                                        const btn = ev.target.closest("[data-map-load]");
-                                        if (!btn) return;
-
-                                        const shell = btn.closest("[data-map-shell]");
-                                        if (!shell) return;
-
-                                        const src = btn.getAttribute("data-map-src");
-                                        const title = btn.getAttribute("data-map-title") || "Google Maps";
-                                        if (!src) return;
-
-                                        // Prüfe Cookie-Consent
-                                        const hasConsent = window.getCookieConsent ? window.getCookieConsent() : false;
-
-                                        if (!hasConsent) {
-                                            // Zeige Hinweis
-                                            shell.innerHTML = `
-                                                <div class="p-6 sm:p-8 text-center bg-amber-50 ring-1 ring-amber-200">
-                                                    <div class="font-albert text-lg font-bold text-amber-900">
-                                                        ⚠️ Cookie-Zustimmung erforderlich
-                                                    </div>
-                                                    <p class="mt-2 font-barlow text-sm text-amber-800">
-                                                        Um Google Maps zu laden, musst du Cookies akzeptieren. 
-                                                        Scrolle nach unten und klicke auf "Akzeptieren" im Cookie-Banner.
-                                                    </p>
-                                                </div>
-                                            `;
-                                            return;
-                                        }
-
-                                        // Consent vorhanden -> Karte laden
-                                        shell.innerHTML = `
-              <iframe
-                title="${title}"
-                src="${src}"
-                class="block w-full h-[360px] sm:h-[420px]"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            `;
-                                    });
-                                }
-                            </script>
+                            <GoogleMap
+                                mapSrc={mapSrc}
+                                mapQuery={mapQuery}
+                                title={`Karte: ${clubName}`}
+                                ctaBtnClass={ctaBtn + " relative z-10"}
+                                secBtnClass={secondaryBtn}
+                            />
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </section>

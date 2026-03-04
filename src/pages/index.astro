@@ -1,20 +1,10 @@
 ---
 import SiteLayout from "../layouts/siteLayout.astro";
 import RuderAmpel from "../components/ruderampel.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import CtaSection from "../components/CtaSection.astro";
 import { rudernEiner, drachenbootNah, rudernBreitSport } from "../assets/images";
-
-const titleClass =
-	"font-albert text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight";
-const underlinedTitleClass =
-	`${titleClass} relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 after:h-1 after:rounded-full after:bg-blue-500`;
-
-const bodyClass = "font-barlow text-neutral-700 leading-relaxed";
-const ctaBtn =
-	"font-barlow inline-flex items-center justify-center rounded-md bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300";
-const secondaryBtn =
-	"font-barlow inline-flex items-center justify-center rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 shadow-sm ring-1 ring-neutral-200 hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300";
-const tertiaryBtn =
-	"font-barlow inline-flex items-center justify-center rounded-md bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50";
+import { ctaBtn, secondaryBtn, tertiaryBtn, bodyClass, underlinedTitleSmClass } from "../lib/styles";
 ---
 
 <SiteLayout
@@ -28,199 +18,158 @@ const tertiaryBtn =
 >
 	<div id="top" class="sr-only">Top</div>
 
-	<!-- ÜBER UNS (graue Box mit runden Ecken) -->
-	<section class="bg-white">
-		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-			<div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
-				<div class="grid gap-10 lg:grid-cols-12 lg:items-start">
-					<div class="lg:col-span-4 flex justify-center lg:justify-center">
-						<h1 class={underlinedTitleClass}>Über Uns</h1>
-					</div>
+	<!-- ÜBER UNS -->
+	<SectionIntro title="Über Uns" titleTag="h1" titleSize="text-2xl sm:text-3xl">
+		<p class={bodyClass}>
+			Der jüngste der drei Gießener Rudervereine in Gießen wurde im September des Jahres 1920 gegründet.
+			Wir blicken auf eine bewegte und wechselvolle Geschichte zurück. Der Verein verzeichnet seit Ende der
+			1970er Jahre jedoch einen stetigen und ungebrochenen Aufwärtstrend.
+			<br /><br />
+			Die jeweiligen Vereinsvorstände versuchen seit jeher die Attraktivität des Rudersports durch sinnvolle
+			und passende Sportarten und Freizeitmöglichkeiten zu ergänzen. Freude am Sport, Engagement und ein
+			intaktes, familiäres Vereinsleben sind unsere Leitbegriffe.
+		</p>
 
-					<div class="lg:col-span-8">
-						<p class={bodyClass}>
-							Der jüngste der drei Gießener Rudervereine in Gießen wurde im September des Jahres 1920 gegründet.
-							Wir blicken auf eine bewegte und wechselvolle Geschichte zurück. Der Verein verzeichnet seit Ende der
-							1970er Jahre jedoch einen stetigen und ungebrochenen Aufwärtstrend.
-							<br /><br />
-							Die jeweiligen Vereinsvorstände versuchen seit jeher die Attraktivität des Rudersports durch sinnvolle
-							und passende Sportarten und Freizeitmöglichkeiten zu ergänzen. Freude am Sport, Engagement und ein
-							intaktes, familiäres Vereinsleben sind unsere Leitbegriffe.
-						</p>
-
-						<div class="mt-6 flex flex-wrap gap-3">
-							<a class={ctaBtn} href="/vorstand">Vorstand</a>
-							<a class={secondaryBtn} href="/news">News</a>
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="mt-6 flex flex-wrap gap-3">
+			<a class={ctaBtn} href="/vorstand">Vorstand</a>
+			<a class={secondaryBtn} href="/news">News</a>
 		</div>
-	</section>
+	</SectionIntro>
 
 	<!-- ZITAT -->
 	<section class="bg-white">
 		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
 			<blockquote class="text-center">
 				<p class="font-albert text-lg sm:text-2xl text-neutral-800">
-					„Es ist besser zu rudern, als zu treiben.“
+					„Es ist besser zu rudern, als zu treiben."
 					<span class="text-neutral-500"> – Isländisches Sprichwort</span>
 				</p>
 			</blockquote>
 		</div>
 	</section>
 
-	<!-- SPORTANGEBOT (Headline mittig oben, Cards mit dezenten Blau/Gelb Akzenten) -->
-	<section class="bg-white">
-		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-			<div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
-				<!-- Headline mittig -->
-				<div class="text-center">
-					<h2 class={`${underlinedTitleClass} mx-auto`}>Sportangebot</h2>
-				</div>
+	<!-- SPORTANGEBOT -->
+	<SectionIntro title="Sportangebot" centered={true} titleSize="text-2xl sm:text-3xl">
+		<p class={bodyClass}>
+			Der Wassersportverein Hellas Gießen ist vor allem ein Ruderverein – von solider Grundausbildung über
+			Leistungssport bis zu Regatten und Meisterschaften. Daneben gibt es eine aktive Freizeit- und
+			Breitensportabteilung mit regelmäßigen Einheiten und Wanderruderfahrten.
+			<br /><br />
+			Auch im Drachenboot Sport sind wir vertreten. In verschiedenen Gruppen und Leveln sind wir im 10er oder
+			20er unterwegs und freuen uns über jeden Mitpaddelnden.
+			<br /><br />
+			Darüber hinaus bieten wir noch weitere Sportangebote an.
+			Neben z.B. Stand-Up-Paddling ist dies vor allem unser allgemeiner Hallensport, mit Angeboten für
+			Kinder ab 3 Jahren bis hin zu verschiedenen Erwachsenen-Sportstunden, sowie ein Sportabzeichen-Treff.
+			<br/><br/>
+			Unser Ziel: Spaß am Sport, Gemeinschaft und (Wasser)Erlebnis für alle Altersgruppen.
+		</p>
 
-				<div class="mt-8 max-w-4xl mx-auto">
-					<p class={bodyClass}>
-						Der Wassersportverein Hellas Gießen ist vor allem ein Ruderverein – von solider Grundausbildung über
-						Leistungssport bis zu Regatten und Meisterschaften. Daneben gibt es eine aktive Freizeit- und
-						Breitensportabteilung mit regelmäßigen Einheiten und Wanderruderfahrten.
-						<br /><br />
-						Auch im Drachenboot Sport sind wir vertreten. In verschiedenen Gruppen und Leveln sind wir im 10er oder
-						20er unterwegs und freuen uns über jeden Mitpaddelnden.
-						<br /><br />
-						Darüber hinaus bieten wir noch weitere Sportangebote an.
-						Neben z.B. Stand-Up-Paddling ist dies vor allem unser allgemeiner Hallensport, mit Angeboten für
-						Kinder ab 3 Jahren bis hin zu verschiedenen Erwachsenen-Sportstunden, sowie ein Sportabzeichen-Treff.
-						<br/><br/>
-						Unser Ziel: Spaß am Sport, Gemeinschaft und (Wasser)Erlebnis für alle Altersgruppen.
-					</p>
-
-					<!-- Cards -->
-					<div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						<a
-							href="/rudern"
-							class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
+		<!-- Cards -->
+		<div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			<a
+				href="/rudern"
+				class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
            transition-colors duration-200 hover:bg-blue-600 hover:ring-blue-600 hover:shadow-md"
-						>
-							<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
+			>
+				<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
 
-							<div class="flex items-start justify-between gap-4 pl-3">
-								<div>
-									<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
-										Rudern
-										<span
-											class="font-barlow text-[11px] px-2 py-0.5 rounded-full
+				<div class="flex items-start justify-between gap-4 pl-3">
+					<div>
+						<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
+							Rudern
+							<span
+								class="font-barlow text-[11px] px-2 py-0.5 rounded-full
                    bg-amber-400/20 text-amber-700 ring-1 ring-amber-400/30
                    group-hover:bg-white/15 group-hover:text-white/90 group-hover:ring-white/25 transition-colors"
-										>
-            Training
-          </span>
-									</div>
+							>
+								Training
+							</span>
+						</div>
 
-									<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
-										Von Einsteigerkursen bis Regatta – auf der Lahn zuhause.
-									</p>
-								</div>
-
-								<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">
-        →
-      </span>
-							</div>
-
-							<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
-						</a>
-
-						<a
-							href="/drachenboot"
-							class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
-           transition-colors duration-200 hover:bg-blue-600 hover:ring-blue-600 hover:shadow-md"
-						>
-							<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
-
-							<div class="flex items-start justify-between gap-4 pl-3">
-								<div>
-									<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
-										Drachenboot
-										<span
-											class="font-barlow text-[11px] px-2 py-0.5 rounded-full
-                   bg-amber-400/20 text-amber-700 ring-1 ring-amber-400/30
-                   group-hover:bg-white/15 group-hover:text-white/90 group-hover:ring-white/25 transition-colors"
-										>
-            Team
-          </span>
-									</div>
-
-									<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
-										Teamspirit pur: Training, Events & Rennen.
-									</p>
-								</div>
-
-								<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">
-        →
-      </span>
-							</div>
-
-							<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
-						</a>
-
-						<a
-							href="/allgemeines-sportangebot"
-							class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
-           transition-colors duration-200 hover:bg-blue-600 hover:ring-blue-600 hover:shadow-md"
-						>
-							<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
-
-							<div class="flex items-start justify-between gap-4 pl-3">
-								<div>
-									<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
-										Hallensport & mehr
-										<span
-											class="font-barlow text-[11px] px-2 py-0.5 rounded-full
-                   bg-amber-400/20 text-amber-700 ring-1 ring-amber-400/30
-                   group-hover:bg-white/15 group-hover:text-white/90 group-hover:ring-white/25 transition-colors"
-										>
-            Freizeit
-          </span>
-									</div>
-
-									<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
-										Stand-Up-Paddling, Fitness & Sportabzeichen.
-									</p>
-								</div>
-
-								<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">
-        →
-      </span>
-							</div>
-
-							<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
-						</a>
+						<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
+							Von Einsteigerkursen bis Regatta – auf der Lahn zuhause.
+						</p>
 					</div>
-				</div>
-			</div>
-		</div>
 
-	</section>
+					<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">→</span>
+				</div>
+
+				<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
+			</a>
+
+			<a
+				href="/drachenboot"
+				class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
+           transition-colors duration-200 hover:bg-blue-600 hover:ring-blue-600 hover:shadow-md"
+			>
+				<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
+
+				<div class="flex items-start justify-between gap-4 pl-3">
+					<div>
+						<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
+							Drachenboot
+							<span
+								class="font-barlow text-[11px] px-2 py-0.5 rounded-full
+                   bg-amber-400/20 text-amber-700 ring-1 ring-amber-400/30
+                   group-hover:bg-white/15 group-hover:text-white/90 group-hover:ring-white/25 transition-colors"
+							>
+								Team
+							</span>
+						</div>
+
+						<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
+							Teamspirit pur: Training, Events & Rennen.
+						</p>
+					</div>
+
+					<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">→</span>
+				</div>
+
+				<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
+			</a>
+
+			<a
+				href="/allgemeines-sportangebot"
+				class="group relative rounded-xl p-5 shadow-sm ring-1 ring-neutral-200 bg-white
+           transition-colors duration-200 hover:bg-blue-600 hover:ring-blue-600 hover:shadow-md"
+			>
+				<div class="absolute left-0 top-4 bottom-4 w-1 rounded-full bg-blue-500/80 group-hover:bg-white/70 transition-colors"></div>
+
+				<div class="flex items-start justify-between gap-4 pl-3">
+					<div>
+						<div class="font-albert font-bold text-neutral-900 group-hover:text-white transition-colors flex items-center gap-2">
+							Hallensport & mehr
+							<span
+								class="font-barlow text-[11px] px-2 py-0.5 rounded-full
+                   bg-amber-400/20 text-amber-700 ring-1 ring-amber-400/30
+                   group-hover:bg-white/15 group-hover:text-white/90 group-hover:ring-white/25 transition-colors"
+							>
+								Freizeit
+							</span>
+						</div>
+
+						<p class="mt-2 font-barlow text-sm text-neutral-600 group-hover:text-white/90 transition-colors">
+							Stand-Up-Paddling, Fitness & Sportabzeichen.
+						</p>
+					</div>
+
+					<span class="mt-1 text-blue-500/80 group-hover:text-white/80 transition-colors">→</span>
+				</div>
+
+				<div class="mt-4 h-px bg-neutral-200 group-hover:bg-white/20 transition-colors"></div>
+			</a>
+		</div>
+	</SectionIntro>
 
 	<!-- CTA -->
-	<section class="bg-white">
-		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-			<div class="rounded-2xl bg-neutral-900 px-6 py-10 sm:px-10 sm:py-12 text-center">
-				<h3 class="font-albert text-2xl sm:text-3xl font-extrabold text-white">
-					Lust, mal mitzumachen?
-				</h3>
-				<p class="mt-3 font-barlow text-neutral-200 max-w-2xl mx-auto">
-					Schreib uns oder komm zu einem Probetraining vorbei – wir freuen uns auf neue Gesichter im Boot und am Land.
-				</p>
-				<div class="mt-6 flex flex-wrap justify-center gap-3">
-					<a class={ctaBtn} href="/kontakt">
-						Kontakt
-					</a>
-					<a class={tertiaryBtn} href="/mitglied-werden">
-						Mitglied werden
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
+	<CtaSection
+		title="Lust, mal mitzumachen?"
+		body="Schreib uns oder komm zu einem Probetraining vorbei – wir freuen uns auf neue Gesichter im Boot und am Land."
+		primaryHref="/kontakt"
+		primaryLabel="Kontakt"
+		secondaryHref="/mitglied-werden"
+		secondaryLabel="Mitglied werden"
+		dark={true}
+	/>
 </SiteLayout>
