@@ -29,6 +29,10 @@ const secondaryBtn =
 const heroImage = logo;
 const imgHall = hallensport;
 const imgSportabzeichen = sportabzeichen;
+
+// Karte – Sandfeldschule Gießen
+const sandfeldQuery = "Sandfeldschule, Sandfeld, 35394 Gießen";
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(sandfeldQuery)}&output=embed`;
 ---
 
 <SiteLayout
@@ -53,13 +57,16 @@ const imgSportabzeichen = sportabzeichen;
 
                     <div class="lg:col-span-8">
                         <p class={bodyClass}>
-                            Neben Rudern und Drachenboot bietet der WSV Hellas ein starkes Angebot abseits des Wassers –
-                            besonders im <strong>Hallensport</strong> (vor allem für Kinder) und im <strong>Sportabzeichen-Treff</strong>.
-                            Hier findest du alle Infos und Zeiten die du brauchst.
+                            Der WSV Hellas bietet auch noch mehr Sportmöglichkeiten an.
+                            Vor allem die ganzjährigen <strong>Hallensportstunden</strong> bieten hier viele Bewegungsangebote
+                            für Kinder und Jugendliche ab 3 Jahren, bis hin zu verschiedenen Sportgruppen
+                            für Erwachsene. Ein <strong>Sportabzeichen-Treff</strong> für alle Interessierten, sowie gelegentliches
+                            Yoga runden das Angebot in und um die Sporthalle ab. Auf dem Wasser gibt es noch
+                            <strong>Stand-Up-Paddling</strong> und die Möglichkeit zum Paddeln in Kanu oder Kajak.
                         </p>
 
                         <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                            <a class={ctaBtn} href="/kontakt">Kontakt / Einstieg</a>
+                            <a class={ctaBtn} href="/kontakt">Probetraining anfragen</a>
                             <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
                         </div>
 
@@ -82,6 +89,12 @@ const imgSportabzeichen = sportabzeichen;
                             >
                                 Weitere Angebote
                             </a>
+                            <a
+                                    href="#anfahrt"
+                                    class="rounded-full bg-white ring-1 ring-black/10 px-4 py-2 font-barlow text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition"
+                            >
+                                Anfahrt & Lage
+                            </a>
                         </div>
 
                         <p class={"mt-4 " + smallClass}>
@@ -102,23 +115,20 @@ const imgSportabzeichen = sportabzeichen;
                     <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
                         <h3 class={sectionTitleClass}>Hallensport</h3>
                         <p class={"mt-3 " + bodyClass}>
-                            Unser Hallensportangebot ist eine perfekte Ergänzung zum Wassersport – mit viel Bewegung, Koordination,
-                            Spielen und Spaß. Besonders für Kinder bieten wir altersgerechte Gruppen. Für Erwachsene gibt es eigene
-                            Sportstunden in lockerer Atmosphäre.
+                            Die Hallensportstunden sind nicht sportart-spezifisch ausgerichtet, sondern legen besonderen Wert auf
+                            ein vielseitiges, abwechslungsreiches Bewegungsangebot.
+                            In den Kindersportstunden beginnt dies mit der Schulung von Motorik und Koordination und erweitert sich
+                            in den folgenden Sportgruppen hin zu Inhalten wie Ausdauer, Kräftigung, Beweglichkeit, sowie
+                            unterschiedlichsten spielerischen Fähigkeiten. Dies setzt sich dann auch im Erwachsenenbereich fort,
+                            wo es eine reine Frauensportstunde und eine mit Frauen und Männern gemischte Sportgruppe gibt.
                         </p>
 
-                        <div class="mt-6">
-                            <div class="font-albert text-xl font-extrabold text-neutral-900">Ort</div>
-                            <p class={"mt-2 " + smallClass}>
-                                Sporthalle der Sandfeldschule Gießen (in den Schulferien geschlossen)
-                            </p>
-                        </div>
+
 
                         <!-- Kinder & Jugendliche Zeiten -->
                         <div class="mt-8">
                             <div class="flex items-end justify-between gap-3">
                                 <div class="font-albert text-xl font-extrabold text-neutral-900">Kinder & Jugendliche</div>
-                                <div class="font-barlow text-sm text-neutral-600">Montags</div>
                             </div>
 
                             <div class="mt-4 overflow-hidden rounded-2xl bg-white ring-1 ring-black/10">
@@ -126,33 +136,22 @@ const imgSportabzeichen = sportabzeichen;
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
                                         <div>
                                             <div class="font-barlow font-semibold text-neutral-900">3–6 Jahre</div>
-                                            <div class="font-barlow text-sm text-neutral-600">spielerisch & motorisch</div>
                                         </div>
-                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">16:00–16:50</div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 16:05–17:00</div>
                                     </div>
 
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
                                         <div>
                                             <div class="font-barlow font-semibold text-neutral-900">6–10 Jahre</div>
-                                            <div class="font-barlow text-sm text-neutral-600">Bewegung, Spiele, Koordination</div>
                                         </div>
-                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">16:55–17:45</div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 17:05–18:05</div>
                                     </div>
 
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
                                         <div>
                                             <div class="font-barlow font-semibold text-neutral-900">10–14 Jahre</div>
-                                            <div class="font-barlow text-sm text-neutral-600">Fitness, Teamspiele, Technik</div>
                                         </div>
-                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">17:50–18:50</div>
-                                    </div>
-
-                                    <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                        <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">ab 14 Jahre</div>
-                                            <div class="font-barlow text-sm text-neutral-600">Jugend-Training & sportlicher Fokus</div>
-                                        </div>
-                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">18:55–19:55</div>
+                                        <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Montag 18:10–19:25</div>
                                     </div>
                                 </div>
                             </div>
@@ -171,20 +170,18 @@ const imgSportabzeichen = sportabzeichen;
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
                                         <div>
                                             <div class="font-barlow font-semibold text-neutral-900">Frauen-Sportstunde (ab 18)</div>
-                                            <div class="font-barlow text-sm text-neutral-600">Ganzkörper, Mobilität, Ausdauer</div>
                                         </div>
                                         <div class="text-right">
-                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Mi 20:00–21:30</div>
+                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Mittwoch 20:00–21:30</div>
                                         </div>
                                     </div>
 
                                     <div class="flex items-start justify-between gap-4 px-5 py-4">
                                         <div>
-                                            <div class="font-barlow font-semibold text-neutral-900">Gemischt (Frauen & Männer)</div>
-                                            <div class="font-barlow text-sm text-neutral-600">Sportlich aktiv – gemeinsam</div>
+                                            <div class="font-barlow font-semibold text-neutral-900">Gemischt Sportstunde (Frauen & Männer)</div>
                                         </div>
                                         <div class="text-right">
-                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Fr 20:00–21:45</div>
+                                            <div class="font-barlow font-semibold text-neutral-900 whitespace-nowrap">Freitag 20:00–21:45</div>
                                         </div>
                                     </div>
                                 </div>
@@ -249,8 +246,11 @@ const imgSportabzeichen = sportabzeichen;
                         <h3 class={sectionTitleClass}>Sportabzeichen-Treff</h3>
 
                         <p class={"mt-3 " + bodyClass}>
-                            Training und Abnahme des <strong>Deutschen Sportabzeichens</strong> – gemeinsam, motivierend und für alle,
-                            die ihre Fitness testen oder gezielt verbessern möchten. Der Treff ist ideal für Jugendliche wie Erwachsene.
+                            Das <strong>Deutsche Sportabzeichen</strong> bietet die alljährliche Möglichkeit, seine Fitness und
+                            Sportlichkeit zu trainieren und immer wieder neu unter Beweis zu stellen. In einer motivierten und bunt
+                            gemischten Gruppe können Kinder ab 6 Jahren, Erwachsene und auch ältere Aktive für die unterschiedlichen
+                            Leistungen aus Leichtathletik, Turnen und Radfahren gemeinsam üben und ablegen. Der ideale Treff für
+                            jeden Einzelnen, als auch für die ganze Familie.
                         </p>
 
                         <div class="mt-6 grid gap-3 sm:grid-cols-2">
@@ -273,18 +273,136 @@ const imgSportabzeichen = sportabzeichen;
 
                         <ul class="mt-6 space-y-2 font-barlow text-base text-neutral-700">
                             <li>• Teilnahme ist auch <strong>ohne Vereinsmitgliedschaft</strong> möglich</li>
-                            <li>• Training + Abnahme in Leichtathletik-Disziplinen (nach deinen Zielen)</li>
+                            <li>• Training + Abnahme in Leichtathletik-, Turn- und Radfahr-Disziplinen </li>
                             <li>• Ideal als persönlicher Fitness-Check oder gemeinsames Saison-Ziel</li>
                         </ul>
 
                         <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                            <a class={ctaBtn} href="/kontakt">Fragen / Anmeldung</a>
-                            <a class={secondaryBtn} href="/trainingszeiten">Zeiten im Überblick</a>
+                            <a class={ctaBtn} href="/kontakt">Kontakt aufnehmen</a>
+                            <a class={secondaryBtn} href="/trainingszeiten">Trainingszeiten</a>
                         </div>
 
                         <p class={"mt-4 " + smallClass}>
                             Wetter- und ferienabhängig – bei Unsicherheiten einfach kurz nachfragen.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anfahrt & Lage -->
+    <section id="anfahrt" class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div class="bg-neutral-100 rounded-2xl px-6 py-10 sm:px-10 sm:py-12">
+                <h3 class="font-albert text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 text-center">
+                    Anfahrt & Lage
+                </h3>
+                <p class={"mt-3 text-center " + smallClass}>
+                    Hallensport und Sportabzeichen finden im Bereich der <strong class="text-neutral-700">Sandfeldschule Gießen</strong> statt.
+                </p>
+
+                <div class="mt-8 grid gap-6 lg:grid-cols-12 lg:items-start">
+                    <!-- Info-Kacheln -->
+                    <div class="lg:col-span-4 flex flex-col gap-4">
+                        <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+                            <div class="h-1 w-12 rounded-full bg-blue-500/90"></div>
+                            <div class="mt-4 font-albert text-base font-extrabold text-neutral-900">Adresse</div>
+                            <p class={"mt-2 " + smallClass}>
+                                Sandfeldschule Gießen<br />
+                                Mildred-Harnack-Weg 37<br />
+                                35396 Gießen
+                            </p>
+                        </div>
+                        <div class="bg-white rounded-2xl ring-1 ring-black/10 p-5">
+                            <div class="h-1 w-12 rounded-full bg-blue-500/90"></div>
+                            <div class="mt-4 font-albert text-base font-extrabold text-neutral-900">Hinweis</div>
+                            <p class={"mt-2 " + smallClass}>
+                                In den Schulferien ist die Sporthalle geschlossen. Der Sportabzeichen-Treff findet auf
+                                den Außensportanlagen statt (wetterabhängig).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Karte -->
+                    <div class="lg:col-span-8">
+                        <div
+                            class="relative overflow-hidden rounded-2xl ring-1 ring-black/10 bg-white"
+                            data-map-shell
+                        >
+                            <div class="p-6 sm:p-8 text-center">
+                                <div class="font-albert text-lg sm:text-xl font-extrabold text-neutral-900">
+                                    Karte laden
+                                </div>
+                                <p class={"mt-2 mx-auto max-w-xl " + smallClass}>
+                                    Beim Laden der Karte können Daten an Google übertragen werden.
+                                </p>
+                                <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                    <button
+                                        type="button"
+                                        class={ctaBtn + " relative z-10"}
+                                        data-map-load
+                                        data-map-src={mapSrc}
+                                        data-map-title="Karte: Sandfeldschule Gießen"
+                                    >
+                                        Google Maps anzeigen
+                                    </button>
+                                    <a
+                                        class={secondaryBtn}
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sandfeldQuery)}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        In Google Maps öffnen
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script is:inline>
+                            if (!window.__hellasMapDelegationInstalled) {
+                                window.__hellasMapDelegationInstalled = true;
+
+                                document.addEventListener("click", (ev) => {
+                                    const btn = ev.target.closest("[data-map-load]");
+                                    if (!btn) return;
+
+                                    const shell = btn.closest("[data-map-shell]");
+                                    if (!shell) return;
+
+                                    const src = btn.getAttribute("data-map-src");
+                                    const title = btn.getAttribute("data-map-title") || "Google Maps";
+                                    if (!src) return;
+
+                                    const hasConsent = window.getCookieConsent ? window.getCookieConsent() : false;
+
+                                    if (!hasConsent) {
+                                        shell.innerHTML = `
+                                            <div class="p-6 sm:p-8 text-center bg-amber-50 ring-1 ring-amber-200 rounded-2xl">
+                                                <div class="font-albert text-lg font-bold text-amber-900">
+                                                    ⚠️ Cookie-Zustimmung erforderlich
+                                                </div>
+                                                <p class="mt-2 font-barlow text-sm text-amber-800">
+                                                    Um Google Maps zu laden, musst du Cookies akzeptieren.
+                                                    Scrolle nach unten und klicke auf "Akzeptieren" im Cookie-Banner.
+                                                </p>
+                                            </div>
+                                        `;
+                                        return;
+                                    }
+
+                                    shell.innerHTML = `
+                                        <iframe
+                                            title="${title}"
+                                            src="${src}"
+                                            class="block w-full h-[360px] sm:h-[420px]"
+                                            loading="lazy"
+                                            referrerpolicy="no-referrer-when-downgrade"
+                                        ></iframe>
+                                    `;
+                                });
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -318,9 +436,9 @@ const imgSportabzeichen = sportabzeichen;
 
                     <div class="bg-white rounded-2xl ring-1 ring-black/10 p-6">
                         <div class="h-1 w-14 rounded-full bg-blue-500/90"></div>
-                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Yoga (unregelmäßig)</div>
+                        <div class="mt-4 font-albert text-lg font-extrabold text-neutral-900">Yoga</div>
                         <p class={"mt-2 " + smallClass}>
-                            Winterangebot – aktuell nur unregelmäßig. Bei Interesse bitte kurz melden.
+                            Aktuell nur unregelmäßiges Angebot. Bei Interesse bitte kurz melden.
                         </p>
                     </div>
                 </div>

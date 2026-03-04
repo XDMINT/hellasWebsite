@@ -89,7 +89,7 @@ const isActive = (href: string) => {
                                             data-astro-prefetch={shouldPrefetch(l.href) ? "viewport" : undefined}
                                             aria-current={active ? "page" : undefined}
                                             class:list={[
-                                                "relative inline-block pb-2 text-lg font-albert leading-none text-neutral-900 no-underline",
+                                                "relative inline-block pb-2 text-lg font-albert font-bold leading-none text-neutral-900 no-underline",
                                                 "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
                                                 "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
                                                 "hover:after:scale-x-100 focus-visible:after:scale-x-100",
@@ -125,7 +125,7 @@ const isActive = (href: string) => {
                                                 data-astro-prefetch={shouldPrefetch(l.href) ? "load" : undefined}
                                                 aria-current={active ? "page" : undefined}
                                                 class:list={[
-                                                    "font-albert text-base rounded-xl px-4 py-3 block no-underline transition",
+                                                    "font-albert font-bold text-base rounded-xl px-4 py-3 block no-underline transition",
                                                     active
                                                         ? "bg-blue-600 text-white"
                                                         : "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-blue-50",

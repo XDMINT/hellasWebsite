@@ -3,29 +3,17 @@
 @font-face {
     font-family: "Albert Sans";
     src: url("/fonts/Albert_Sans/AlbertSans-VariableFont_wght.woff2") format("woff2");
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 
-/* Überschriften */
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-}
-
-/* Buttons (native + “button-like”) */
-button,
-[type="button"],
-[type="submit"],
-[type="reset"],
-.btn {
-    font-family: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-}
-
-@layer utilities {
-    .font-albert {
-        font-family: "Albert Sans", system-ui, sans-serif;
-    }
+@font-face {
+    font-family: "Albert Sans";
+    src: url("/fonts/Albert_Sans/AlbertSans-Italic-VariableFont_wght.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -36,20 +24,36 @@ button,
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Barlow";
+    src: url("/fonts/Barlow/Barlow-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Barlow";
+    src: url("/fonts/Barlow/Barlow-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
 p {
     font-family: "Barlow", ui-sans-serif, system-ui, sans-serif;
 }
 
-@layer utilities {
-    .font-barlow {
-        font-family: "Barlow", system-ui, sans-serif;
-    }
-}
-
-
 @tailwind utilities;
 
 @layer utilities {
+    .font-albert {
+        font-family: "Albert Sans", system-ui, sans-serif;
+    }
+    .font-barlow {
+        font-family: "Barlow", system-ui, sans-serif;
+    }
+
     /* sehr nah am Mockup: weicher, großer Schatten */
     .hero-shadow {
         text-shadow:
