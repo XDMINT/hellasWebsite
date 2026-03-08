@@ -193,7 +193,7 @@ async function fetchCatchmentPrecipitation(): Promise<number[] | null> {
     try {
         const results = await Promise.all(
             catchmentPoints.map(async (p) => {
-                const url = `${WEATHER}?latitude=${p.lat}&longitude=${p.lon}&hourly=precipitation&forecast_days=2`;
+                const url = `${WEATHER}?latitude=${p.lat}&longitude=${p.lon}&timezone=Europe%2FBerlin&hourly=precipitation&forecast_days=2`;
                 const res = await fetch(url);
                 if (!res.ok) return null;
                 const data = await res.json();
@@ -227,7 +227,7 @@ async function load(isOverlay: boolean): Promise<void> {
         // Station + Wetter parallel laden
         const [stationRes, weatherRes] = await Promise.all([
             fetch(`${API}/stations/${STATION}.json?includeTimeseries=true&includeCurrentMeasurement=true`),
-            fetch(`${WEATHER}?latitude=50.585&longitude=8.678&current=temperature_2m,weather_code&hourly=temperature_2m,weather_code,precipitation,precipitation_probability,uv_index,wind_speed_10m,wind_direction_10m&minutely_15=temperature_2m,weather_code,precipitation,precipitation_probability,wind_speed_10m,wind_direction_10m&forecast_days=2`),
+            fetch(`${WEATHER}?latitude=50.585&longitude=8.678&timezone=Europe%2FBerlin&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation,precipitation_probability,uv_index,wind_speed_10m,wind_direction_10m&minutely_15=temperature_2m,weather_code,precipitation,precipitation_probability,wind_speed_10m,wind_direction_10m&forecast_days=2`),
         ]);
 
         if (!stationRes.ok) throw new Error(`Station API ${stationRes.status}`);
@@ -240,11 +240,17 @@ async function load(isOverlay: boolean): Promise<void> {
 
         // Pegel + Temperatur extrahieren
         const levelTs = station.timeseries?.find((t: any) => t.shortname === "W");
-        const tempTs  = station.timeseries?.find((t: any) => t.longname?.includes("Wassertemperatur"));
-        const level   = levelTs?.currentMeasurement?.value ?? 0;
-        const temp    = tempTs?.currentMeasurement?.value ?? 5;
+        const tempTs  = station.timeseries?.find((t: any) =>
+            t.longname?.toLowerCase().includes("wassertemperatur") ||
+            t.longname?.toLowerCase().includes("wasser-temperatur") ||
+            ["WT", "TW", "WTEMP", "WASSER_TEMP", "W_TEMP"].includes(t.shortname?.toUpperCase())
+        );
+        const level        = levelTs?.currentMeasurement?.value ?? 0;
+        const temp         = tempTs?.currentMeasurement?.value ?? null;
+        const tempIsFallback = temp === null;
+        const tempValue = temp ?? 5;
 
-        const status = level >= FLOOD || temp < 1 ? "red" : temp < 10 ? "yellow" : "green";
+        const status = level >= FLOOD || tempValue < 1 ? "red" : tempValue < 10 ? "yellow" : "green";
         setColor(status, isOverlay);
 
         const dot = document.querySelector<HTMLElement>("[data-ampel-dot]");
@@ -264,15 +270,30 @@ async function load(isOverlay: boolean): Promise<void> {
 
         if (levelEl)   levelEl.textContent   = `${Math.round(level)} cm`;
         if (trendEl)   trendEl.textContent   = "Lade...";
-        if (tempEl)    tempEl.textContent    = temp > 0 ? `${temp.toFixed(1)}°C` : "–";
-        if (airTempEl) airTempEl.textContent = `${(weather.current.temperature_2m).toFixed(1)}°C`;
+        if (tempEl)    tempEl.textContent    = tempIsFallback ? "n/v" : `${tempValue.toFixed(1)}°C`;
+        if (airTempEl) {
+            const airT = weather.current.temperature_2m;
+            const feelT = weather.current.apparent_temperature;
+            airTempEl.textContent = `${airT.toFixed(1)}°C`;
+            const feelEl = airTempEl.nextElementSibling as HTMLElement | null;
+            if (feelEl) {
+                feelEl.textContent = (feelT !== undefined && feelT !== null && Math.abs(feelT - airT) >= 1)
+                    ? `gefühlt ${feelT.toFixed(1)}°C`
+                    : "";
+            }
+        }
         if (timeEl)    timeEl.textContent    = new Date().toLocaleString("de-DE");
 
         const weatherCode = weather.current.weather_code;
         if (weatherEl) {
             weatherEl.textContent =
+                weatherCode >= 95 ? "⛈️ Gewitter" :
+                weatherCode >= 80 ? "🌦️ Schauer" :
+                weatherCode >= 71 ? "❄️ Schnee" :
                 weatherCode >= 51 ? "🌧️ Regen" :
+                weatherCode >= 45 ? "🌫️ Nebel" :
                 weatherCode >= 3  ? "☁️ Bewölkt" :
+                weatherCode >= 1  ? "🌤️ Leicht bewölkt" :
                 "☀️ Klar";
         }
 
@@ -293,8 +314,11 @@ async function load(isOverlay: boolean): Promise<void> {
             hint.textContent =
                 status === "red"
                     ? (level >= FLOOD ? "Hochwasser" : "Wassertemperatur zu kalt")
-                    : status === "yellow" ? "Kaltwasser - erhöhte Vorsicht"
+                    : status === "yellow" ? "Kaltwasser – erhöhte Vorsicht"
                     : "Alle Bedingungen optimal";
+            if (tempIsFallback) {
+                hint.textContent += " (Wassertemperatur aktuell nicht verfügbar)";
+            }
         }
 
         // Messungen + Prognose laden
@@ -347,9 +371,9 @@ async function load(isOverlay: boolean): Promise<void> {
             // keine offizielle Vorhersage
         }
 
-        // ARIMAX als Fallback
+        // ARIMAX als Fallback – auch wenn offizielle Vorhersage leer zurückkam (Bug 4)
         let hourlyForecast: HourlyForecastPoint[] | null = null;
-        if (!forecastData && measurements.length >= 24) {
+        if ((!forecastData || forecastData.length === 0) && measurements.length >= 24) {
             const series = measurements.map((m) => m.value);
             const precipitation = catchmentPrecipitation ?? weather.hourly?.precipitation ?? [];
             hourlyForecast = computeArimaxForecast(series, precipitation);
@@ -359,20 +383,25 @@ async function load(isOverlay: boolean): Promise<void> {
             }));
 
             const totalRain = precipitation.slice(0, 24).reduce((a, b) => a + b, 0);
-            // Globale Werte für Chart-Wiederverwendung
             (window as any)._ruderampelHourlyForecast = hourlyForecast;
             (window as any)._ruderampelForecastMethod = "ARIMAX";
             (window as any)._ruderampelRainTotal = totalRain;
             (window as any)._ruderampelRainSource = catchmentPrecipitation ? "Einzugsgebiet Lahn" : "Gießen";
+        } else {
+            // Offizieller Pfad: hourlyForecast zurücksetzen damit drawChart nicht veraltete ARIMAX-Daten verwendet
+            (window as any)._ruderampelHourlyForecast = null;
+            (window as any)._ruderampelForecastMethod = "Offiziell";
         }
 
         // Prognose-Karten rendern
         const waterForecastEl = q("[data-water-forecast]");
         if (waterForecastEl && forecastData) {
+            const forecastBaseTime = measurements.length > 0
+                ? new Date(measurements[measurements.length - 1].timestamp).getTime()
+                : Date.now();
             waterForecastEl.innerHTML = forecastData
                 .map((f) => {
-                    const time = new Date();
-                    time.setHours(time.getHours() + f.hours);
+                    const time = new Date(forecastBaseTime + f.hours * 3_600_000);
                     const overLimit = f.value >= FLOOD;
                     const nearLimit = f.value >= FLOOD - 50;
                     const color = overLimit ? "text-red-600" : nearLimit ? "text-yellow-600" : "text-green-600";
@@ -408,6 +437,9 @@ async function load(isOverlay: boolean): Promise<void> {
         // Wettervorhersage-Karten
         const forecastEl = q("[data-forecast]");
         if (forecastEl && (weather.hourly || weather.minutely_15)) {
+            // Aktuelles WeatherData für Listener zugänglich machen
+            (window as any)._ruderampelWeather = weather;
+
             const controls = document.querySelector("[data-forecast-controls]");
             const setActive = (rangeKey: string) => {
                 controls?.querySelectorAll("[data-forecast-range]").forEach((btn) => {
@@ -417,13 +449,19 @@ async function load(isOverlay: boolean): Promise<void> {
                     }`;
                 });
             };
-            controls?.addEventListener("click", (e) => {
-                const target = (e.target as HTMLElement).closest<HTMLElement>("[data-forecast-range]");
-                if (!target) return;
-                const rangeKey = target.getAttribute("data-forecast-range") ?? "2h";
-                setActive(rangeKey);
-                renderWeatherForecast(weather, rangeKey);
-            });
+            // Bug 1: Listener nur beim ersten Mal registrieren, nicht bei jedem 5-Min-Reload.
+            // Nutzt window._ruderampelWeather damit immer aktuelle Daten verwendet werden.
+            if (controls && !(controls as any)._forecastListenerAttached) {
+                controls.addEventListener("click", (e) => {
+                    const target = (e.target as HTMLElement).closest<HTMLElement>("[data-forecast-range]");
+                    if (!target) return;
+                    const rangeKey = target.getAttribute("data-forecast-range") ?? "2h";
+                    setActive(rangeKey);
+                    const currentWeather = (window as any)._ruderampelWeather;
+                    if (currentWeather) renderWeatherForecast(currentWeather, rangeKey);
+                });
+                (controls as any)._forecastListenerAttached = true;
+            }
             setActive("2h");
             renderWeatherForecast(weather, "2h");
         }

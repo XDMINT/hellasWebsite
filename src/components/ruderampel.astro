@@ -66,6 +66,7 @@ const isOverlay = variant === "overlay";
                     <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
                         <div class="font-barlow text-xs text-neutral-500 uppercase tracking-wide">Lufttemp.</div>
                         <div class="font-albert text-2xl font-bold text-neutral-900 mt-1" data-air-temp>–</div>
+                        <div class="font-barlow text-xs text-neutral-500 mt-1"></div>
                     </div>
                     <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
                         <div class="font-barlow text-xs text-neutral-500 uppercase tracking-wide">Wetter</div>
@@ -120,7 +121,7 @@ const isOverlay = variant === "overlay";
                     </div>
                 </div>
 
-                <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4">
+                <div class="rounded-xl bg-neutral-50 ring-1 ring-black/10 p-4" data-radar-section>
                     <h3 class="font-albert text-base font-bold text-neutral-900 mb-3">🌧️ Regenradar</h3>
 
                     <!-- isolation:isolate verhindert dass Leaflet-Buttons aus dem Container herausragen -->

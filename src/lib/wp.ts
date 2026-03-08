@@ -1,6 +1,7 @@
 // src/lib/wp.ts
 export const WP_BASE =
-    import.meta.env.WP_BASE_URL ?? "https://wsv-hellas.de";
+    // Bug 13: trailing slash normalisieren damit paths mit führendem "/" immer korrekt zusammengesetzt werden
+    (import.meta.env.WP_BASE_URL ?? "https://wsv-hellas.de").replace(/\/$/, "");
 
 export type WpPost = {
     id: number;
@@ -31,7 +32,9 @@ export function getFeaturedImage(post: WpPost): string | null {
 }
 
 export function formatDateDE(iso: string): string {
+    // Bug 14: ungültige Datumsstrings abfangen
     const d = new Date(iso);
+    if (isNaN(d.getTime())) return "–";
     return new Intl.DateTimeFormat("de-DE", {
         day: "2-digit",
         month: "long",
@@ -41,8 +44,14 @@ export function formatDateDE(iso: string): string {
 
 const FETCH_TIMEOUT_MS = 8_000;
 
+// Bug 12: AbortSignal.timeout ist in älteren Browsern nicht verfügbar – Fallback mit AbortController
 function withTimeout(ms: number): AbortSignal {
-    return AbortSignal.timeout(ms);
+    if (typeof AbortSignal.timeout === "function") {
+        return AbortSignal.timeout(ms);
+    }
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), ms);
+    return controller.signal;
 }
 
 export async function fetchWp<T>(path: string): Promise<T> {

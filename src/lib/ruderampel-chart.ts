@@ -38,6 +38,9 @@ export function drawChart(
     const displayW = container.offsetWidth - 24;
     const displayH = container.offsetHeight - 24;
 
+    // Bug 12: Container unsichtbar (z.B. Modal noch nicht offen) → abbrechen
+    if (displayW <= 0 || displayH <= 0) return;
+
     // HiDPI/Retina Support
     const dpr = window.devicePixelRatio || 1;
     canvas.width = displayW * dpr;
@@ -73,13 +76,17 @@ export function drawChart(
     }
 
     const vals = allData.map((d) => d.value);
-    const max = Math.max(...vals, FLOOD + 50);
-    const min = Math.min(...vals) - 20;
+    // Bug 9: reduce statt spread-Operator – sicher bei großen Arrays
+    const max = Math.max(vals.reduce((a, b) => Math.max(a, b), -Infinity), FLOOD + 50);
+    const min = Math.min(vals.reduce((a, b) => Math.min(a, b), Infinity)) - 20;
     const range = max - min;
 
     const firstTime = new Date(allData[0].timestamp).getTime();
     const lastTime = new Date(allData[allData.length - 1].timestamp).getTime();
     const timeRange = lastTime - firstTime;
+
+    // Bug 8: Guard gegen Division durch Zero (z.B. nur ein Datenpunkt)
+    if (timeRange === 0 || range === 0) return;
 
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
@@ -195,6 +202,7 @@ export function drawChart(
     }
 
     // Rahmen + Y-Titel
+    ctx.setLineDash([]);  // Bug 11: sicherstellen dass Rahmen nie gestrichelt ist
     ctx.strokeStyle = "#9ca3af";
     ctx.lineWidth = 1.5;
     ctx.strokeRect(marginLeft, marginTop, plotW, plotH);
