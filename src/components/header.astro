@@ -35,66 +35,63 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="bg-white border-b border-black/10">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <!-- Top row: Logo centered + burger on mobile -->
-        <div class="relative flex flex-col items-center pt-3 lg:pt-4">
-            <!-- mobile: logo + burger in one row -->
-            <div class="w-full flex items-center justify-between lg:justify-center pb-3 lg:pb-0">
+<header class="sticky lg:static z-50 transition-none" data-hellas-header>
+    <!-- Mobile wrapper: becomes floating pill on scroll -->
+    <div class="lg:hidden mobile-header border-b border-gray-200 relative overflow-visible bg-white" data-mobile-header>
+        <div class="flex items-center justify-between h-16 px-4">
+            <!-- Logo -->
             <a href="/" aria-label="Zur Startseite" class="inline-flex items-center">
-                    <OptimizedImg
-                            src={logoSrc}
-                            alt={logoAlt}
-                            className="h-14 sm:h-16 lg:h-20 w-auto block"
-                            loading="eager"
-                            widths={[80, 120, 160]}
-                            sizes="80px"
-                    />
-                </a>
+                <OptimizedImg
+                        src={logoSrc}
+                        alt={logoAlt}
+                        className="h-14 sm:h-16 w-auto block"
+                        loading="eager"
+                        widths={[80, 120, 160]}
+                        sizes="80px"
+                />
+            </a>
 
-                <!-- Mobile hamburger / close -->
-                <button
-                        type="button"
-                        class="lg:hidden inline-flex items-center justify-center rounded-xl p-3
-                 ring-1 ring-black/10 hover:bg-neutral-50 transition
-                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
-                        aria-label="Menü öffnen"
-                        aria-controls="mobile-menu"
-                        aria-expanded="false"
-                        data-menu-button
-                >
-                    <span class="sr-only">Menü</span>
+            <!-- Mobile hamburger (3-Linien → X Rotation) -->
+            <button
+                    type="button"
+                    class="flex flex-col gap-1.5 p-2 hover:bg-neutral-50 rounded-xl transition
+                           ring-1 ring-black/10
+                           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
+                    aria-label="Menü öffnen"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                    data-menu-button
+            >
+                <span class="w-5 h-0.5 bg-neutral-800 transition-all duration-300 block" data-bar-1></span>
+                <span class="w-5 h-0.5 bg-neutral-800 transition-all duration-300 block" data-bar-2></span>
+                <span class="w-5 h-0.5 bg-neutral-800 transition-all duration-300 block" data-bar-3></span>
+            </button>
+        </div>
 
-                    <!-- Hamburger -->
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-icon-hamburger>
-                        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-
-                    <!-- X -->
-                    <svg class="h-6 w-6 hidden" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-icon-close>
-                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Desktop nav UNDER logo -->
-            <nav aria-label="Hauptnavigation" class="hidden lg:block mt-6 mb-6">
-                <ul class="m-0 p-0 list-none flex flex-wrap justify-center gap-12">
+        <!-- Mobile nav: drops out below the header pill, absolute -->
+        <nav
+                id="mobile-menu"
+                aria-label="Mobile Hauptnavigation"
+                aria-hidden="true"
+                data-menu-panel
+                class="mobile-nav"
+        >
+            <div class="px-4 py-4 space-y-2">
+                <ul class="m-0 p-0 list-none flex flex-col gap-2">
                     {links.map((l) => {
                         const active = isActive(l.href);
                         return (
                                 <li>
                                     <a
                                             href={l.href}
-                                            data-astro-prefetch={shouldPrefetch(l.href) ? "viewport" : undefined}
+                                            data-astro-prefetch={shouldPrefetch(l.href) ? "load" : undefined}
                                             aria-current={active ? "page" : undefined}
                                             class:list={[
-                                                "relative inline-block pb-2 text-lg font-albert font-bold leading-none text-neutral-900 no-underline",
-                                                "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
-                                                "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
-                                                "hover:after:scale-x-100 focus-visible:after:scale-x-100",
-                                                active && "after:scale-x-100",
-                                                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 rounded-lg",
+                                                "font-albert font-bold text-base rounded-xl px-4 py-3 block no-underline transition",
+                                                active
+                                                    ? "bg-blue-600 text-white"
+                                                    : "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-blue-50",
+                                                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300",
                                             ]}
                                     >
                                         {l.label}
@@ -103,33 +100,44 @@ const isActive = (href: string) => {
                         );
                     })}
                 </ul>
-            </nav>
-        </div>
+            </div>
+        </nav>
+    </div>
 
-        <!-- Mobile slide-down panel -->
-        <div
-                id="mobile-menu"
-                data-menu-panel
-                class="lg:hidden overflow-hidden max-h-0 opacity-0 transition-all duration-300 ease-out"
-                aria-hidden="true"
-        >
-            <nav aria-label="Mobile Hauptnavigation" class="pb-6">
-                <div class="bg-neutral-100 rounded-2xl px-4 py-4 mt-3">
-                    <ul class="m-0 p-0 list-none flex flex-col gap-2">
+    <!-- Desktop header (unverändert) -->
+    <div class="hidden lg:block bg-white border-b border-black/10">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="relative flex flex-col items-center pt-4">
+                <div class="w-full flex items-center justify-center pb-0">
+                    <a href="/" aria-label="Zur Startseite" class="inline-flex items-center">
+                        <OptimizedImg
+                                src={logoSrc}
+                                alt={logoAlt}
+                                className="h-20 w-auto block"
+                                loading="eager"
+                                widths={[80, 120, 160]}
+                                sizes="80px"
+                        />
+                    </a>
+                </div>
+
+                <nav aria-label="Hauptnavigation" class="mt-6 mb-6">
+                    <ul class="m-0 p-0 list-none flex flex-wrap justify-center gap-12">
                         {links.map((l) => {
                             const active = isActive(l.href);
                             return (
                                     <li>
                                         <a
                                                 href={l.href}
-                                                data-astro-prefetch={shouldPrefetch(l.href) ? "load" : undefined}
+                                                data-astro-prefetch={shouldPrefetch(l.href) ? "viewport" : undefined}
                                                 aria-current={active ? "page" : undefined}
                                                 class:list={[
-                                                    "font-albert font-bold text-base rounded-xl px-4 py-3 block no-underline transition",
-                                                    active
-                                                        ? "bg-blue-600 text-white"
-                                                        : "bg-white text-neutral-900 ring-1 ring-black/10 hover:bg-blue-50",
-                                                    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300",
+                                                    "relative inline-block pb-2 text-lg font-albert font-bold leading-none text-neutral-900 no-underline",
+                                                    "after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-1 after:rounded-full after:bg-blue-500",
+                                                    "after:origin-left after:scale-x-0 after:transition-transform after:duration-150 after:ease-out",
+                                                    "hover:after:scale-x-100 focus-visible:after:scale-x-100",
+                                                    active && "after:scale-x-100",
+                                                    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300 rounded-lg",
                                                 ]}
                                         >
                                             {l.label}
@@ -138,72 +146,179 @@ const isActive = (href: string) => {
                             );
                         })}
                     </ul>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
     </div>
-
-    <script is:inline>
-        (() => {
-            const btn = document.querySelector("[data-menu-button]");
-            const panel = document.querySelector("[data-menu-panel]");
-            const iconHamburger = document.querySelector("[data-icon-hamburger]");
-            const iconClose = document.querySelector("[data-icon-close]");
-            if (!btn || !panel || !iconHamburger || !iconClose) return;
-
-            const openClasses = ["max-h-[520px]", "opacity-100"];
-            const closedClasses = ["max-h-0", "opacity-0"];
-
-            const setOpen = (open) => {
-                // toggle panel
-                panel.classList.remove(...(open ? closedClasses : openClasses));
-                panel.classList.add(...(open ? openClasses : closedClasses));
-
-                // aria
-                btn.setAttribute("aria-expanded", String(open));
-                panel.setAttribute("aria-hidden", String(!open));
-                btn.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
-
-                // icons
-                iconHamburger.classList.toggle("hidden", open);
-                iconClose.classList.toggle("hidden", !open);
-            };
-
-            let open = false;
-            setOpen(false);
-
-            btn.addEventListener("click", () => {
-                open = !open;
-                setOpen(open);
-            });
-
-            // Close on link click
-            panel.querySelectorAll("a").forEach((a) =>
-                a.addEventListener("click", () => {
-                    open = false;
-                    setOpen(false);
-                })
-            );
-
-            // Close on ESC
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") {
-                    open = false;
-                    setOpen(false);
-                }
-            });
-
-            // If resized to desktop, ensure menu is closed
-            const mq = window.matchMedia("(min-width: 1024px)"); // lg
-            mq.addEventListener?.("change", (e) => {
-                if (e.matches) {
-                    open = false;
-                    setOpen(false);
-                }
-            });
-        })();
-    </script>
 </header>
+
+<style>
+    /* Kein Transition auf dem sticky header selbst – nur Mobile */
+    @media (max-width: 1023px) {
+        [data-hellas-header] {
+            top: 0;
+            transition: none !important;
+        }
+    }
+
+    /* ── Mobile floating-pill ── */
+    .mobile-header {
+        overflow: visible;
+    }
+
+    .mobile-header.smooth-radius {
+        transition:
+            border-top-left-radius 0.25s ease-out 0.15s,
+            border-top-right-radius 0.25s ease-out 0.15s,
+            border-bottom-left-radius 0.25s ease-out 0.15s,
+            border-bottom-right-radius 0.25s ease-out 0.15s;
+    }
+
+    /* ── Mobile nav drop-down ── */
+    .mobile-nav {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+            max-height 0.4s ease-in-out,
+            padding 0.4s ease-in-out,
+            border 0.4s ease-in-out;
+        padding: 0;
+        border-top: 0px solid rgba(209, 213, 219, 0.3);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        pointer-events: none;
+        background-color: white;
+        border-bottom-left-radius: 1.25rem;
+        border-bottom-right-radius: 1.25rem;
+        margin-top: -0.25rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 50;
+    }
+
+    .mobile-nav.open {
+        max-height: 600px;
+        border-top: 1px solid rgba(209, 213, 219, 0.3);
+        padding: 1rem;
+        pointer-events: auto;
+    }
+
+    /* ── Burger → X animation ── */
+    [data-menu-button].open [data-bar-1] {
+        transform: rotate(45deg) translate(7px, 7px);
+    }
+    [data-menu-button].open [data-bar-2] {
+        opacity: 0;
+    }
+    [data-menu-button].open [data-bar-3] {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+</style>
+
+<script>
+    const navToggle    = document.querySelector('[data-menu-button]') as HTMLElement | null;
+    const mobileNav    = document.querySelector('[data-menu-panel]') as HTMLElement | null;
+    const mobileHeader = document.querySelector('[data-mobile-header]') as HTMLElement | null;
+    const header       = document.querySelector('[data-hellas-header]') as HTMLElement | null;
+
+    let navIsOpen = false;
+
+    if (mobileHeader && header) {
+        const START = 40;
+        const RANGE = 100;
+
+        function applyScrollStyles(sy: number) {
+            const progress = Math.min(Math.max((sy - START) / RANGE, 0), 1);
+            const margin   = progress * 16;
+            const radius   = progress * 20;
+            const top      = progress * 12;
+            const shadowBlur    = progress * 40;
+            const shadowSpread  = progress * -8;
+            const shadowOpacity = progress * 0.25;
+
+            mobileHeader!.style.marginLeft  = `${margin}px`;
+            mobileHeader!.style.marginRight = `${margin}px`;
+            mobileHeader!.style.boxShadow   = navIsOpen
+                ? 'none'
+                : `0 ${shadowBlur * 0.5}px ${shadowBlur}px ${shadowSpread}px rgba(0,0,0,${shadowOpacity.toFixed(2)})`;
+            mobileHeader!.style.borderColor = progress >= 1
+                ? 'transparent'
+                : `rgba(209,213,219,${(1 - progress).toFixed(2)})`;
+            header!.style.top = `${top}px`;
+
+            const bottomRadius = navIsOpen ? '0px' : `${radius}px`;
+            mobileHeader!.style.borderTopLeftRadius     = `${radius}px`;
+            mobileHeader!.style.borderTopRightRadius    = `${radius}px`;
+            mobileHeader!.style.borderBottomLeftRadius  = bottomRadius;
+            mobileHeader!.style.borderBottomRightRadius = bottomRadius;
+        }
+
+        window.addEventListener('scroll', () => {
+            mobileHeader!.classList.remove('smooth-radius');
+            header!.style.transition = 'none';
+            applyScrollStyles(window.scrollY);
+        }, { passive: true });
+
+        if (navToggle && mobileNav) {
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('open');
+                mobileNav.classList.toggle('open');
+                const isNowOpen = mobileNav.classList.contains('open');
+                navToggle.setAttribute('aria-expanded', String(isNowOpen));
+                navToggle.setAttribute('aria-label', isNowOpen ? 'Menü schließen' : 'Menü öffnen');
+                mobileNav.setAttribute('aria-hidden', String(!isNowOpen));
+                if (isNowOpen) {
+                    navIsOpen = true;
+                    mobileHeader!.classList.remove('smooth-radius');
+                    applyScrollStyles(window.scrollY);
+                } else {
+                    navIsOpen = false;
+                    mobileHeader!.classList.add('smooth-radius');
+                    applyScrollStyles(window.scrollY);
+                    setTimeout(() => mobileHeader!.classList.remove('smooth-radius'), 400);
+                }
+            });
+
+            const links = mobileNav.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navToggle.classList.remove('open');
+                    mobileNav.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navToggle.setAttribute('aria-label', 'Menü öffnen');
+                    mobileNav.setAttribute('aria-hidden', 'true');
+                    navIsOpen = false;
+                    mobileHeader!.classList.add('smooth-radius');
+                    applyScrollStyles(window.scrollY);
+                    setTimeout(() => mobileHeader!.classList.remove('smooth-radius'), 400);
+                });
+            });
+
+            document.addEventListener('keydown', (e: KeyboardEvent) => {
+                if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+                    navToggle.classList.remove('open');
+                    mobileNav.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navToggle.setAttribute('aria-label', 'Menü öffnen');
+                    mobileNav.setAttribute('aria-hidden', 'true');
+                    navIsOpen = false;
+                    mobileHeader!.classList.add('smooth-radius');
+                    applyScrollStyles(window.scrollY);
+                    setTimeout(() => mobileHeader!.classList.remove('smooth-radius'), 400);
+                }
+            });
+
+            mobileNav.addEventListener('transitionend', (e: TransitionEvent) => {
+                if (e.propertyName === 'max-height' && !mobileNav.classList.contains('open')) {
+                    navIsOpen = false;
+                    applyScrollStyles(window.scrollY);
+                }
+            });
+        }
+    }
+</script>
 
 
 
