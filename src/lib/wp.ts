@@ -1,7 +1,7 @@
 // src/lib/wp.ts
 export const WP_BASE =
     // Bug 13: trailing slash normalisieren damit paths mit führendem "/" immer korrekt zusammengesetzt werden
-    (import.meta.env.WP_BASE_URL ?? "https://wsv-hellas.de").replace(/\/$/, "");
+    (import.meta.env.WP_BASE_URL ?? "https://cms.wsv-hellas.de").replace(/\/$/, "");
 
 export type WpPost = {
     id: number;
