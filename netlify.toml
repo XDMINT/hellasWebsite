@@ -36,6 +36,19 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# WordPress-Shortcuts
+[[redirects]]
+  from = "/login"
+  to   = "https://cms.wsv-hellas.de/wp-login.php"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "/wp-admin"
+  to   = "https://cms.wsv-hellas.de/wp-admin/"
+  status = 301
+  force  = true
+
 
 
 
