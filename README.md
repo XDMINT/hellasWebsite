@@ -150,4 +150,4 @@ Da die Seite als SSR auf Netlify läuft, werden WordPress-Inhalte bei jedem Requ
 
 Die Seite wird automatisch über **Netlify** deployed. Der Netlify-Adapter ermöglicht SSR für dynamische Seiten (z. B. News via WordPress-API). CSS wird immer inline gerendert, um blockierende Netzwerk-Requests zu vermeiden.
 
-**Live:** [https://wsv-hellas-giessen.de](https://wsv-hellas-giessen.de)
+**Live:** [https://wsv-hellas-giessen.de](https://wsv-hellas.de)
