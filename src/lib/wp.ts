@@ -8,6 +8,7 @@ export type WpPost = {
     slug: string;
     link: string;
     date: string;
+    modified?: string;
     title: { rendered: string };
     excerpt: { rendered: string };
     content?: { rendered: string };
@@ -21,6 +22,16 @@ export function stripHtml(html: string): string {
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
+}
+
+/** Korrigiert alte Medien-URLs im WP-HTML-Content.
+ *  WordPress lief früher auf wsv-hellas.de – alle Upload-URLs in Artikeln
+ *  zeigen noch auf die alte Domain. Diese werden auf cms.wsv-hellas.de umgeschrieben. */
+export function fixContentUrls(html: string): string {
+    return html.replace(
+        /https?:\/\/wsv-hellas\.de\/wp-content\/uploads\//gi,
+        "https://cms.wsv-hellas.de/wp-content/uploads/"
+    );
 }
 
 export function getFeaturedImage(post: WpPost): string | null {

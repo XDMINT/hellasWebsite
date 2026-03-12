@@ -20,7 +20,7 @@ Astro.response.headers.set("Netlify-Cache-Tag", `news, news-${slug}`);
 
 import SiteLayout from "../../layouts/siteLayout.astro";
 import OptimizedImg from "../../components/OptimizedImg.astro";
-import { fetchWp, type WpPost, getFeaturedImage, formatDateDE, stripHtml } from "../../lib/wp";
+import { fetchWp, type WpPost, getFeaturedImage, formatDateDE, stripHtml, fixContentUrls } from "../../lib/wp";
 import "../../styles/global.css";
 
 
@@ -29,6 +29,12 @@ const found = await fetchWp<WpPost[]>(
 );
 
 const post = found?.[0] ?? null;
+
+// WP-Content bereinigen: Bild-URLs zeigen noch auf wsv-hellas.de (alte WP-Domain).
+// Serverseitig auf cms.wsv-hellas.de umschreiben damit Bilder auch im localhost laden.
+if (post?.content?.rendered) {
+    post.content.rendered = fixContentUrls(post.content.rendered);
+}
 
 if (!post) {
     Astro.response.status = 404;
@@ -53,7 +59,7 @@ const showLead =
 // SEO-Optimierung: Dynamische Meta-Daten aus Post
 const pageTitle = `${post.title.rendered} | News | WSV Hellas Gießen`;
 const pageDescription = excerptText.slice(0, 155) || contentText.slice(0, 155);
-const canonicalURL = `https://wsv-hellas-giessen.de/news/${slug}`;
+const canonicalURL = `https://wsv-hellas.de/news/${slug}`;
 
 const btnSecondary =
     "font-barlow inline-flex items-center justify-center rounded-xl px-4 py-2 " +
