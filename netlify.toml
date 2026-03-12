@@ -49,6 +49,15 @@
   status = 301
   force  = true
 
+# Alte WP-Medien-URLs weiterleiten:
+# Artikel-Content hat noch wsv-hellas.de/wp-content/uploads/... eingetragen
+# (von als WordPress noch auf wsv-hellas.de lief) → auf cms.wsv-hellas.de umleiten
+[[redirects]]
+  from = "/wp-content/uploads/*"
+  to   = "https://cms.wsv-hellas.de/wp-content/uploads/:splat"
+  status = 301
+  force  = true
+
 
 
 
